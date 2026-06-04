@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Архив: Легендарная Пятерка</title>
+    <style>
+        :root {
+            --bg-color: #0b0c10;
+            --card-bg: #1f2833;
+            --text-main: #c5a059;
+            --text-secondary: #ffffff;
+            --accent-gold: #ffcc00;
+            --accent-glow: rgba(255, 204, 0, 0.4);
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            background-color: var(--bg-color);
+            background-image: radial-gradient(circle at 50% 50%, #1a1c23 0%, #0b0c10 100%);
+            color: var(--text-secondary);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: space-between;
+            padding: 40px 20px;
+        }
+
+        header { text-align: center; margin-bottom: 50px; }
+
+        h1 {
+            font-size: 2.8rem;
+            text-transform: uppercase;
+            letter-spacing: 4px;
+            color: var(--accent-gold);
+            text-shadow: 0 0 15px var(--accent-glow);
+            margin-bottom: 10px;
+        }
+
+        .container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 30px;
+            max-width: 1400px;
+            width: 100%;
+            justify-content: center;
+            padding: 10px;
+        }
+
+        .card {
+            background: linear-gradient(145deg, #232a35, #161b22);
+            border: 1px solid rgba(255, 204, 0, 0.1);
+            border-radius: 20px;
+            padding: 30px 20px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+            width: 280px;
+        }
+
+        .card:hover {
+            transform: translateY(-10px) scale(1.02);
+            border-color: var(--accent-gold);
+            box-shadow: 0 15px 35px var(--accent-glow);
+        }
+
+        .avatar-container { position: relative; width: 140px; height: 140px; margin: 0 auto 20px; }
+
+        .card img {
+            width: 100%; height: 100%;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 3px solid var(--accent-gold);
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.6);
+            background-color: #333;
+        }
+
+        .status-badge {
+            position: absolute; bottom: 0; left: 50%;
+            transform: translateX(-50%);
+            background: var(--accent-gold);
+            color: #000;
+            font-size: 0.75rem;
+            font-weight: bold;
+            padding: 4px 12px;
+            border-radius: 12px;
+            text-transform: uppercase;
+            white-space: nowrap;
+        }
+
+        .name { font-size: 1.6rem; font-weight: 700; margin-bottom: 15px; }
+
+        .bio-text { font-size: 0.95rem; color: #b3b9c1; line-height: 1.6; min-height: 80px; }
+
+        .stats-highlight {
+            margin-top: 15px;
+            padding-top: 15px;
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+            font-size: 0.8rem;
+            color: var(--accent-gold);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        #sanji-card { display: none; border-color: #ff0055; animation: fadeIn 0.5s ease forwards; }
+        
+        footer {
+            margin-top: 60px;
+            text-align: center;
+            font-size: 0.9rem;
+            color: #555;
+            cursor: pointer;
+            user-select: none;
+        }
+
+        @keyframes fadeIn { from { opacity: 0; transform: scale(0.8); } to { opacity: 1; transform: scale(1); } }
+    </style>
+</head>
+<body>
+
+    <header><h1>Досье: Главные Лица</h1></header>
+    
+    <div class="container">
+        <!-- Артем -->
+        <div class="card">
+            <div class="avatar-container">
+                <img src="artem.jpg" alt="Артём">
+                <span class="status-badge" style="background: #ff4444; color: #fff;">Спец-приемы</span>
+            </div>
+            <div class="name">Артём</div>
+            <div class="bio-text">Он умеет отлично рыгать и пердеть, также есть запас много чего интересного в галерее. Помог отравить Арину.</div>
+            <div class="stats-highlight">Хранитель Компромата</div>
+        </div>
+
+        <!-- Слава -->
+        <div class="card">
+            <div class="avatar-container">
+                <img src="slava.jpg" alt="Слава">
+                <span class="status-badge" style="background: #4488ff; color: #fff;">Наблюдатель</span>
+            </div>
+            <div class="name">Слава</div>
+            <div class="bio-text">Слава высокий, не участвует в битвах. Предпочитает сохранять стратегический нейтралитет.</div>
+            <div class="stats-highlight">Высотный Пацифист</div>
+        </div>
+
+        <!-- Тимур -->
+        <div class="card">
+            <div class="avatar-container">
+                <img src="timur.jpg" alt="Тимур">
+                <span class="status-badge">Ветеран</span>
+            </div>
+            <div class="name">Тимур</div>
+            <div class="bio-text">Быстрый флеш, участвовал в нескольких битвах. Битва за полицейский участок, битва за заброшку, оккупацию стадиона.</div>
+            <div class="stats-highlight">Скорость: Максимум</div>
+        </div>
+
+        <!-- Ваня -->
+        <div class="card">
+            <div class="avatar-container">
+                <img src="vanya.jpg" alt="Ваня">
+                <span class="status-badge">Тяжеловес</span>
+            </div>
+            <div class="name">Ваня</div>
+            <div class="bio-text">Медленный и высокий, также участвовал в нескольких битвах. Битва за полицейский участок, битва за заброшку, оккупация стадиона.</div>
+            <div class="stats-highlight">Стойкость: Осада</div>
+        </div>
+
+        <!-- Арсалан -->
+        <div class="card">
+            <div class="avatar-container">
+                <img src="arsalan.jpg" alt="Арсалан">
+                <span class="status-badge" style="background: #00cc66; color: #fff;">Сборщик</span>
+            </div>
+            <div class="name">Арсалан</div>
+            <div class="bio-text">Арсалан всегда всех зовет гулять, не главный.</div>
+            <div class="stats-highlight">Организатор Сборов</div>
+        </div>
+
+        <!-- Скрытый Санжи -->
+        <div class="card" id="sanji-card">
+            <div class="avatar-container">
+                <img src="sanji.jpg" alt="Санжи">
+                <span class="status-badge" style="background: #ff0055; color: #fff;">Штурмовик</span>
+            </div>
+            <div class="name">Санжи</div>
+            <div class="bio-text">Атаковал полицейские участки и т.д. Он за них.</div>
+            <div class="stats-highlight" style="color: #ff0055;">Особо опасен</div>
+        </div>
+    </div>
+
+    <footer onclick="checkClicks()">Информация 2025Г.</footer>
+
+    <script>
+        let clickCount = 0;
+        function checkClicks() {
+            clickCount++;
+            if (clickCount === 3) {
+                document.getElementById('sanji-card').style.display = 'block';
+            }
+        }
+    </script>
+</body>
+</html>
