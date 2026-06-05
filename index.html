@@ -13,6 +13,7 @@
             --accent-gold: #ffcc00;
             --accent-glow: rgba(255, 204, 0, 0.4);
             --vista-blue: #0078d7;
+            --neon-pink: #ff0055;
         }
 
         * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -44,7 +45,6 @@
             user-select: none;
         }
 
-        /* Адаптивный контейнер */
         .container {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
@@ -101,7 +101,6 @@
         }
 
         .name { font-size: 1.6rem; font-weight: 700; margin-bottom: 15px; }
-
         .bio-text { font-size: 0.95rem; color: #b3b9c1; line-height: 1.6; min-height: 80px; text-align: center; }
 
         .stats-highlight {
@@ -114,7 +113,7 @@
             letter-spacing: 1px;
         }
 
-        #sanji-card { display: none; border-color: #ff0055; animation: fadeIn 0.5s ease forwards; }
+        #sanji-card { display: none; border-color: var(--neon-pink); box-shadow: 0 0 15px rgba(255, 0, 85, 0.3); animation: fadeIn 0.5s ease forwards; }
 
         /* Полноэкранные страницы/оверлеи */
         .fullscreen-overlay {
@@ -136,13 +135,13 @@
             user-select: none; z-index: 10001;
         }
 
-        /* ЭКРАН АРТЁМА: Диаграмма и Радар */
+        /* ЭКРАН АРТЁМА */
         .artem-page { background: #07090e; width: 100%; height: 100%; color: #fff; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 30px; }
         .radar-track {
-            width: 200px; height: 200px; border: 2px dashed var(--accent-gold); border-radius: 50%;
+            width: 180px; height: 180px; border: 2px dashed var(--accent-gold); border-radius: 50%;
             position: relative; animation: spin 4s linear infinite; display: flex; align-items: center; justify-content: center;
         }
-        .radar-pointer { width: 20px; height: 20px; background: red; border-radius: 50%; position: absolute; top: 10px; box-shadow: 0 0 15px red; }
+        .radar-pointer { width: 18px; height: 18px; background: red; border-radius: 50%; position: absolute; top: 10px; box-shadow: 0 0 15px red; }
         .chart-container { width: 100%; max-width: 400px; background: #111; padding: 20px; border-radius: 15px; border: 1px solid #333; }
         .chart-bar { background: var(--accent-gold); height: 25px; margin: 10px 0; display: flex; align-items: center; padding-left: 10px; color: #000; font-weight: bold; border-radius: 5px; transition: width 1s ease; width: 0; }
 
@@ -152,10 +151,10 @@
             background: linear-gradient(135deg, #1d589a 0%, #10386a 100%);
             position: relative; overflow: hidden; display: flex; flex-direction: column; justify-content: space-between;
         }
-        .vista-icon { width: 80px; text-align: center; margin: 20px; cursor: pointer; color: white; font-size: 0.8rem; text-shadow: 1px 1px 3px #000; }
-        .vista-icon img { width: 50px; height: 50px; display: block; margin: 0 auto 5px; }
+        .vista-icon { width: 90px; text-align: center; margin: 30px; cursor: pointer; color: white; font-size: 0.8rem; text-shadow: 1px 1px 3px #000; }
+        .vista-icon svg { width: 55px; height: 55px; display: block; margin: 0 auto 8px; filter: drop-shadow(0px 4px 5px rgba(0,0,0,0.3)); }
         .vista-window {
-            position: absolute; top: 30%; left: 50%; transform: translate(-50%, -50%);
+            position: absolute; top: 40%; left: 50%; transform: translate(-50%, -50%);
             width: 90%; max-width: 400px; background: rgba(240, 240, 240, 0.95); border: 3px solid #005a9e;
             border-radius: 8px; color: #000; box-shadow: 0 10px 20px rgba(0,0,0,0.4); display: none; flex-direction: column;
         }
@@ -165,10 +164,15 @@
         .vista-taskbar { width: 100%; height: 40px; background: rgba(20, 20, 20, 0.85); backdrop-filter: blur(5px); display: flex; align-items: center; padding-left: 10px; }
         .start-btn { width: 32px; height: 32px; background: #0078d7; border-radius: 50%; box-shadow: 0 0 10px #0078d7; }
 
-        /* BSOD Экран смерти */
-        #bsod { display: none; position: fixed; inset: 0; background: #0000aa; color: white; padding: 40px; font-family: monospace; z-index: 50000; text-align: left; }
+        /* ИГРА ТИМУРА */
+        .speed-clicker { width: 120px; height: 120px; background: radial-gradient(circle, #ffcc00, #ff8800); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: black; font-weight: bold; font-size: 1.2rem; cursor: pointer; box-shadow: 0 0 25px var(--accent-gold); user-select: none; -webkit-user-select: none; }
+        .speed-clicker:active { transform: scale(0.95); filter: brightness(1.2); }
 
-        /* Остальные стили */
+        /* ТЕРМИНАЛ САНЖИ */
+        .terminal-box { width: 100%; max-width: 500px; height: 300px; background: #000; border: 2px solid var(--neon-pink); border-radius: 10px; font-family: monospace; padding: 15px; color: #00ff00; overflow-y: hidden; box-shadow: 0 0 20px rgba(255, 0, 85, 0.4); margin-top: 20px; font-size: 0.85rem; }
+
+        /* Оверлеи ПК / Базовые анимации */
+        #bsod { display: none; position: fixed; inset: 0; background: #0000aa; color: white; padding: 40px; font-family: monospace; z-index: 50000; text-align: left; }
         #trigger-image { max-width: 85%; max-height: 50vh; border: 3px dashed var(--accent-gold); border-radius: 10px; cursor: pointer; }
         .unlocked-container { display: none; margin-top: 20px; flex-wrap: wrap; gap: 15px; justify-content: center; }
         .unlocked-container img { width: 150px; height: 150px; object-fit: cover; border: 3px solid #ff0055; border-radius: 10px; }
@@ -185,6 +189,7 @@
     <header><h1 onclick="triggerShake()">Досье: Главные Лица</h1></header>
     
     <div class="container">
+        <!-- АРТЁМ -->
         <div class="card" onclick="openArtemPage()">
             <div class="avatar-container">
                 <img src="artem.jpg" alt="Артём">
@@ -195,6 +200,7 @@
             <div class="stats-highlight">Хранитель Компромата</div>
         </div>
 
+        <!-- СЛАВА -->
         <div class="card" onclick="openVista()">
             <div class="avatar-container">
                 <img src="slava.jpg" alt="Слава">
@@ -205,16 +211,18 @@
             <div class="stats-highlight">Высотный Пацифист</div>
         </div>
 
-        <div class="card">
+        <!-- ТИМУР -->
+        <div class="card" onclick="openTimurGame()">
             <div class="avatar-container">
                 <img src="timur.jpg" alt="Тимур">
                 <span class="status-badge">Ветеран</span>
             </div>
             <div class="name">Тимур</div>
             <div class="bio-text">Быстрый флеш, участвовал в нескольких битвах. Битва за полицейский участок, битва за заброшку, оккупацию стадиона.</div>
-            <div class="stats-highlight">Скорость: Максимум</div>
+            <div class="stats-highlight">Скорость: Максимум (Тапни для теста)</div>
         </div>
 
+        <!-- ВАНЯ -->
         <div class="card">
             <div class="avatar-container">
                 <img src="vanya.jpg" alt="Ваня" onclick="event.stopPropagation(); checkVanyaClicks()">
@@ -225,6 +233,7 @@
             <div class="stats-highlight">Стойкость: Осада</div>
         </div>
 
+        <!-- АРСАЛАН -->
         <div class="card">
             <div class="avatar-container">
                 <img src="arsalan.jpg" alt="Арсалан" ondblclick="event.stopPropagation(); triggerChaos()">
@@ -235,23 +244,24 @@
             <div class="stats-highlight">Организатор Сборов</div>
         </div>
 
-        <div class="card" id="sanji-card">
+        <!-- САНЖИ -->
+        <div class="card" id="sanji-card" onclick="openSanjiTerminal()">
             <div class="avatar-container">
                 <img src="sanji.jpg" alt="Санжи">
-                <span class="status-badge" style="background: #ff0055; color: #fff;">Штурма</span>
+                <span class="status-badge" style="background: #ff0055; color: #fff;">Крутой турма</span>
             </div>
             <div class="name">Санжи</div>
             <div class="bio-text">Атаковал полицейские участки и т.д. Он за них.</div>
-            <div class="stats-highlight" style="color: #ff0055;">Особо опасен</div>
+            <div class="stats-highlight" style="color: #ff0055;">Особо опасен (Архив Системы)</div>
         </div>
     </div>
 
+    <!-- СТРАНИЦА АРТЁМА -->
     <div id="artem-overlay" class="fullscreen-overlay">
         <span class="close-btn" onclick="closeArtemPage()">&times;</span>
         <div class="artem-page">
             <h2 style="color:var(--accent-gold)">РАДАР ПОИСКА КОМПРОМАТА</h2>
             <div class="radar-track"><div class="radar-pointer"></div></div>
-            
             <div class="chart-container">
                 <h3 style="margin-bottom:10px; font-size:0.9rem;">СТАТИСТИКА МОЩНОСТИ СПЕЦ-ПРИЕМОВ</h3>
                 <div style="font-size:0.8rem; color:#aaa;">Рыгание</div>
@@ -264,11 +274,16 @@
         </div>
     </div>
 
+    <!-- СТРАНИЦА СЛАВЫ (WINDOWS VISTA С КРАСИВОЙ ИКОНКОЙ) -->
     <div id="vista-overlay" class="fullscreen-overlay" style="padding:0;">
         <span class="close-btn" onclick="closeVista()" style="right:20px; top:10px;">&times;</span>
         <div class="vista-desktop">
             <div class="vista-icon" onclick="openVistaWindow()">
-                <img src="https://upload.wikimedia.org/wikipedia/commons/5/5f/Windows_Folder_Icon.svg" alt="Folder">
+                <!-- Кастомная неоновая папка высокого качества -->
+                <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M22 19V9C22 7.89543 21.1046 7 20 7H12L10 4H4C2.89543 4 2 4.89543 2 6V19C2 20.1046 2.89543 21 4 21H20C21.1046 21 22 20.1046 22 19Z" fill="#ffaa00" stroke="#fff" stroke-width="1.5"/>
+                    <path d="M2 10H22" stroke="#fff" stroke-width="1.5"/>
+                </svg>
                 <span>КУДА ПРОПАЛ САНЖИ</span>
             </div>
 
@@ -282,11 +297,28 @@
                     <button onclick="startSearchGlitch()" style="padding:8px 15px; cursor:pointer;">Искать Санжи</button>
                 </div>
             </div>
-
             <div class="vista-taskbar"><div class="start-btn"></div></div>
         </div>
     </div>
 
+    <!-- СТРАНИЦА ТИМУРА (МИНИ-ИГРА НА СКОРОСТЬ) -->
+    <div id="timur-overlay" class="fullscreen-overlay">
+        <span class="close-btn" onclick="closeTimurGame()">&times;</span>
+        <h2 style="color:var(--accent-gold); margin-bottom: 10px;">СВЕРХЗВУКОВОЙ ТИМУР</h2>
+        <p style="color:#aaa; margin-bottom: 30px; text-align:center;">У тебя есть 5 секунд. Кликай по кнопке со скоростью Флеша!</p>
+        <div id="clicker-btn" class="speed-clicker" onclick="clickTimurTarget()">КЛИК!</div>
+        <h3 id="clicker-score" style="margin-top: 30px; font-size: 1.5rem;">Клики: 0</h3>
+        <h4 id="clicker-timer" style="color: red; margin-top: 10px;">Взлом не начат</h4>
+    </div>
+
+    <!-- СТРАНИЦА САНЖИ (ХАКЕРСКИЙ ТЕРМИНАЛ) -->
+    <div id="sanji-overlay" class="fullscreen-overlay">
+        <span class="close-btn" onclick="closeSanjiTerminal()">&times;</span>
+        <h2 style="color:var(--neon-pink); text-shadow: 0 0 10px rgba(255,0,85,0.5);">ВЗЛОМ ЛОГОВ САНЖИ...</h2>
+        <div class="terminal-box" id="term-logs"></div>
+    </div>
+
+    <!-- ПАСХАЛКА ВАНЯ -->
     <div id="secret-overlay" class="fullscreen-overlay">
         <span class="close-btn" onclick="closeOverlay()">&times;</span>
         <img id="trigger-image" src="vanya_secret.jpg" alt="Ввод PIN" onclick="askPin()">
@@ -295,13 +327,11 @@
         </div>
     </div>
 
+    <!-- BSOD -->
     <div id="bsod">
         <p>A problem has been detected and Windows has been shut down to prevent damage to your computer.</p><br>
         <p>SANJI_NOT_FOUND_IN_SYSTEM_CORES</p><br>
-        <p>If this is the first time you've seen this Stop error screen, restart your computer. If this screen appears again, follow these steps:</p><br>
-        <p>Check to make sure any new hardware or software is properly installed. Проверьте логи штурма стадиона.</p><br>
-        <p>Technical Information:</p>
-        <p>*** STOP: 0x000000D1 (0x0000000C, 0x00000002, 0x00000000, 0xF73120AE)</p><br>
+        <p>Technical Information: *** STOP: 0x000000D1</p><br>
         <p>Click anywhere to reboot system...</p>
     </div>
 
@@ -310,33 +340,26 @@
     <script>
         let clickCount = 0, shakeCount = 0, vanyaClicks = 0;
 
-        // ПАСХАЛКА САНЖИ (Нижний футер)
         function checkClicks() {
             clickCount++;
-            if (clickCount === 3) { document.getElementById('sanji-card').style.display = 'block'; }
+            if (clickCount === 3) { document.getElementById('sanji-card').style.display = 'block'; alert("Обнаружен скрытый файл: Санжи добавлен в архив!"); }
         }
 
-        // ТРЯСКА ШЕЙК
         function triggerShake() {
             shakeCount++;
             if (shakeCount === 5) {
                 const cards = document.querySelectorAll('.card');
                 cards.forEach(card => card.classList.add('shaking'));
-                setTimeout(() => {
-                    cards.forEach(card => card.classList.remove('shaking'));
-                    shakeCount = 0;
-                }, 3000);
+                setTimeout(() => { cards.forEach(card => card.classList.remove('shaking')); shakeCount = 0; }, 3000);
             }
         }
 
-        // ХАОС АРСАЛАНА
         function triggerChaos() {
             document.body.classList.add('glitch-mode');
             alert("АРСАЛАН! Что ты наделал?! Зачем ты всех позвал гулять? Сайт взломан!");
             setTimeout(() => { document.body.classList.remove('glitch-mode'); }, 4000);
         }
 
-        // КЛИКИ ВАНЯ
         function checkVanyaClicks() {
             vanyaClicks++;
             if (vanyaClicks === 3) { document.getElementById('secret-overlay').style.display = 'flex'; vanyaClicks = 0; }
@@ -348,7 +371,6 @@
             else if (p !== null) { alert("НЕВЕРНЫЙ КОД!"); }
         }
 
-        // ИНТЕРАКТИВ АРТЁМА (Диаграмма)
         function openArtemPage() {
             document.getElementById('artem-overlay').style.display = 'flex';
             setTimeout(() => {
@@ -359,30 +381,75 @@
         }
         function closeArtemPage() {
             document.getElementById('artem-overlay').style.display = 'none';
-            document.getElementById('bar1').style.width = '0';
-            document.getElementById('bar2').style.width = '0';
-            document.getElementById('bar3').style.width = '0';
+            document.getElementById('bar1').style.width = '0'; document.getElementById('bar2').style.width = '0'; document.getElementById('bar3').style.width = '0';
         }
 
-        // СИМУЛЯТОР ВИНДОВС СЛАВЫ
         function openVista() { document.getElementById('vista-overlay').style.display = 'flex'; }
         function closeVista() { document.getElementById('vista-overlay').style.display = 'none'; closeVistaWindow(); }
         function openVistaWindow() { document.getElementById('vista-win').style.display = 'flex'; }
         function closeVistaWindow() { document.getElementById('vista-win').style.display = 'none'; }
-
         function startSearchGlitch() {
             alert("Ошибка 0x80070002: Санжи скрылся с радаров штурма!");
-            alert("Попытка переподключения к стадиону...");
             document.getElementById('bsod').style.display = 'block';
         }
+        document.getElementById('bsod').onclick = function() { this.style.display = 'none'; closeVista(); };
 
-        // Перезагрузка BSOD экрана
-        document.getElementById('bsod').onclick = function() {
-            this.style.display = 'none';
-            closeVista();
-        };
+        // ЛОГИКА ДЛЯ ТИМУРА
+        let timurClicks = 0, clickerTimer = null, timeLeft = 5, gameActive = false;
+        function openTimurGame() { document.getElementById('timur-overlay').style.display = 'flex'; resetTimurGame(); }
+        function closeTimurGame() { document.getElementById('timur-overlay').style.display = 'none'; clearInterval(clickerTimer); gameActive = false; }
+        function resetTimurGame() {
+            timurClicks = 0; timeLeft = 5; gameActive = false;
+            document.getElementById('clicker-score').innerText = "Клики: 0";
+            document.getElementById('clicker-timer').innerText = "Кликни по кнопке, чтобы начать!";
+            document.getElementById('clicker-timer').style.color = "var(--accent-gold)";
+        }
+        function clickTimurTarget() {
+            if (!gameActive && timeLeft === 5) {
+                gameActive = true;
+                clickerTimer = setInterval(() => {
+                    timeLeft--;
+                    document.getElementById('clicker-timer').innerText = `Осталось времени: ${timeLeft}с`;
+                    if (timeLeft <= 0) {
+                        clearInterval(clickerTimer);
+                        gameActive = false;
+                        document.getElementById('clicker-timer').innerText = "Время вышло!";
+                        document.getElementById('clicker-timer').style.color = "red";
+                        alert(`Финиш! Твоя скорость штурма: ${timurClicks} кликов за 5 секунд! Тимур одобряет.`);
+                    }
+                }, 1000);
+            }
+            if (gameActive) {
+                timurClicks++;
+                document.getElementById('clicker-score').innerText = `Клики: ${timurClicks}`;
+            }
+        }
+
+        // ЛОГИКА ДЛЯ САНЖИ
+        function openSanjiTerminal() {
+            document.getElementById('sanji-overlay').style.display = 'flex';
+            const box = document.getElementById('term-logs');
+            box.innerHTML = "";
+            const lines = [
+                "> Подключение к серверу полицейского участка...",
+                "> Доступ получен. Обход брандмауэра... 100%",
+                "> Поиск заблокированных логов Санжи...",
+                "> НАЙДЕНО: Операция 'Оккупация стадиона' прошла успешно.",
+                "> Статус Лидера: Засекречен. Находится на гитарной сессии.",
+                "> Взлом завершен. Полный доступ к архивам штурма открыт!"
+            ];
+            let i = 0;
+            const interval = setInterval(() => {
+                if(i < lines.length) {
+                    box.innerHTML += lines[i] + "<br><br>";
+                    i++;
+                } else { clearInterval(interval); }
+            }, 800);
+        }
+        function closeSanjiTerminal() { document.getElementById('sanji-overlay').style.display = 'none'; }
     </script>
-    
+
+    <!-- BLOAT DATA (1 MB) -->
     <script>const bloat = "010101010101".repeat(85000);</script>
 </body>
-            </html>
+</html>
