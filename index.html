@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+       <!DOCTYPE html>
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
@@ -38,6 +38,8 @@
             color: var(--accent-gold);
             text-shadow: 0 0 15px var(--accent-glow);
             margin-bottom: 10px;
+            cursor: pointer;
+            user-select: none;
         }
 
         .container {
@@ -78,6 +80,7 @@
             border: 3px solid var(--accent-gold);
             box-shadow: 0 0 15px rgba(0, 0, 0, 0.6);
             background-color: #333;
+            cursor: pointer;
         }
 
         .status-badge {
@@ -119,25 +122,90 @@
         }
 
         @keyframes fadeIn { from { opacity: 0; transform: scale(0.8); } to { opacity: 1; transform: scale(1); } }
+
+        /* Эффекты старых пасхалок */
+        .shaking { animation: shake 0.5s infinite; }
+        @keyframes shake {
+            0% { transform: translate(1px, 1px) rotate(0deg); }
+            10% { transform: translate(-1px, -2px) rotate(-1deg); }
+            20% { transform: translate(-3px, 0px) rotate(1deg); }
+            30% { transform: translate(3px, 2px) rotate(0deg); }
+            40% { transform: translate(1px, -1px) rotate(1deg); }
+            50% { transform: translate(-1px, 2px) rotate(-1deg); }
+            100% { transform: translate(0, 0) rotate(0deg); }
+        }
+
+        .glitch-mode { filter: invert(1) hue-rotate(180deg); animation: crazy-jump 0.1s infinite; }
+        @keyframes crazy-jump {
+            0% { transform: translate(5px, -5px); }
+            100% { transform: translate(-5px, 5px); }
+        }
+
+        /* Полноэкранный темный экран для новой пасхалки */
+        #secret-overlay {
+            display: none;
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background: rgba(0, 0, 0, 0.98);
+            z-index: 10000;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            overflow-y: auto;
+        }
+        #secret-overlay .close-btn {
+            position: absolute; top: 20px; right: 30px;
+            color: #fff; font-size: 2.5rem; cursor: pointer;
+            user-select: none; transition: color 0.2s;
+        }
+        #secret-overlay .close-btn:hover { color: #ff0055; }
+        
+        #trigger-image {
+            max-width: 85%; max-height: 55vh;
+            border: 3px dashed var(--accent-gold);
+            border-radius: 10px;
+            cursor: pointer;
+            box-shadow: 0 0 20px rgba(255, 204, 0, 0.2);
+            transition: transform 0.2s;
+            object-fit: contain;
+        }
+        #trigger-image:hover { transform: scale(1.02); }
+        
+        .unlocked-container {
+            display: none;
+            margin-top: 30px;
+            flex-wrap: wrap;
+            gap: 20px;
+            justify-content: center;
+            width: 100%;
+            max-width: 1000px;
+        }
+        .unlocked-container img {
+            width: 220px; height: 220px;
+            object-fit: cover;
+            border: 3px solid #ff0055;
+            border-radius: 15px;
+            box-shadow: 0 0 15px rgba(255, 0, 85, 0.4);
+        }
     </style>
 </head>
 <body>
 
-    <header><h1>Досье: Главные Лица</h1></header>
+    <header><h1 onclick="triggerShake()">Досье: Главные Лица</h1></header>
     
     <div class="container">
-        <!-- Артем -->
         <div class="card">
             <div class="avatar-container">
                 <img src="artem.jpg" alt="Артём">
                 <span class="status-badge" style="background: #ff4444; color: #fff;">Спец-приемы</span>
             </div>
-            <div class="name">Артём</div>
+            <div class="name">Aртём</div>
             <div class="bio-text">Он умеет отлично рыгать и пердеть, также есть запас много чего интересного в галерее. Помог отравить Арину.</div>
             <div class="stats-highlight">Хранитель Компромата</div>
         </div>
 
-        <!-- Слава -->
         <div class="card">
             <div class="avatar-container">
                 <img src="slava.jpg" alt="Слава">
@@ -148,7 +216,6 @@
             <div class="stats-highlight">Высотный Пацифист</div>
         </div>
 
-        <!-- Тимур -->
         <div class="card">
             <div class="avatar-container">
                 <img src="timur.jpg" alt="Тимур">
@@ -159,10 +226,9 @@
             <div class="stats-highlight">Скорость: Максимум</div>
         </div>
 
-        <!-- Ваня -->
         <div class="card">
             <div class="avatar-container">
-                <img src="vanya.jpg" alt="Ваня">
+                <img src="vanya.jpg" alt="Ваня" onclick="checkVanyaClicks()">
                 <span class="status-badge">Тяжеловес</span>
             </div>
             <div class="name">Ваня</div>
@@ -170,22 +236,20 @@
             <div class="stats-highlight">Стойкость: Осада</div>
         </div>
 
-        <!-- Арсалан -->
         <div class="card">
             <div class="avatar-container">
-                <img src="arsalan.jpg" alt="Арсалан">
+                <img src="arsalan.jpg" alt="Арсалан" ondblclick="triggerChaos()">
                 <span class="status-badge" style="background: #00cc66; color: #fff;">Сборщик</span>
             </div>
             <div class="name">Арсалан</div>
-            <div class="bio-text">Арсалан всегда всех зовет гулять, крутой.</div>
+            <div class="bio-text">Арсалан всегда всех зовет гулять, туалет.</div>
             <div class="stats-highlight">Организатор Сборов</div>
         </div>
 
-        <!-- Скрытый Санжи -->
         <div class="card" id="sanji-card">
             <div class="avatar-container">
                 <img src="sanji.jpg" alt="Санжи">
-                <span class="status-badge" style="background: #ff0055; color: #fff;">Штурмовик</span>
+                <span class="status-badge" style="background: #ff0055; color: #fff;">Лидер Штурма</span>
             </div>
             <div class="name">Санжи</div>
             <div class="bio-text">Атаковал полицейские участки и т.д. Он за них.</div>
@@ -193,14 +257,70 @@
         </div>
     </div>
 
+    <div id="secret-overlay">
+        <span class="close-btn" onclick="closeOverlay()">&times;</span>
+        <img id="trigger-image" src="vanya_secret.jpg" alt="Кликни по мне для ввода PIN" onclick="askPin()">
+        
+        <div class="unlocked-container" id="unlocked-pics">
+            <img src="secret_1.jpg" alt="Секретное фото 1">
+            <img src="secret_2.jpg" alt="Секретное фото 2">
+            <img src="secret_3.jpg" alt="Секретное фото 3">
+        </div>
+    </div>
+
     <footer onclick="checkClicks()">Информация 2025Г.</footer>
 
     <script>
         let clickCount = 0;
+        let shakeCount = 0;
+        let vanyaClicks = 0;
+
         function checkClicks() {
             clickCount++;
             if (clickCount === 3) {
                 document.getElementById('sanji-card').style.display = 'block';
+            }
+        }
+
+        function triggerShake() {
+            shakeCount++;
+            if (shakeCount === 5) {
+                const cards = document.querySelectorAll('.card');
+                cards.forEach(card => card.classList.add('shaking'));
+                setTimeout(() => {
+                    cards.forEach(card => card.classList.remove('shaking'));
+                    shakeCount = 0;
+                }, 3000);
+            }
+        }
+
+        function triggerChaos() {
+            document.body.classList.add('glitch-mode');
+            alert("АРСАЛАН! Что ты наделал?! Сайт взломан!");
+            setTimeout(() => { document.body.classList.remove('glitch-mode'); }, 4000);
+        }
+
+        /* Логика пасхалки Вани */
+        function checkVanyaClicks() {
+            vanyaClicks++;
+            if (vanyaClicks === 3) {
+                document.getElementById('secret-overlay').style.display = 'flex';
+                vanyaClicks = 0;
+            }
+        }
+
+        function closeOverlay() {
+            document.getElementById('secret-overlay').style.display = 'none';
+            document.getElementById('unlocked-pics').style.display = 'none';
+        }
+
+        function askPin() {
+            let userPin = prompt("Доступ заблокирован. Введите PIN-код для разблокировки:");
+            if (userPin === "1234") {
+                alert("Доступ разрешен. Архивы открыты.");
+                document.getElementById('unlocked-pics').style.display = 'flex';
+            } else if (userPin !== null) {
+                alert("НЕВЕРНЫЙ КОД! Доступ запрещен.");
             }
         }
     </script>
