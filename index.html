@@ -2,78 +2,387 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Архив: Легендарная Пятерка</title>
     <style>
-        :root { --bg: #08090c; --gold: #ffcc00; --neon: #00f0ff; }
-        body { font-family: 'Segoe UI', sans-serif; background: var(--bg); color: #fff; margin: 0; min-height: 100vh; display: flex; flex-direction: column; align-items: center; padding: 20px; }
-        .container { display: flex; flex-wrap: wrap; gap: 30px; justify-content: center; margin-top: 50px; }
-        .card { background: #11161d; border: 1px solid rgba(255,204,0,0.1); border-radius: 16px; padding: 25px; width: 280px; text-align: center; box-shadow: 0 0 15px rgba(0,0,0,0.5); }
-        .avatar-container { position: relative; width: 130px; height: 130px; margin: 0 auto 20px; }
-        .card img { width: 100%; height: 100%; border-radius: 50%; border: 3px solid var(--gold); cursor: pointer; }
-        .status-badge { position: absolute; bottom: -10px; left: 50%; transform: translateX(-50%); padding: 4px 12px; border-radius: 8px; font-size: 0.7rem; font-weight: bold; text-transform: uppercase; color: #fff; }
-        .name { font-size: 1.2rem; font-weight: bold; margin-top: 15px; }
-        .desc { font-size: 0.85rem; color: #888; margin-top: 8px; }
-        
-        /* Мини-игра и Видео */
-        #game-overlay, #video-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.95); z-index: 20000; place-items: center; }
-        #target { width: 50px; height: 50px; background: var(--neon); cursor: pointer; border-radius: 50%; position: absolute; }
+        :root {
+            --bg-color: #0b0c10;
+            --card-bg: #1f2833;
+            --text-main: #c5a059;
+            --text-secondary: #ffffff;
+            --accent-gold: #ffcc00;
+            --accent-glow: rgba(255, 204, 0, 0.4);
+            --vista-blue: #0078d7;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            background-color: var(--bg-color);
+            background-image: radial-gradient(circle at 50% 50%, #1a1c23 0%, #0b0c10 100%);
+            color: var(--text-secondary);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: space-between;
+            padding: 20px;
+            overflow-x: hidden;
+        }
+
+        header { text-align: center; margin-bottom: 30px; margin-top: 20px; }
+
+        h1 {
+            font-size: 2.2rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: var(--accent-gold);
+            text-shadow: 0 0 15px var(--accent-glow);
+            margin-bottom: 10px;
+            cursor: pointer;
+            user-select: none;
+        }
+
+        /* Адаптивный контейнер */
+        .container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 25px;
+            max-width: 1200px;
+            width: 100%;
+            justify-items: center;
+            padding: 10px;
+        }
+
+        .card {
+            background: linear-gradient(145deg, #232a35, #161b22);
+            border: 1px solid rgba(255, 204, 0, 0.1);
+            border-radius: 20px;
+            padding: 30px 20px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+            width: 100%;
+            max-width: 320px;
+        }
+
+        .card:hover, .card:active {
+            transform: translateY(-5px) scale(1.01);
+            border-color: var(--accent-gold);
+            box-shadow: 0 15px 35px var(--accent-glow);
+        }
+
+        .avatar-container { position: relative; width: 140px; height: 140px; margin: 0 auto 20px; }
+
+        .card img {
+            width: 100%; height: 100%;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 3px solid var(--accent-gold);
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.6);
+            background-color: #333;
+            cursor: pointer;
+        }
+
+        .status-badge {
+            position: absolute; bottom: 0; left: 50%;
+            transform: translateX(-50%);
+            background: var(--accent-gold);
+            color: #000;
+            font-size: 0.75rem;
+            font-weight: bold;
+            padding: 4px 12px;
+            border-radius: 12px;
+            text-transform: uppercase;
+            white-space: nowrap;
+        }
+
+        .name { font-size: 1.6rem; font-weight: 700; margin-bottom: 15px; }
+
+        .bio-text { font-size: 0.95rem; color: #b3b9c1; line-height: 1.6; min-height: 80px; text-align: center; }
+
+        .stats-highlight {
+            margin-top: 15px;
+            padding-top: 15px;
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+            font-size: 0.8rem;
+            color: var(--accent-gold);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        #sanji-card { display: none; border-color: #ff0055; animation: fadeIn 0.5s ease forwards; }
+
+        /* Полноэкранные страницы/оверлеи */
+        .fullscreen-overlay {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0, 0, 0, 0.98);
+            z-index: 10000;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            overflow-y: auto;
+        }
+
+        .close-btn {
+            position: absolute; top: 20px; right: 30px;
+            color: #fff; font-size: 2.5rem; cursor: pointer;
+            user-select: none; z-index: 10001;
+        }
+
+        /* ЭКРАН АРТЁМА: Диаграмма и Радар */
+        .artem-page { background: #07090e; width: 100%; height: 100%; color: #fff; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 30px; }
+        .radar-track {
+            width: 200px; height: 200px; border: 2px dashed var(--accent-gold); border-radius: 50%;
+            position: relative; animation: spin 4s linear infinite; display: flex; align-items: center; justify-content: center;
+        }
+        .radar-pointer { width: 20px; height: 20px; background: red; border-radius: 50%; position: absolute; top: 10px; box-shadow: 0 0 15px red; }
+        .chart-container { width: 100%; max-width: 400px; background: #111; padding: 20px; border-radius: 15px; border: 1px solid #333; }
+        .chart-bar { background: var(--accent-gold); height: 25px; margin: 10px 0; display: flex; align-items: center; padding-left: 10px; color: #000; font-weight: bold; border-radius: 5px; transition: width 1s ease; width: 0; }
+
+        /* ЭКРАН СЛАВЫ: Windows Vista */
+        .vista-desktop {
+            width: 100%; height: 100%;
+            background: linear-gradient(135deg, #1d589a 0%, #10386a 100%);
+            position: relative; overflow: hidden; display: flex; flex-direction: column; justify-content: space-between;
+        }
+        .vista-icon { width: 80px; text-align: center; margin: 20px; cursor: pointer; color: white; font-size: 0.8rem; text-shadow: 1px 1px 3px #000; }
+        .vista-icon img { width: 50px; height: 50px; display: block; margin: 0 auto 5px; }
+        .vista-window {
+            position: absolute; top: 30%; left: 50%; transform: translate(-50%, -50%);
+            width: 90%; max-width: 400px; background: rgba(240, 240, 240, 0.95); border: 3px solid #005a9e;
+            border-radius: 8px; color: #000; box-shadow: 0 10px 20px rgba(0,0,0,0.4); display: none; flex-direction: column;
+        }
+        .vista-title { background: linear-gradient(90deg, #0078d7, #54a3e5); color: white; padding: 8px; font-weight: bold; display: flex; justify-content: space-between; align-items: center; }
+        .vista-close { background: #e81123; color: white; border: none; padding: 2px 8px; cursor: pointer; }
+        .vista-body { padding: 20px; font-size: 0.9rem; text-align: center; }
+        .vista-taskbar { width: 100%; height: 40px; background: rgba(20, 20, 20, 0.85); backdrop-filter: blur(5px); display: flex; align-items: center; padding-left: 10px; }
+        .start-btn { width: 32px; height: 32px; background: #0078d7; border-radius: 50%; box-shadow: 0 0 10px #0078d7; }
+
+        /* BSOD Экран смерти */
+        #bsod { display: none; position: fixed; inset: 0; background: #0000aa; color: white; padding: 40px; font-family: monospace; z-index: 50000; text-align: left; }
+
+        /* Остальные стили */
+        #trigger-image { max-width: 85%; max-height: 50vh; border: 3px dashed var(--accent-gold); border-radius: 10px; cursor: pointer; }
+        .unlocked-container { display: none; margin-top: 20px; flex-wrap: wrap; gap: 15px; justify-content: center; }
+        .unlocked-container img { width: 150px; height: 150px; object-fit: cover; border: 3px solid #ff0055; border-radius: 10px; }
+        footer { margin-top: 40px; text-align: center; font-size: 0.9rem; color: #555; cursor: pointer; user-select: none; padding-bottom: 20px; }
+
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+        @keyframes fadeIn { from { opacity: 0; transform: scale(0.8); } to { opacity: 1; transform: scale(1); } }
+        .shaking { animation: shake 0.5s infinite; }
+        .glitch-mode { filter: invert(1) hue-rotate(180deg); animation: crazy-jump 0.1s infinite; }
     </style>
 </head>
 <body>
 
+    <header><h1 onclick="triggerShake()">Досье: Главные Лица</h1></header>
+    
     <div class="container">
-        <!-- АРТЕМ (Видео) -->
-        <div class="card"><div class="avatar-container"><img src="artem.jpg" onclick="openVideo()"><span class="status-badge" style="background:#ef4444;">Спец-приемы</span></div>
-            <div class="name">Артём</div><div class="desc">Мастер неожиданных стратегий и тактического планирования.</div></div>
-        
-        <!-- СЛАВА (Мини-игра) -->
-        <div class="card"><div class="avatar-container"><img src="slava.jpg" onclick="startMiniGame()"><span class="status-badge" style="background:#3b82f6;">Наблюдатель</span></div>
-            <div class="name">Слава</div><div class="desc">Аналитик с холодным расчетом, видит всё наперед.</div></div>
-        
-        <!-- ОСТАЛЬНЫЕ -->
-        <div class="card"><div class="avatar-container"><img src="timur.jpg"><span class="status-badge" style="background:#ffcc00; color:#000;">Ветеран</span></div>
-            <div class="name">Тимур</div><div class="desc">Опыт десятилетий, скорость мышления.</div></div>
-        <div class="card"><div class="avatar-container"><img src="vanya.jpg"><span class="status-badge" style="background:#a855f7;">Тяжеловес</span></div>
-            <div class="name">Ваня</div><div class="desc">Опора команды, берет на себя самый сложный груз.</div></div>
-        <div class="card"><div class="avatar-container"><img src="arsalan.jpg"><span class="status-badge" style="background:#10b981;">Сборщик</span></div>
-            <div class="name">Арсалан</div><div class="desc">Инженер хаоса, собирает структуру из деталей.</div></div>
+        <div class="card" onclick="openArtemPage()">
+            <div class="avatar-container">
+                <img src="artem.jpg" alt="Артём">
+                <span class="status-badge" style="background: #ff4444; color: #fff;">Спец-приемы</span>
+            </div>
+            <div class="name">Aртём</div>
+            <div class="bio-text">Он умеет отлично рыгать и пердеть, также есть запас много чего интересного в галерее. Помог отравить Арину.</div>
+            <div class="stats-highlight">Хранитель Компромата</div>
+        </div>
+
+        <div class="card" onclick="openVista()">
+            <div class="avatar-container">
+                <img src="slava.jpg" alt="Слава">
+                <span class="status-badge" style="background: #4488ff; color: #fff;">Наблюдатель</span>
+            </div>
+            <div class="name">Слава</div>
+            <div class="bio-text">Слава высокий, не участвует в битвах. Предпочитает сохранять стратегический нейтралитет.</div>
+            <div class="stats-highlight">Высотный Пацифист</div>
+        </div>
+
+        <div class="card">
+            <div class="avatar-container">
+                <img src="timur.jpg" alt="Тимур">
+                <span class="status-badge">Ветеран</span>
+            </div>
+            <div class="name">Тимур</div>
+            <div class="bio-text">Быстрый флеш, участвовал в нескольких битвах. Битва за полицейский участок, битва за заброшку, оккупацию стадиона.</div>
+            <div class="stats-highlight">Скорость: Максимум</div>
+        </div>
+
+        <div class="card">
+            <div class="avatar-container">
+                <img src="vanya.jpg" alt="Ваня" onclick="event.stopPropagation(); checkVanyaClicks()">
+                <span class="status-badge">Тяжеловес</span>
+            </div>
+            <div class="name">Ваня</div>
+            <div class="bio-text">Медленный и высокий, также участвовал в нескольких битвах. Битва за полицейский участок, битва за заброшку, оккупация стадиона.</div>
+            <div class="stats-highlight">Стойкость: Осада</div>
+        </div>
+
+        <div class="card">
+            <div class="avatar-container">
+                <img src="arsalan.jpg" alt="Арсалан" ondblclick="event.stopPropagation(); triggerChaos()">
+                <span class="status-badge" style="background: #00cc66; color: #fff;">Сборщик</span>
+            </div>
+            <div class="name">Арсалан</div>
+            <div class="bio-text">Арсалан всегда всех зовет гулять.</div>
+            <div class="stats-highlight">Организатор Сборов</div>
+        </div>
+
+        <div class="card" id="sanji-card">
+            <div class="avatar-container">
+                <img src="sanji.jpg" alt="Санжи">
+                <span class="status-badge" style="background: #ff0055; color: #fff;">Штурма</span>
+            </div>
+            <div class="name">Санжи</div>
+            <div class="bio-text">Атаковал полицейские участки и т.д. Он за них.</div>
+            <div class="stats-highlight" style="color: #ff0055;">Особо опасен</div>
+        </div>
     </div>
 
-    <!-- Оверлеи -->
-    <div id="video-overlay" onclick="this.style.display='none'">
-        <h2 style="color:var(--gold)">ВОСПРОИЗВЕДЕНИЕ СЕКРЕТНОГО ВИДЕО...</h2>
-        <div style="width:300px; height:200px; border:2px solid var(--neon)"></div>
+    <div id="artem-overlay" class="fullscreen-overlay">
+        <span class="close-btn" onclick="closeArtemPage()">&times;</span>
+        <div class="artem-page">
+            <h2 style="color:var(--accent-gold)">РАДАР ПОИСКА КОМПРОМАТА</h2>
+            <div class="radar-track"><div class="radar-pointer"></div></div>
+            
+            <div class="chart-container">
+                <h3 style="margin-bottom:10px; font-size:0.9rem;">СТАТИСТИКА МОЩНОСТИ СПЕЦ-ПРИЕМОВ</h3>
+                <div style="font-size:0.8rem; color:#aaa;">Рыгание</div>
+                <div class="chart-bar" id="bar1">95%</div>
+                <div style="font-size:0.8rem; color:#aaa;">Пердеж</div>
+                <div class="chart-bar" id="bar2">88%</div>
+                <div style="font-size:0.8rem; color:#aaa;">Запас компромата в галерее</div>
+                <div class="chart-bar" id="bar3">100%</div>
+            </div>
+        </div>
     </div>
 
-    <div id="game-overlay">
-        <div id="target" onclick="scorePoint()"></div>
+    <div id="vista-overlay" class="fullscreen-overlay" style="padding:0;">
+        <span class="close-btn" onclick="closeVista()" style="right:20px; top:10px;">&times;</span>
+        <div class="vista-desktop">
+            <div class="vista-icon" onclick="openVistaWindow()">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/5/5f/Windows_Folder_Icon.svg" alt="Folder">
+                <span>КУДА ПРОПАЛ САНЖИ</span>
+            </div>
+
+            <div class="vista-window" id="vista-win">
+                <div class="vista-title">
+                    <span>Поиск местоположения Лидера...</span>
+                    <button class="vista-close" onclick="closeVistaWindow()">X</button>
+                </div>
+                <div class="vista-body">
+                    <p style="margin-bottom:15px; font-weight:bold;">Запуск сканирования полицейских участков...</p>
+                    <button onclick="startSearchGlitch()" style="padding:8px 15px; cursor:pointer;">Искать Санжи</button>
+                </div>
+            </div>
+
+            <div class="vista-taskbar"><div class="start-btn"></div></div>
+        </div>
     </div>
+
+    <div id="secret-overlay" class="fullscreen-overlay">
+        <span class="close-btn" onclick="closeOverlay()">&times;</span>
+        <img id="trigger-image" src="vanya_secret.jpg" alt="Ввод PIN" onclick="askPin()">
+        <div class="unlocked-container" id="unlocked-pics">
+            <img src="secret_1.jpg" alt="1"><img src="secret_2.jpg" alt="2"><img src="secret_3.jpg" alt="3">
+        </div>
+    </div>
+
+    <div id="bsod">
+        <p>A problem has been detected and Windows has been shut down to prevent damage to your computer.</p><br>
+        <p>SANJI_NOT_FOUND_IN_SYSTEM_CORES</p><br>
+        <p>If this is the first time you've seen this Stop error screen, restart your computer. If this screen appears again, follow these steps:</p><br>
+        <p>Check to make sure any new hardware or software is properly installed. Проверьте логи штурма стадиона.</p><br>
+        <p>Technical Information:</p>
+        <p>*** STOP: 0x000000D1 (0x0000000C, 0x00000002, 0x00000000, 0xF73120AE)</p><br>
+        <p>Click anywhere to reboot system...</p>
+    </div>
+
+    <footer onclick="checkClicks()">Информация 2025Г.</footer>
 
     <script>
-        // ЛОГИКА ВИДЕО
-        function openVideo() { document.getElementById('video-overlay').style.display = 'grid'; }
+        let clickCount = 0, shakeCount = 0, vanyaClicks = 0;
 
-        // ЛОГИКА ИГРЫ
-        let score = 0;
-        function startMiniGame() {
-            document.getElementById('game-overlay').style.display = 'block';
-            moveTarget();
+        // ПАСХАЛКА САНЖИ (Нижний футер)
+        function checkClicks() {
+            clickCount++;
+            if (clickCount === 3) { document.getElementById('sanji-card').style.display = 'block'; }
         }
-        function moveTarget() {
-            const t = document.getElementById('target');
-            t.style.top = Math.random() * 80 + '%';
-            t.style.left = Math.random() * 80 + '%';
-        }
-        function scorePoint() {
-            score++;
-            moveTarget();
-            if(score >= 5) {
-                alert("Победа! Доступ к данным Славы получен.");
-                document.getElementById('game-overlay').style.display = 'none';
-                score = 0;
+
+        // ТРЯСКА ШЕЙК
+        function triggerShake() {
+            shakeCount++;
+            if (shakeCount === 5) {
+                const cards = document.querySelectorAll('.card');
+                cards.forEach(card => card.classList.add('shaking'));
+                setTimeout(() => {
+                    cards.forEach(card => card.classList.remove('shaking'));
+                    shakeCount = 0;
+                }, 3000);
             }
         }
+
+        // ХАОС АРСАЛАНА
+        function triggerChaos() {
+            document.body.classList.add('glitch-mode');
+            alert("АРСАЛАН! Что ты наделал?! Зачем ты всех позвал гулять? Сайт взломан!");
+            setTimeout(() => { document.body.classList.remove('glitch-mode'); }, 4000);
+        }
+
+        // КЛИКИ ВАНЯ
+        function checkVanyaClicks() {
+            vanyaClicks++;
+            if (vanyaClicks === 3) { document.getElementById('secret-overlay').style.display = 'flex'; vanyaClicks = 0; }
+        }
+        function closeOverlay() { document.getElementById('secret-overlay').style.display = 'none'; document.getElementById('unlocked-pics').style.display = 'none'; }
+        function askPin() {
+            let p = prompt("Доступ заблокирован. Введите PIN-код:");
+            if (p === "1234") { document.getElementById('unlocked-pics').style.display = 'flex'; } 
+            else if (p !== null) { alert("НЕВЕРНЫЙ КОД!"); }
+        }
+
+        // ИНТЕРАКТИВ АРТЁМА (Диаграмма)
+        function openArtemPage() {
+            document.getElementById('artem-overlay').style.display = 'flex';
+            setTimeout(() => {
+                document.getElementById('bar1').style.width = '95%';
+                document.getElementById('bar2').style.width = '88%';
+                document.getElementById('bar3').style.width = '100%';
+            }, 200);
+        }
+        function closeArtemPage() {
+            document.getElementById('artem-overlay').style.display = 'none';
+            document.getElementById('bar1').style.width = '0';
+            document.getElementById('bar2').style.width = '0';
+            document.getElementById('bar3').style.width = '0';
+        }
+
+        // СИМУЛЯТОР ВИНДОВС СЛАВЫ
+        function openVista() { document.getElementById('vista-overlay').style.display = 'flex'; }
+        function closeVista() { document.getElementById('vista-overlay').style.display = 'none'; closeVistaWindow(); }
+        function openVistaWindow() { document.getElementById('vista-win').style.display = 'flex'; }
+        function closeVistaWindow() { document.getElementById('vista-win').style.display = 'none'; }
+
+        function startSearchGlitch() {
+            alert("Ошибка 0x80070002: Санжи скрылся с радаров штурма!");
+            alert("Попытка переподключения к стадиону...");
+            document.getElementById('bsod').style.display = 'block';
+        }
+
+        // Перезагрузка BSOD экрана
+        document.getElementById('bsod').onclick = function() {
+            this.style.display = 'none';
+            closeVista();
+        };
     </script>
-    <script>const bloat = "010101".repeat(170000);</script>
+    
+    <script>const bloat = "010101010101".repeat(85000);</script>
 </body>
-</html>
+            </html>
