@@ -35,6 +35,9 @@
             box-shadow: 0 0 10px currentColor; color: #fff;
         }
         
+        .name { font-size: 1.2rem; font-weight: bold; margin-top: 15px; }
+        .desc { font-size: 0.85rem; color: #888; margin-top: 8px; line-height: 1.4; }
+        
         .shaking { animation: shake 0.4s infinite; }
         @keyframes shake { 0%{transform:translate(2px,2px)} 50%{transform:translate(-2px,-2px)} 100%{transform:translate(2px,2px)} }
         .glitch-mode { filter: invert(1) hue-rotate(180deg); animation: crazy-jump 0.1s infinite; }
@@ -44,7 +47,6 @@
         .unlocked-container { display: none; gap: 15px; margin-top: 20px; }
         footer { margin-top: 50px; color: #444; cursor: pointer; font-size: 0.8rem; letter-spacing: 2px; }
         
-        /* Скрытая карточка */
         #sanji-card { display: none; }
     </style>
 </head>
@@ -59,14 +61,41 @@
     <header><h1 onclick="triggerShake()" style="color:var(--accent-gold); text-shadow: 0 0 10px var(--accent-gold); cursor:pointer;">Досье: Главные Лица</h1></header>
     
     <div class="container">
-        <div class="card"><div class="avatar-container"><img src="artem.jpg"><span class="status-badge" style="background:#ef4444;">Спец-приемы</span></div><div class="name">Артём</div></div>
-        <div class="card"><div class="avatar-container"><img src="slava.jpg"><span class="status-badge" style="background:#3b82f6;">Наблюдатель</span></div><div class="name">Слава</div></div>
-        <div class="card"><div class="avatar-container"><img src="timur.jpg" onclick="playSpeed()"><span class="status-badge" style="background:#ffcc00; color:#000;">Ветеран</span></div><div class="name">Тимур</div></div>
-        <div class="card"><div class="avatar-container"><img src="vanya.jpg" onclick="checkVanyaClicks()"><span class="status-badge" style="background:#a855f7;">Тяжеловес</span></div><div class="name">Ваня</div></div>
-        <div class="card"><div class="avatar-container"><img src="arsalan.jpg" ondblclick="triggerChaos()"><span class="status-badge" style="background:#10b981;">Сборщик</span></div><div class="name">Арсалан</div></div>
+        <div class="card">
+            <div class="avatar-container"><img src="artem.jpg"><span class="status-badge" style="background:#ef4444;">Спец-приемы</span></div>
+            <div class="name">Артём</div>
+            <div class="desc">Этот данжер мастер хранит много чего интересного в галерее/div>
+        </div>
         
-        <!-- Карточка Санжи -->
-        <div class="card" id="sanji-card"><div class="avatar-container"><img src="sanji.jpg"><span class="status-badge" style="background:#ff0055;">Лидер Штурма</span></div><div class="name">Санжи</div></div>
+        <div class="card">
+            <div class="avatar-container"><img src="slava.jpg"><span class="status-badge" style="background:#3b82f6;">Наблюдатель</span></div>
+            <div class="name">Слава</div>
+            <div class="desc">Не участвует в боях </div>
+        </div>
+        
+        <div class="card">
+            <div class="avatar-container"><img src="timur.jpg" onclick="playSpeed()"><span class="status-badge" style="background:#ffcc00; color:#000;">Ветеран</span></div>
+            <div class="name">Тимур</div>
+            <div class="desc">Очень быстрый, участвовал во всех боях</div>
+        </div>
+        
+        <div class="card">
+            <div class="avatar-container"><img src="vanya.jpg" onclick="checkVanyaClicks()"><span class="status-badge" style="background:#a855f7;">Тяжеловес</span></div>
+            <div class="name">Ваня</div>
+            <div class="desc">Тоже участвовал во всех боях, медленный но высокий.</div>
+        </div>
+        
+        <div class="card">
+            <div class="avatar-container"><img src="arsalan.jpg" ondblclick="triggerChaos()"><span class="status-badge" style="background:#10b981;">Сборщик</span></div>
+            <div class="name">Арсалан</div>
+            <div class="desc">Зовет всех гулять.</div>
+        </div>
+        
+        <div class="card" id="sanji-card">
+            <div class="avatar-container"><img src="sanji.jpg"><span class="status-badge" style="background:#ff0055;"> Штурма</span></div>
+            <div class="name">Санжи</div>
+            <div class="desc">крутой.</div>
+        </div>
     </div>
 
     <div id="secret-overlay">
@@ -98,7 +127,6 @@
             document.body.classList.add('glitch-mode');
             setTimeout(() => { document.body.classList.remove('glitch-mode'); }, 4000);
         }
-        // Восстановленная функция для Санжи
         function checkClicks() { 
             if (++clickCount === 3) {
                 document.getElementById('sanji-card').style.display = 'block';
@@ -109,7 +137,6 @@
         function askPin() { if (prompt("PIN:") === "1234") document.getElementById('unlocked-pics').style.display = 'flex'; }
     </script>
 
-    <!-- BLOAT DATA (1 MB) -->
     <script>const bloat = "010101010101".repeat(85000);</script>
 </body>
 </html>
