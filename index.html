@@ -2,141 +2,78 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Архив: Легендарная Пятерка</title>
     <style>
-        :root { 
-            --bg-color: #08090c; 
-            --accent-gold: #ffcc00; 
-            --cyber-pink: #ff0055; 
-            --cyber-blue: #00f0ff;
-            --cyber-green: #10b981;
-            --cyber-purple: #a855f7;
-        }
-        body { font-family: 'Segoe UI', sans-serif; background: var(--bg-color); color: #fff; margin: 0; min-height: 100vh; display: flex; flex-direction: column; align-items: center; padding: 20px; }
-        
-        #loader { position: fixed; inset: 0; background: #000; z-index: 99999; display: flex; align-items: center; justify-content: center; color: var(--accent-gold); font-family: monospace; }
-        #console { position: fixed; bottom: 10px; right: 10px; width: 200px; height: 100px; background: rgba(0,0,0,0.8); border: 1px solid #333; font-size: 10px; padding: 5px; color: #0f0; overflow: hidden; pointer-events: none; z-index: 1000; }
-        
+        :root { --bg: #08090c; --gold: #ffcc00; --neon: #00f0ff; }
+        body { font-family: 'Segoe UI', sans-serif; background: var(--bg); color: #fff; margin: 0; min-height: 100vh; display: flex; flex-direction: column; align-items: center; padding: 20px; }
         .container { display: flex; flex-wrap: wrap; gap: 30px; justify-content: center; margin-top: 50px; }
-        
-        .card { 
-            background: #11161d; border: 1px solid rgba(255,204,0,0.1); border-radius: 16px; padding: 25px; width: 280px; text-align: center; 
-            transition: 0.4s; position: relative; box-shadow: 0 0 15px rgba(0,0,0,0.5);
-        }
-        .card:hover { border-color: var(--accent-gold); box-shadow: 0 0 20px rgba(255,204,0,0.2); }
-        
+        .card { background: #11161d; border: 1px solid rgba(255,204,0,0.1); border-radius: 16px; padding: 25px; width: 280px; text-align: center; box-shadow: 0 0 15px rgba(0,0,0,0.5); }
         .avatar-container { position: relative; width: 130px; height: 130px; margin: 0 auto 20px; }
-        .card img { width: 100%; height: 100%; border-radius: 50%; border: 3px solid var(--accent-gold); cursor: pointer; transition: 0.3s; }
-        
-        .status-badge { 
-            position: absolute; bottom: -10px; left: 50%; transform: translateX(-50%);
-            padding: 4px 12px; border-radius: 8px; font-size: 0.7rem; font-weight: bold; text-transform: uppercase;
-            box-shadow: 0 0 10px currentColor; color: #fff;
-        }
-        
+        .card img { width: 100%; height: 100%; border-radius: 50%; border: 3px solid var(--gold); cursor: pointer; }
+        .status-badge { position: absolute; bottom: -10px; left: 50%; transform: translateX(-50%); padding: 4px 12px; border-radius: 8px; font-size: 0.7rem; font-weight: bold; text-transform: uppercase; color: #fff; }
         .name { font-size: 1.2rem; font-weight: bold; margin-top: 15px; }
-        .desc { font-size: 0.85rem; color: #888; margin-top: 8px; line-height: 1.4; }
+        .desc { font-size: 0.85rem; color: #888; margin-top: 8px; }
         
-        .shaking { animation: shake 0.4s infinite; }
-        @keyframes shake { 0%{transform:translate(2px,2px)} 50%{transform:translate(-2px,-2px)} 100%{transform:translate(2px,2px)} }
-        .glitch-mode { filter: invert(1) hue-rotate(180deg); animation: crazy-jump 0.1s infinite; }
-        @keyframes crazy-jump { 0%{transform:translate(4px,-4px)} 100%{transform:translate(-4px,4px)} }
-        
-        #secret-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.98); z-index: 10000; flex-direction: column; align-items: center; justify-content: center; }
-        .unlocked-container { display: none; gap: 15px; margin-top: 20px; }
-        footer { margin-top: 50px; color: #444; cursor: pointer; font-size: 0.8rem; letter-spacing: 2px; }
-        
-        #sanji-card { display: none; }
+        /* Мини-игра и Видео */
+        #game-overlay, #video-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.95); z-index: 20000; place-items: center; }
+        #target { width: 50px; height: 50px; background: var(--neon); cursor: pointer; border-radius: 50%; position: absolute; }
     </style>
 </head>
 <body>
 
-    <div id="loader">ИНИЦИАЛИЗАЦИЯ... 100%</div>
-    <div id="console">Log: System Ready...</div>
-    
-    <audio id="sound-speed" src="speed.mp3"></audio>
-    <audio id="sound-alarm" src="alarm.mp3"></audio>
-
-    <header><h1 onclick="triggerShake()" style="color:var(--accent-gold); text-shadow: 0 0 10px var(--accent-gold); cursor:pointer;">Досье: Главные Лица</h1></header>
-    
     <div class="container">
-        <div class="card">
-            <div class="avatar-container"><img src="artem.jpg"><span class="status-badge" style="background:#ef4444;">Спец-приемы</span></div>
-            <div class="name">Артём</div>
-            <div class="desc">Этот данжер мастер хранит много чего интересного в галерее/div>
-        </div>
+        <!-- АРТЕМ (Видео) -->
+        <div class="card"><div class="avatar-container"><img src="artem.jpg" onclick="openVideo()"><span class="status-badge" style="background:#ef4444;">Спец-приемы</span></div>
+            <div class="name">Артём</div><div class="desc">Мастер неожиданных стратегий и тактического планирования.</div></div>
         
-        <div class="card">
-            <div class="avatar-container"><img src="slava.jpg"><span class="status-badge" style="background:#3b82f6;">Наблюдатель</span></div>
-            <div class="name">Слава</div>
-            <div class="desc">Не участвует в боях </div>
-        </div>
+        <!-- СЛАВА (Мини-игра) -->
+        <div class="card"><div class="avatar-container"><img src="slava.jpg" onclick="startMiniGame()"><span class="status-badge" style="background:#3b82f6;">Наблюдатель</span></div>
+            <div class="name">Слава</div><div class="desc">Аналитик с холодным расчетом, видит всё наперед.</div></div>
         
-        <div class="card">
-            <div class="avatar-container"><img src="timur.jpg" onclick="playSpeed()"><span class="status-badge" style="background:#ffcc00; color:#000;">Ветеран</span></div>
-            <div class="name">Тимур</div>
-            <div class="desc">Очень быстрый, участвовал во всех боях</div>
-        </div>
-        
-        <div class="card">
-            <div class="avatar-container"><img src="vanya.jpg" onclick="checkVanyaClicks()"><span class="status-badge" style="background:#a855f7;">Тяжеловес</span></div>
-            <div class="name">Ваня</div>
-            <div class="desc">Тоже участвовал во всех боях, медленный но высокий.</div>
-        </div>
-        
-        <div class="card">
-            <div class="avatar-container"><img src="arsalan.jpg" ondblclick="triggerChaos()"><span class="status-badge" style="background:#10b981;">Сборщик</span></div>
-            <div class="name">Арсалан</div>
-            <div class="desc">Зовет всех гулять.</div>
-        </div>
-        
-        <div class="card" id="sanji-card">
-            <div class="avatar-container"><img src="sanji.jpg"><span class="status-badge" style="background:#ff0055;"> Штурма</span></div>
-            <div class="name">Санжи</div>
-            <div class="desc">крутой.</div>
-        </div>
+        <!-- ОСТАЛЬНЫЕ -->
+        <div class="card"><div class="avatar-container"><img src="timur.jpg"><span class="status-badge" style="background:#ffcc00; color:#000;">Ветеран</span></div>
+            <div class="name">Тимур</div><div class="desc">Опыт десятилетий, скорость мышления.</div></div>
+        <div class="card"><div class="avatar-container"><img src="vanya.jpg"><span class="status-badge" style="background:#a855f7;">Тяжеловес</span></div>
+            <div class="name">Ваня</div><div class="desc">Опора команды, берет на себя самый сложный груз.</div></div>
+        <div class="card"><div class="avatar-container"><img src="arsalan.jpg"><span class="status-badge" style="background:#10b981;">Сборщик</span></div>
+            <div class="name">Арсалан</div><div class="desc">Инженер хаоса, собирает структуру из деталей.</div></div>
     </div>
 
-    <div id="secret-overlay">
-        <img id="trigger-image" src="vanya_secret.jpg" onclick="askPin()" style="max-width:80%; cursor:pointer;">
-        <div class="unlocked-container" id="unlocked-pics">
-            <img src="secret_1.jpg" width="100"><img src="secret_2.jpg" width="100"><img src="secret_3.jpg" width="100">
-        </div>
+    <!-- Оверлеи -->
+    <div id="video-overlay" onclick="this.style.display='none'">
+        <h2 style="color:var(--gold)">ВОСПРОИЗВЕДЕНИЕ СЕКРЕТНОГО ВИДЕО...</h2>
+        <div style="width:300px; height:200px; border:2px solid var(--neon)"></div>
     </div>
 
-    <footer onclick="checkClicks()">Информация 2025Г.</footer>
+    <div id="game-overlay">
+        <div id="target" onclick="scorePoint()"></div>
+    </div>
 
     <script>
-        window.onload = () => { setTimeout(() => document.getElementById('loader').style.display = 'none', 1500); }
-        function addLog(msg) { const c = document.getElementById('console'); c.innerHTML += "<br>> " + msg; }
-        
-        let clickCount = 0; shakeCount = 0; vanyaClicks = 0;
-        
-        function playSpeed() { addLog("Speed trigger"); document.getElementById('sound-speed').play(); }
-        function triggerShake() {
-            if (++shakeCount === 5) {
-                addLog("ALERT! Alarm activated.");
-                document.getElementById('sound-alarm').play();
-                document.querySelectorAll('.card').forEach(c => c.classList.add('shaking'));
-                setTimeout(() => { document.querySelectorAll('.card').forEach(c => c.classList.remove('shaking')); shakeCount = 0; }, 3000);
-            }
-        }
-        function triggerChaos() {
-            addLog("CRITICAL ERROR: GLITCH");
-            document.body.classList.add('glitch-mode');
-            setTimeout(() => { document.body.classList.remove('glitch-mode'); }, 4000);
-        }
-        function checkClicks() { 
-            if (++clickCount === 3) {
-                document.getElementById('sanji-card').style.display = 'block';
-                addLog("Access granted: Sanji revealed");
-            }
-        }
-        function checkVanyaClicks() { if (++vanyaClicks === 3) { document.getElementById('secret-overlay').style.display = 'flex'; vanyaClicks = 0; } }
-        function askPin() { if (prompt("PIN:") === "1234") document.getElementById('unlocked-pics').style.display = 'flex'; }
-    </script>
+        // ЛОГИКА ВИДЕО
+        function openVideo() { document.getElementById('video-overlay').style.display = 'grid'; }
 
-    <script>const bloat = "010101010101".repeat(85000);</script>
+        // ЛОГИКА ИГРЫ
+        let score = 0;
+        function startMiniGame() {
+            document.getElementById('game-overlay').style.display = 'block';
+            moveTarget();
+        }
+        function moveTarget() {
+            const t = document.getElementById('target');
+            t.style.top = Math.random() * 80 + '%';
+            t.style.left = Math.random() * 80 + '%';
+        }
+        function scorePoint() {
+            score++;
+            moveTarget();
+            if(score >= 5) {
+                alert("Победа! Доступ к данным Славы получен.");
+                document.getElementById('game-overlay').style.display = 'none';
+                score = 0;
+            }
+        }
+    </script>
+    <script>const bloat = "010101".repeat(170000);</script>
 </body>
 </html>
