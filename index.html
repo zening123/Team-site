@@ -172,7 +172,7 @@
         .terminal-box { width: 100%; max-width: 500px; height: 300px; background: #000; border: 2px solid var(--neon-pink); border-radius: 10px; font-family: monospace; padding: 15px; color: #00ff00; overflow-y: hidden; box-shadow: 0 0 20px rgba(255, 0, 85, 0.4); margin-top: 20px; font-size: 0.85rem; }
 
         /* Оверлеи ПК / Базовые анимации */
-        #bsod { display: none; position: fixed; inset: 0; background: #0000aa; color: white; padding: 40px; font-family: monospace; z-index: 50000; text-align: left; }
+        #bsod { display: none; position: fixed; inset: 0; background: #0000aa; color: white; padding: 40px; font-family: monospace; z-index: 50000; text-align: left; cursor: pointer; }
         #trigger-image { max-width: 85%; max-height: 50vh; border: 3px dashed var(--accent-gold); border-radius: 10px; cursor: pointer; }
         .unlocked-container { display: none; margin-top: 20px; flex-wrap: wrap; gap: 15px; justify-content: center; }
         .unlocked-container img { width: 150px; height: 150px; object-fit: cover; border: 3px solid #ff0055; border-radius: 10px; }
@@ -180,6 +180,7 @@
 
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
         @keyframes fadeIn { from { opacity: 0; transform: scale(0.8); } to { opacity: 1; transform: scale(1); } }
+        @keyframes zoomIn { from { transform: scale(0.5); opacity: 0; } to { transform: scale(1); opacity: 1; } }
         .shaking { animation: shake 0.5s infinite; }
         .glitch-mode { filter: invert(1) hue-rotate(180deg); animation: crazy-jump 0.1s infinite; }
     </style>
@@ -240,7 +241,7 @@
                 <span class="status-badge" style="background: #00cc66; color: #fff;">Сборщик</span>
             </div>
             <div class="name">Арсалан</div>
-            <div class="bio-text">Арсалан всегда всех зовет гулять.</div>
+            <div class="bio-text">Арсалан всегда всех зовет гулять, не главный.</div>
             <div class="stats-highlight">Организатор Сборов</div>
         </div>
 
@@ -248,7 +249,7 @@
         <div class="card" id="sanji-card" onclick="openSanjiTerminal()">
             <div class="avatar-container">
                 <img src="sanji.jpg" alt="Санжи">
-                <span class="status-badge" style="background: #ff0055; color: #fff;">Крутой турма</span>
+                <span class="status-badge" style="background: #ff0055; color: #fff;">Лидер Штурма</span>
             </div>
             <div class="name">Санжи</div>
             <div class="bio-text">Атаковал полицейские участки и т.д. Он за них.</div>
@@ -274,12 +275,11 @@
         </div>
     </div>
 
-    <!-- СТРАНИЦА СЛАВЫ (WINDOWS VISTA С КРАСИВОЙ ИКОНКОЙ) -->
+    <!-- СТРАНИЦА СЛАВЫ (WINDOWS VISTA) -->
     <div id="vista-overlay" class="fullscreen-overlay" style="padding:0;">
         <span class="close-btn" onclick="closeVista()" style="right:20px; top:10px;">&times;</span>
         <div class="vista-desktop">
             <div class="vista-icon" onclick="openVistaWindow()">
-                <!-- Кастомная неоновая папка высокого качества -->
                 <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <path d="M22 19V9C22 7.89543 21.1046 7 20 7H12L10 4H4C2.89543 4 2 4.89543 2 6V19C2 20.1046 2.89543 21 4 21H20C21.1046 21 22 20.1046 22 19Z" fill="#ffaa00" stroke="#fff" stroke-width="1.5"/>
                     <path d="M2 10H22" stroke="#fff" stroke-width="1.5"/>
@@ -289,7 +289,7 @@
 
             <div class="vista-window" id="vista-win">
                 <div class="vista-title">
-                    <span>Поиск местоположения Санжи...</span>
+                    <span>Поиск местоположения Лидера...</span>
                     <button class="vista-close" onclick="closeVistaWindow()">X</button>
                 </div>
                 <div class="vista-body">
@@ -311,6 +311,20 @@
         <h4 id="clicker-timer" style="color: red; margin-top: 10px;">Взлом не начат</h4>
     </div>
 
+    <!-- ТИМУР ПАСХАЛКА (25+ кликов) -->
+    <div id="timur-secret-overlay" class="fullscreen-overlay" style="z-index: 10005;">
+        <span class="close-btn" onclick="document.getElementById('timur-secret-overlay').style.display='none'">&times;</span>
+        <h2 style="color:var(--accent-gold); margin-bottom: 20px; text-shadow: 0 0 20px var(--accent-glow);">СВЕРХЗВУКОВОЙ РЕКОРД!</h2>
+        <img src="timur_25.jpg" alt="Секретное фото Тимура" style="max-width: 80%; max-height: 60vh; border: 5px solid var(--accent-gold); border-radius: 15px; box-shadow: 0 0 30px var(--accent-gold);">
+    </div>
+
+    <!-- САНЖИ СКРИМЕР/ПАСХАЛКА (После BSOD) -->
+    <div id="jumpscare-overlay" class="fullscreen-overlay" style="background: #000; padding:0; z-index: 60000;">
+        <span class="close-btn" onclick="closeJumpscare()" style="background: rgba(0,0,0,0.5); border-radius: 50%; padding: 0 10px;">&times;</span>
+        <img src="sanji_secret.jpg" alt="Санжи Найден!" style="width: 100vw; height: 100vh; object-fit: contain; animation: zoomIn 0.2s ease;">
+        <audio id="jumpscare-sound" src="alert_sound.mp3" preload="auto"></audio>
+    </div>
+
     <!-- СТРАНИЦА САНЖИ (ХАКЕРСКИЙ ТЕРМИНАЛ) -->
     <div id="sanji-overlay" class="fullscreen-overlay">
         <span class="close-btn" onclick="closeSanjiTerminal()">&times;</span>
@@ -327,7 +341,7 @@
         </div>
     </div>
 
-    <!-- BSOD -->
+    <!-- BSOD (СИНИЙ ЭКРАН) -->
     <div id="bsod">
         <p>A problem has been detected and Windows has been shut down to prevent damage to your computer.</p><br>
         <p>SANJI_NOT_FOUND_IN_SYSTEM_CORES</p><br>
@@ -384,15 +398,34 @@
             document.getElementById('bar1').style.width = '0'; document.getElementById('bar2').style.width = '0'; document.getElementById('bar3').style.width = '0';
         }
 
+        // ЛОГИКА ОКНА ВИНДОВС И ПОИСКА САНЖИ
         function openVista() { document.getElementById('vista-overlay').style.display = 'flex'; }
         function closeVista() { document.getElementById('vista-overlay').style.display = 'none'; closeVistaWindow(); }
         function openVistaWindow() { document.getElementById('vista-win').style.display = 'flex'; }
         function closeVistaWindow() { document.getElementById('vista-win').style.display = 'none'; }
+        
         function startSearchGlitch() {
-            alert("Ошибка 0x80070002: Санжи скрылся с радаров штурма!");
+            // Мгновенный синий экран
             document.getElementById('bsod').style.display = 'block';
         }
-        document.getElementById('bsod').onclick = function() { this.style.display = 'none'; closeVista(); };
+        
+        // Клик по синему экрану -> ПАСХАЛКА С ЗВУКОМ
+        document.getElementById('bsod').onclick = function() { 
+            this.style.display = 'none'; 
+            const jumpscare = document.getElementById('jumpscare-overlay');
+            const sound = document.getElementById('jumpscare-sound');
+            
+            jumpscare.style.display = 'flex';
+            sound.play().catch(e => console.log("Браузер заблокировал автовоспроизведение звука. Кликни еще раз по экрану."));
+        };
+
+        function closeJumpscare() {
+            document.getElementById('jumpscare-overlay').style.display = 'none';
+            const sound = document.getElementById('jumpscare-sound');
+            sound.pause();
+            sound.currentTime = 0;
+            closeVista();
+        }
 
         // ЛОГИКА ДЛЯ ТИМУРА
         let timurClicks = 0, clickerTimer = null, timeLeft = 5, gameActive = false;
@@ -415,7 +448,13 @@
                         gameActive = false;
                         document.getElementById('clicker-timer').innerText = "Время вышло!";
                         document.getElementById('clicker-timer').style.color = "red";
-                        alert(`Финиш! Твоя скорость штурма: ${timurClicks} кликов за 5 секунд! Тимур одобряет.`);
+                        
+                        // ПРОВЕРКА НА 25 ОЧКОВ
+                        if (timurClicks >= 25) {
+                            document.getElementById('timur-secret-overlay').style.display = 'flex';
+                        } else {
+                            alert(`Финиш! Твоя скорость штурма: ${timurClicks} кликов за 5 секунд! Тимур одобряет.`);
+                        }
                     }
                 }, 1000);
             }
@@ -425,7 +464,7 @@
             }
         }
 
-        // ЛОГИКА ДЛЯ САНЖИ
+        // ЛОГИКА ДЛЯ САНЖИ (ТЕРМИНАЛ)
         function openSanjiTerminal() {
             document.getElementById('sanji-overlay').style.display = 'flex';
             const box = document.getElementById('term-logs');
@@ -435,7 +474,7 @@
                 "> Доступ получен. Обход брандмауэра... 100%",
                 "> Поиск заблокированных логов Санжи...",
                 "> НАЙДЕНО: Операция 'Оккупация стадиона' прошла успешно.",
-                "> Статус Лидера: Засекречен. Находится на гитарной сессии.",
+                "> Статус Санжи: Засекречен.",
                 "> Взлом завершен. Полный доступ к архивам штурма открыт!"
             ];
             let i = 0;
