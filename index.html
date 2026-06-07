@@ -367,10 +367,10 @@
         const SUPABASE_URL = 'https://buontfivfesaifslldjh.supabase.co'; 
         const SUPABASE_ANON_KEY = 'sb_publishable_OqCXdCVOL5xbKspkCJ8yFQ_Sh4Z45iS'; 
 
-        const supabase = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+        const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
         async function saveOnlineScore(name, score) {
-            const { data, error } = await supabase
+            const { data, error } = await supabaseClient
                 .from('timur_leaderboard')
                 .insert([{ player_name: name, score: score }]);
                 
@@ -383,7 +383,7 @@
         }
 
         async function loadOnlineLeaderboard() {
-            const { data, error } = await supabase
+            const { data, error } = await supabaseClient
                 .from('timur_leaderboard')
                 .select('*')
                 .order('score', { ascending: false })
@@ -406,7 +406,6 @@
                 document.getElementById('leaderboard-container').innerHTML = '<p style="color:red;">Ошибка подключения к базе</p>';
             }
         }
-
 
         // --- БАЗОВЫЕ ФУНКЦИИ И ПАСХАЛКИ ---
         let clickCount = 0, shakeCount = 0, vanyaClicks = 0;
@@ -614,4 +613,4 @@
         }
     </script>
 </body>
-                    </html>
+    </html>
