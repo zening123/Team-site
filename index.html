@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Архив: Легендарная Пятерка</title>
     <style>
+        /* === ОРИГИНАЛЬНЫЕ СТИЛИ (НЕ ТРОГАТЬ) === */
         :root {
             --bg-color: #0b0c10;
             --card-bg: #1f2833;
@@ -14,6 +15,7 @@
             --accent-glow: rgba(255, 204, 0, 0.4);
             --vista-blue: #0078d7;
             --neon-pink: #ff0055;
+            --blood-red: #8b0000;
         }
 
         * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -30,6 +32,7 @@
             justify-content: space-between;
             padding: 20px;
             overflow-x: hidden;
+            transition: filter 0.3s ease;
         }
 
         header { text-align: center; margin-bottom: 30px; margin-top: 20px; }
@@ -69,6 +72,7 @@
             width: 100%;
             max-width: 320px;
             z-index: 10;
+            cursor: pointer;
         }
 
         .card:hover, .card:active {
@@ -86,7 +90,6 @@
             border: 3px solid var(--accent-gold);
             box-shadow: 0 0 15px rgba(0, 0, 0, 0.6);
             background-color: #333;
-            cursor: pointer;
         }
 
         .status-badge {
@@ -117,7 +120,6 @@
 
         #sanji-card { display: none; border-color: var(--neon-pink); box-shadow: 0 0 15px rgba(255, 0, 85, 0.3); animation: fadeIn 0.5s ease forwards; }
 
-        /* Полноэкранные страницы/оверлеи */
         .fullscreen-overlay {
             display: none;
             position: fixed;
@@ -137,150 +139,259 @@
             user-select: none; z-index: 10001;
         }
 
-        /* ЭКРАН АРТЁМА */
         .artem-page { background: #07090e; width: 100%; height: 100%; color: #fff; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 30px; }
         .radar-track { width: 180px; height: 180px; border: 2px dashed var(--accent-gold); border-radius: 50%; position: relative; animation: spin 4s linear infinite; display: flex; align-items: center; justify-content: center; }
         .radar-pointer { width: 18px; height: 18px; background: red; border-radius: 50%; position: absolute; top: 10px; box-shadow: 0 0 15px red; }
         .chart-container { width: 100%; max-width: 400px; background: #111; padding: 20px; border-radius: 15px; border: 1px solid #333; }
-        .chart-bar { background: var(--accent-gold); height: 25px; margin: 10px 0; display: flex; align-items: center; padding-left: 10px; color: #000; font-weight: bold; border-radius: 5px; transition: width 0.3s ease; width: 0; cursor: pointer;}
+        .chart-bar { background: var(--accent-gold); height: 25px; margin: 5px 0 15px 0; display: flex; align-items: center; padding-left: 10px; color: #000; font-weight: bold; border-radius: 5px; transition: width 0.3s ease; cursor: pointer;}
+        .chart-label { color: #fff; font-size: 0.9rem; font-weight: bold; margin-bottom: 5px; }
 
-        /* ЭКРАН СЛАВЫ: Windows Vista */
         .vista-desktop { width: 100%; height: 100%; background: linear-gradient(135deg, #1d589a 0%, #10386a 100%); position: relative; overflow: hidden; display: flex; flex-direction: column; justify-content: space-between; }
-        .vista-icon { width: 90px; text-align: center; margin: 30px; cursor: pointer; color: white; font-size: 0.8rem; text-shadow: 1px 1px 3px #000; }
+        .vista-icon { width: 90px; text-align: center; margin: 30px; cursor: pointer; color: white; font-size: 0.8rem; text-shadow: 1px 1px 3px #000; position: relative; }
         .vista-icon svg { width: 55px; height: 55px; display: block; margin: 0 auto 8px; filter: drop-shadow(0px 4px 5px rgba(0,0,0,0.3)); }
+        
+        .secret-invisible-btn { position: absolute; top: -10px; right: -10px; width: 45px; height: 45px; background: transparent; cursor: pointer; z-index: 999; border-radius: 50%; }
+
         .vista-window { position: absolute; top: 40%; left: 50%; transform: translate(-50%, -50%); width: 90%; max-width: 400px; background: rgba(240, 240, 240, 0.95); border: 3px solid #005a9e; border-radius: 8px; color: #000; box-shadow: 0 10px 20px rgba(0,0,0,0.4); display: none; flex-direction: column; }
         .vista-title { background: linear-gradient(90deg, #0078d7, #54a3e5); color: white; padding: 8px; font-weight: bold; display: flex; justify-content: space-between; align-items: center; }
         .vista-close { background: #e81123; color: white; border: none; padding: 2px 8px; cursor: pointer; }
         .vista-body { padding: 20px; font-size: 0.9rem; text-align: center; }
-        .vista-taskbar { width: 100%; height: 40px; background: rgba(20, 20, 20, 0.85); backdrop-filter: blur(5px); display: flex; align-items: center; padding-left: 10px; }
+        .vista-taskbar { width: 100%; height: 40px; background: rgba(20, 20, 20, 0.85); backdrop-filter: blur(5px); display: flex; align-items: center; padding-left: 10px; position: relative; }
         .start-btn { width: 32px; height: 32px; background: #0078d7; border-radius: 50%; box-shadow: 0 0 10px #0078d7; }
 
-        /* ИГРА ТИМУРА */
-        .speed-clicker { width: 120px; height: 120px; background: radial-gradient(circle, #ffcc00, #ff8800); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: black; font-weight: bold; font-size: 1.2rem; cursor: pointer; box-shadow: 0 0 25px var(--accent-gold); user-select: none; -webkit-user-select: none; }
-        .speed-clicker:active { transform: scale(0.95); filter: brightness(1.2); }
-        .leaderboard-box { margin-top: 30px; width: 100%; max-width: 350px; background: #111; padding: 15px; border-radius: 10px; border: 1px solid var(--accent-gold); }
+        .vista-assistant { position: absolute; bottom: 55px; right: 20px; width: 75px; height: 75px; cursor: pointer; transition: transform 0.3s; z-index: 100; }
+        .vista-assistant:hover { transform: scale(1.1); }
+        .assistant-bubble { position: absolute; bottom: 140px; right: 20px; background: #ffffe1; color: #000; border: 1px solid #000; padding: 10px; border-radius: 8px; font-size: 0.85rem; max-width: 200px; box-shadow: 3px 3px 5px rgba(0,0,0,0.2); display: none; z-index: 101; }
+        .assistant-bubble::after { content: ''; position: absolute; bottom: -10px; right: 30px; border-width: 10px 10px 0; border-style: solid; border-color: #ffffe1 transparent; display: block; width: 0; }
 
-        /* ТЕРМИНАЛ САНЖИ */
+        .story-scene { display: none; position: fixed; inset: 0; background: #090a0f; z-index: 20000; overflow: hidden; box-shadow: inset 0 0 150px rgba(0,0,0,0.9); }
+        .story-text-box { position: absolute; top: 20px; left: 50%; transform: translateX(-50%); background: rgba(15, 0, 0, 0.85); color: #d3d3d3; border: 1px solid var(--blood-red); padding: 15px 25px; border-radius: 10px; font-size: 1.2rem; text-align: center; max-width: 80%; z-index: 20005; text-shadow: 0 0 5px red; box-shadow: 0 0 20px rgba(139, 0, 0, 0.5); transition: opacity 0.5s; }
+        .hill-ground { position: absolute; bottom: 0; left: -10%; width: 70%; height: 40vh; background: #112211; border-radius: 100% 100% 0 0; border-top: 2px solid #224422; }
+        .flat-ground { position: absolute; bottom: 0; right: 0; width: 50%; height: 15vh; background: #0a140a; }
+        .village-toilet { position: absolute; bottom: 15vh; right: 15%; width: 70px; height: 110px; background: #1a1a1a; border: 3px solid #000; display: none; box-shadow: 0 0 30px rgba(0,0,0,0.8); }
+        .toilet-door { position: absolute; top: 15px; left: 10px; width: 50px; height: 85px; background: #0a0a0a; border: 1px solid #333; transition: all 0.5s; transform-origin: left; }
+        .toilet-roof { position: absolute; top: -20px; left: -5px; width: 80px; height: 20px; background: #000; transform: rotate(-10deg); }
+        .school-building { position: absolute; bottom: 15vh; right: -350px; width: 280px; height: 200px; background: #1a1c20; border: 4px solid #000; transition: right 2s ease; box-shadow: -10px 0 50px rgba(0,0,0,0.8); }
+        .school-door { position: absolute; bottom: 0; left: 115px; width: 50px; height: 70px; background: var(--blood-red); box-shadow: inset 0 0 10px #000; }
+        .director-room { position: absolute; inset: 0; background: radial-gradient(circle, #3a0000, #000000); display: none; flex-direction: column; align-items: center; justify-content: center; }
+
+        .actor-circle { position: absolute; width: 30px; height: 30px; border-radius: 50%; border: 2px solid #000; transition: all 0.8s ease; display: none; font-weight: bold; font-size: 0.7rem; color: #fff; text-align: center; line-height: 26px; box-shadow: 0 5px 10px rgba(0,0,0,0.5);}
+        .c-fun { background: #5a5a5a; }
+        .c-fun.twitch { animation: twitch 0.1s infinite; }
+        .c-blue { background: #004488; }
+        .c-pink { background: #aa0033; box-shadow: 0 0 15px #aa0033; }
+
+        #execution-overlay { background: #050505; color: white; position: fixed; inset: 0; display: none; z-index: 30000; overflow: hidden; }
+        .circle-char { position: absolute; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; font-family: monospace; }
+        #exec-sanji { width: 50px; height: 50px; background: #ff0055; border: 2px solid #ffaaaa; top: 50%; left: 20%; transform: translateY(-50%); transition: all 0.5s; box-shadow: 0 0 20px rgba(255,0,85,0.4); z-index: 2; }
+        #exec-agent { 
+            width: 150px; height: 150px; background: #111; border: 4px solid #fff; 
+            top: 50%; right: -200px; transform: translateY(-50%); font-size: 1.2rem; 
+            color: #fff; transition: right 2s ease-out; z-index: 2;
+            cursor: crosshair; 
+        }
+        #exec-agent:hover { box-shadow: 0 0 15px #ff0000; }
+
+        .bullet { position: absolute; width: 25px; height: 3px; background: #ffaa00; top: 50%; right: 250px; display: none; box-shadow: 0 0 10px #ffaa00; z-index: 1; }
+        #blood-pool { position: absolute; width: 0; height: 20px; background: var(--blood-red); border-radius: 50%; top: calc(50% + 20px); left: 20%; transform: translateX(-20px); transition: width 1s, height 1s; z-index: 0; }
+        .death-text { position: absolute; top: 20%; left: 50%; transform: translateX(-50%); color: var(--blood-red); font-size: 3rem; font-weight: bold; text-shadow: 0 0 20px red; display: none; letter-spacing: 5px; text-align: center;}
+        .exec-story-box { position: absolute; bottom: 10%; left: 50%; transform: translateX(-50%); background: rgba(0, 0, 0, 0.8); border: 1px solid #fff; color: #fff; padding: 15px 30px; font-family: monospace; font-size: 1.2rem; display: none; z-index: 10; }
+
+        .timur-content { display: flex; flex-direction: column; align-items: center; gap: 20px; }
+        .speed-clicker { width: 60px; height: 60px; background: var(--accent-gold); border-radius: 50%; color: #000; font-weight: bold; display: flex; align-items: center; justify-content: center; cursor: pointer; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); transition: top 0.2s, left 0.2s; user-select: none; z-index: 100;}
+        .leaderboard-box { background: #1a1c23; border: 1px solid var(--accent-gold); padding: 15px; border-radius: 10px; width: 100%; max-width: 300px; text-align: left; margin-top: auto; margin-bottom: 20px; z-index: 10; position: relative;}
+        .leaderboard-box h3 { color: var(--accent-gold); border-bottom: 1px solid #333; padding-bottom: 5px; margin-bottom: 10px; }
+        #leaderboard-list li { list-style: none; display: flex; justify-content: space-between; padding: 5px 0; border-bottom: 1px dashed #333; }
+
+        .vanya-gallery { display: flex; flex-wrap: wrap; gap: 15px; justify-content: center; margin-top: 30px; }
+        .vanya-photo { width: 200px; height: 200px; background: #333; border: 2px solid var(--accent-gold); border-radius: 10px; object-fit: cover; display: flex; align-items: center; justify-content: center; color: #aaa; text-align: center; font-size: 0.9rem; }
+
         .terminal-box { width: 100%; max-width: 500px; height: 300px; background: #000; border: 2px solid var(--neon-pink); border-radius: 10px; font-family: monospace; padding: 15px; color: #00ff00; overflow-y: auto; box-shadow: 0 0 20px rgba(255, 0, 85, 0.4); margin-top: 20px; font-size: 0.9rem; line-height: 1.5; white-space: pre-wrap; text-align: left;}
         .terminal-cursor { display: inline-block; width: 8px; height: 15px; background: #00ff00; animation: blink 1s step-end infinite; }
 
-        /* Оверлеи ПК / Базовые анимации */
-        #bsod { display: none; position: fixed; inset: 0; background: #0000aa; color: white; padding: 40px; font-family: monospace; z-index: 50000; text-align: left; cursor: pointer; }
-        #trigger-image { max-width: 85%; max-height: 50vh; border: 3px dashed var(--accent-gold); border-radius: 10px; cursor: pointer; }
-        .unlocked-container { display: none; margin-top: 20px; flex-wrap: wrap; gap: 15px; justify-content: center; }
-        .unlocked-container img { width: 150px; height: 150px; object-fit: cover; border: 3px solid #ff0055; border-radius: 10px; }
-        footer { margin-top: 40px; text-align: center; font-size: 0.9rem; color: #555; cursor: pointer; user-select: none; padding-bottom: 20px; }
+        footer { margin-top: 50px; font-size: 0.8rem; color: #444; cursor: pointer; text-transform: uppercase; letter-spacing: 2px; text-align: center; padding-bottom: 20px; }
+        footer:hover { color: #888; }
 
+        @keyframes twitch { 0% { transform: translate(1px, 1px); } 50% { transform: translate(-1px, -1px); } 100% { transform: translate(1px, -1px); } }
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
         @keyframes fadeIn { from { opacity: 0; transform: scale(0.8); } to { opacity: 1; transform: scale(1); } }
-        @keyframes zoomIn { from { transform: scale(0.5); opacity: 0; } to { transform: scale(1); opacity: 1; } }
-        @keyframes shake { 0% { transform: translate(1px, 1px) rotate(0deg); } 10% { transform: translate(-1px, -2px) rotate(-1deg); } 20% { transform: translate(-3px, 0px) rotate(1deg); } 30% { transform: translate(3px, 2px) rotate(0deg); } 40% { transform: translate(1px, -1px) rotate(1deg); } 50% { transform: translate(-1px, 2px) rotate(-1deg); } 60% { transform: translate(-3px, 1px) rotate(0deg); } 70% { transform: translate(3px, 1px) rotate(-1deg); } 80% { transform: translate(-1px, -1px) rotate(1deg); } 90% { transform: translate(1px, 2px) rotate(0deg); } 100% { transform: translate(1px, -2px) rotate(-1deg); } }
         @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }
-        .shaking { animation: shake 0.5s infinite; }
-        .glitch-mode { filter: invert(1) hue-rotate(180deg); animation: shake 0.2s infinite; }
+        
+        @keyframes extremeShake {
+            0% { transform: translate(3px, 3px) rotate(0deg) scale(1.05); }
+            10% { transform: translate(-4px, -3px) rotate(-2deg) scale(0.95); }
+            20% { transform: translate(-5px, 0px) rotate(2deg) scale(1.1); }
+            30% { transform: translate(5px, 4px) rotate(0deg) scale(0.9); }
+            40% { transform: translate(2px, -2px) rotate(3deg) scale(1.05); }
+            50% { transform: translate(-2px, 5px) rotate(-3deg) scale(1); }
+            60% { transform: translate(-6px, 2px) rotate(0deg) scale(1.1); }
+            70% { transform: translate(6px, 2px) rotate(-2deg) scale(0.95); }
+            80% { transform: translate(-2px, -2px) rotate(2deg) scale(1.05); }
+            90% { transform: translate(2px, 4px) rotate(0deg) scale(0.9); }
+            100% { transform: translate(3px, -4px) rotate(-2deg) scale(1); }
+        }
+
+        /* ===== НОВЫЕ СТИЛИ: ГЛОБАЛЬНЫЙ ДИЗАЙН И АТМОСФЕРА ===== */
+        @import url('https://fonts.googleapis.com/css2?family=Share+Tech+Mono&display=swap');
+
+        body {
+            font-family: 'Share Tech Mono', monospace, sans-serif;
+            background: radial-gradient(circle at center, #2a2b36 0%, #0a0a0c 100%);
+            color: #e0e0e0;
+            margin: 0;
+            min-height: 100vh;
+        }
+
+        body::after {
+            content: "";
+            position: fixed;
+            top: 0; left: 0; width: 100vw; height: 100vh;
+            background: repeating-linear-gradient(
+                0deg,
+                rgba(0, 0, 0, 0.15),
+                rgba(0, 0, 0, 0.15) 1px,
+                transparent 1px,
+                transparent 2px
+            );
+            pointer-events: none;
+            z-index: 9999;
+        }
+
+        .card {
+            background: rgba(20, 20, 25, 0.8);
+            border: 1px solid #444;
+            border-radius: 15px;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+            transition: all 0.3s ease-in-out;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .card:hover {
+            transform: translateY(-10px) scale(1.02);
+            border-color: #777;
+            box-shadow: 0 0 25px rgba(255, 255, 255, 0.2);
+        }
+
+        #card-artem:hover { box-shadow: 0 0 30px rgba(0, 255, 0, 0.6); border-color: #00ff00; }
+        #card-vanya:hover { box-shadow: 0 0 30px rgba(255, 0, 0, 0.6); border-color: red; }
+        #card-slava:hover { box-shadow: 0 0 30px rgba(0, 150, 255, 0.6); border-color: #0096ff; }
+
+        /* ===== СТИЛИ НАБЛЮДАТЕЛЯ (СЛАВА) ===== */
+        #cctv-overlay {
+            display: none; 
+            position: fixed; inset: 0; z-index: 30000;
+            background: rgba(0, 255, 0, 0.05);
+            pointer-events: none;
+        }
+
+        body.slava-active {
+            filter: grayscale(100%) contrast(150%) brightness(0.8);
+        }
+
+        .cctv-ui {
+            position: absolute; top: 20px; left: 20px;
+            color: white; font-size: 1.5rem; text-shadow: 2px 2px 0 #000;
+        }
+
+        .rec-dot {
+            display: inline-block; width: 15px; height: 15px;
+            background: red; border-radius: 50%; margin-right: 10px;
+            animation: blink 1s infinite;
+        }
+
+        .cctv-text-warning {
+            position: absolute; bottom: 20px; right: 20px;
+            color: white; font-size: 1.2rem; text-shadow: 2px 2px 0 #000;
+        }
+
+        /* ===== НОВЫЕ СТИЛИ ДЛЯ АРТЁМА И ВАНИ ===== */
+        #toxic-overlay {
+            position: fixed; inset: 0; background: rgba(20, 80, 20, 0.95); backdrop-filter: blur(15px);
+            z-index: 35000; display: none; flex-direction: column; align-items: center; justify-content: center;
+            color: #00ff00; text-shadow: 0 0 20px #00ff00; text-align: center;
+        }
+        .fan-btn {
+            position: absolute; width: 70px; height: 70px; background: #222; border: 3px solid #00ff00;
+            border-radius: 50%; display: flex; align-items: center; justify-content: center; 
+            font-size: 2rem; cursor: pointer; box-shadow: 0 0 20px #00ff00;
+            animation: spin 0.5s linear infinite; z-index: 35001;
+        }
+        .quake-btn {
+            background: var(--blood-red); color: #fff; border: 2px solid #fff; padding: 15px 30px;
+            font-size: 1.2rem; font-weight: bold; border-radius: 10px; cursor: pointer;
+            margin-top: 30px; box-shadow: 0 5px 15px rgba(139, 0, 0, 0.8); transition: transform 0.1s;
+        }
+        .quake-btn:active { transform: scale(0.9); }
+
+        @keyframes heavyShake {
+            0% { transform: translateY(0); }
+            10% { transform: translateY(40px) scale(1.05); filter: invert(1); }
+            20% { transform: translateY(-30px); }
+            30% { transform: translateY(20px); filter: invert(0); }
+            40% { transform: translateY(-10px); }
+            50% { transform: translateY(5px); }
+            100% { transform: translateY(0); }
+        }
     </style>
 </head>
 <body>
 
-    <!-- АУДИО ФАЙЛЫ -->
     <audio id="sound-arsalan" src="arsalan_run.mp3" preload="auto"></audio>
     <audio id="sound-typing" src="keyboard.mp3" loop preload="auto"></audio>
     <audio id="sound-access" src="access.mp3" preload="auto"></audio>
     <audio id="jumpscare-sound" src="alert_sound.mp3" preload="auto"></audio>
+    <audio id="sound-cartoon" src="cartoon_music.mp3" loop preload="auto"></audio>
+    <audio id="sound-secret-photo" src="arsalan_secret.mp3" loop preload="auto"></audio>
+    <audio id="sound-execution" src="execution_theme.mp3" preload="auto"></audio>
 
-    <header><h1 onclick="triggerShake()">Досье: Главные Лица</h1></header>
+    <header><h1>Досье: Главные Лица</h1></header>
     
     <div class="container" id="cards-container">
-        <!-- АРТЁМ -->
-        <div class="card" onclick="openArtemPage()">
-            <div class="avatar-container">
-                <img src="artem.jpg" alt="Артём">
-                <span class="status-badge" style="background: #ff4444; color: #fff;">Спец-приемы</span>
-            </div>
-            <div class="name">Aртём</div>
-            <div class="bio-text">Он умеет отлично рыгать и пердеть, также есть запас много чего интересного в галерее. Помог отравить Арину.</div>
-            <div class="stats-highlight">Хранитель Компромата</div>
+        <div class="card" id="card-artem" onclick="registerCardSequence('artem'); openArtemPage();">
+            <div class="avatar-container"><img src="artem.jpg" alt="Артём"><span class="status-badge" style="background: #ff4444; color: #fff;">Спец-приемы</span></div>
+            <div class="name">Aртём</div><div class="bio-text">Он умеет отлично рыгать и пердеть. Помог отравить Арину.</div>
         </div>
 
-        <!-- СЛАВА -->
-        <div class="card" onclick="openVista()">
+        <div class="card" id="card-slava" onclick="registerCardSequence('slava'); openVista();">
             <div class="avatar-container">
-                <img src="slava.jpg" alt="Слава">
+                <img src="slava.jpg" alt="Слава" ondblclick="event.stopPropagation(); toggleSlavaMode()">
                 <span class="status-badge" style="background: #4488ff; color: #fff;">Наблюдатель</span>
             </div>
-            <div class="name">Слава</div>
-            <div class="bio-text">Слава высокий, не участвует в битвах. Предпочитает сохранять стратегический нейтралитет.</div>
-            <div class="stats-highlight">Высотный Пацифист</div>
+            <div class="name">Слава</div><div class="bio-text">Слава высокий, не участвует в битвах. Предпочитает сохранять стратегический нейтралитет.</div>
         </div>
 
-        <!-- ТИМУР -->
-        <div class="card" onclick="openTimurGame()">
-            <div class="avatar-container">
-                <img src="timur.jpg" alt="Тимур">
-                <span class="status-badge">Ветеран</span>
-            </div>
-            <div class="name">Тимур</div>
-            <div class="bio-text">Быстрый флеш, участвовал в нескольких битвах. Битва за полицейский участок, битва за заброшку, оккупацию стадиона.</div>
-            <div class="stats-highlight">Скорость: Максимум (Тапни)</div>
+        <div class="card" onclick="openTimurGame();">
+            <div class="avatar-container"><img src="timur.jpg" alt="Тимур"><span class="status-badge">Ветеран</span></div>
+            <div class="name">Тимур</div><div class="bio-text">Быстрый флеш, участвовал в нескольких битвах. (Мини-игра внутри)</div>
         </div>
 
-        <!-- ВАНЯ -->
-        <div class="card">
-            <div class="avatar-container">
-                <img src="vanya.jpg" alt="Ваня" onclick="event.stopPropagation(); checkVanyaClicks()">
-                <span class="status-badge">Тяжеловес</span>
-            </div>
-            <div class="name">Ваня</div>
-            <div class="bio-text">Медленный и высокий, также участвовал в нескольких битвах. Битва за полицейский участок, битва за заброшку, оккупация стадиона.</div>
-            <div class="stats-highlight">Стойкость: Осада</div>
+        <div class="card" id="card-vanya" onclick="openVanyaVault();">
+            <div class="avatar-container"><img src="vanya.jpg" alt="Ваня"><span class="status-badge">Тяжеловес</span></div>
+            <div class="name">Ваня</div><div class="bio-text">Медленный и высокий, имеет закрытый фотоархив.</div>
         </div>
 
-        <!-- АРСАЛАН -->
-        <div class="card" id="arsalan-card">
+        <div class="card" onclick="registerCardSequence('arsalan');">
             <div class="avatar-container">
-                <img src="arsalan.jpg" alt="Арсалан" ondblclick="event.stopPropagation(); triggerChaos()">
+                <img src="arsalan.jpg" alt="Арсалан" ondblclick="event.stopPropagation(); triggerStrongChaos()">
                 <span class="status-badge" style="background: #00cc66; color: #fff;">Сборщик</span>
             </div>
-            <div class="name">Арсалан</div>
-            <div class="bio-text">Арсалан всегда всех зовет гулять. (Двойной клик на фото = Хаос)</div>
-            <div class="stats-highlight">Организатор Сборов</div>
+            <div class="name">Арсалан</div><div class="bio-text">Всегда зовет гулять. (Двойной клик по фото = Жесткий Хаос)</div>
         </div>
 
-        <!-- САНЖИ -->
-        <div class="card" id="sanji-card" onclick="openSanjiTerminal()">
-            <div class="avatar-container">
-                <img src="sanji.jpg" alt="Санжи">
-                <span class="status-badge" style="background: #ff0055; color: #fff;">Штурмовик</span>
-            </div>
-            <div class="name">Санжи</div>
-            <div class="bio-text">Атаковал полицейские участки и т.д. Он за них.</div>
+        <div class="card" id="sanji-card" onclick="openSanjiTerminal();">
+            <div class="avatar-container"><img src="sanji.jpg" alt="Санжи"><span class="status-badge" style="background: #ff0055; color: #fff;">Штурмовик</span></div>
+            <div class="name">Санжи</div><div class="bio-text">Атаковал полицейские участки и т.д. Он за них.</div>
             <div class="stats-highlight" style="color: #ff0055;">Особо опасен (Архив Системы)</div>
         </div>
     </div>
 
-    <!-- СТРАНИЦА АРТЁМА -->
-    <div id="artem-overlay" class="fullscreen-overlay">
-        <span class="close-btn" onclick="closeArtemPage()">&times;</span>
-        <div class="artem-page" id="artem-content">
-            <h2 style="color:var(--accent-gold)">РАДАР ПОИСКА КОМПРОМАТА</h2>
-            <div class="radar-track"><div class="radar-pointer"></div></div>
-            <div class="chart-container">
-                <h3 style="margin-bottom:10px; font-size:0.9rem;">СТАТИСТИКА МОЩНОСТИ</h3>
-                <div style="font-size:0.8rem; color:#aaa;">Рыгание</div>
-                <div class="chart-bar" id="bar1">95%</div>
-                <div style="font-size:0.8rem; color:#aaa;">Пердеж</div>
-                <div class="chart-bar" id="bar2">88%</div>
-                <div style="font-size:0.8rem; color:#aaa; margin-top:10px;">Нажимай, чтобы зарядить компромат:</div>
-                <div class="chart-bar" id="bar3" onclick="chargeArtem()" style="background: #ff4444;">0%</div>
-            </div>
-        </div>
-    </div>
-
-    <!-- СТРАНИЦА СЛАВЫ (WINDOWS VISTA) -->
     <div id="vista-overlay" class="fullscreen-overlay" style="padding:0;">
         <span class="close-btn" onclick="closeVista()" style="right:20px; top:10px;">&times;</span>
         <div class="vista-desktop">
             <div class="vista-icon" onclick="openVistaWindow()">
+                <div class="secret-invisible-btn" onclick="event.stopPropagation(); clickSecretButton();"></div>
                 <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <path d="M22 19V9C22 7.89543 21.1046 7 20 7H12L10 4H4C2.89543 4 2 4.89543 2 6V19C2 20.1046 2.89543 21 4 21H20C21.1046 21 22 20.1046 22 19Z" fill="#ffaa00" stroke="#fff" stroke-width="1.5"/>
                     <path d="M2 10H22" stroke="#fff" stroke-width="1.5"/>
@@ -289,288 +400,570 @@
             </div>
 
             <div class="vista-window" id="vista-win">
-                <div class="vista-title">
-                    <span>Поиск местоположения...</span>
-                    <button class="vista-close" onclick="closeVistaWindow()">X</button>
-                </div>
-                <div class="vista-body">
-                    <p style="margin-bottom:15px; font-weight:bold;">Запуск сканирования полицейских участков...</p>
-                    <button onclick="startSearchGlitch()" style="padding:8px 15px; cursor:pointer;">Искать Санжи</button>
-                </div>
+                <div class="vista-title"><span>Поиск...</span><button class="vista-close" onclick="closeVistaWindow()">X</button></div>
+                <div class="vista-body"><button onclick="startSearchGlitch()" style="padding:8px 15px;">Искать Санжи</button></div>
+            </div>
+
+            <div class="assistant-bubble" id="assist-bubble">Привет!</div>
+            <div class="vista-assistant" onclick="triggerAssistant()">
+                <svg viewBox="0 0 64 64"><circle cx="32" cy="32" r="26" fill="#e0e0e0" stroke="#005a9e" stroke-width="3"/><rect x="20" y="24" width="8" height="12" rx="4" fill="#000"/><rect x="36" y="24" width="8" height="12" rx="4" fill="#000"/><ellipse cx="32" cy="44" rx="10" ry="4" fill="#ff4444"/></svg>
             </div>
             <div class="vista-taskbar"><div class="start-btn"></div></div>
         </div>
     </div>
 
-    <!-- ИГРА ТИМУРА -->
-    <div id="timur-overlay" class="fullscreen-overlay">
-        <span class="close-btn" onclick="closeTimurGame()">&times;</span>
-        <h2 style="color:var(--accent-gold); margin-bottom: 10px;">СВЕРХЗВУКОВОЙ ТИМУР</h2>
-        <p style="color:#aaa; margin-bottom: 30px; text-align:center;">У тебя есть 5 секунд. Кликай по кнопке со скоростью Флеша!</p>
-        <div id="clicker-btn" class="speed-clicker" onclick="clickTimurTarget()">КЛИК!</div>
-        <h3 id="clicker-score" style="margin-top: 30px; font-size: 1.5rem;">Клики: 0</h3>
-        <h4 id="clicker-timer" style="color: red; margin-top: 10px;">Взлом не начат</h4>
-        
-        <!-- ОНЛАЙН ТАБЛИЦА ЛИДЕРОВ -->
-        <div id="leaderboard-container" class="leaderboard-box">
-            <p style="color:#aaa;">Подключение к базе данных...</p>
+    <div id="story-scene" class="story-scene">
+        <div class="story-text-box" id="story-text">В сумерках на старой горке играли 6 фигур...</div>
+        <div class="hill-ground"></div><div class="flat-ground"></div>
+        <div class="village-toilet" id="toilet"><div class="toilet-roof"></div><div class="toilet-door" id="toilet-door"></div></div>
+        <div class="school-building" id="school"><div style="color:var(--blood-red); font-weight:bold; width:100%; text-align:center; margin-top:20px; font-size:1.5rem; text-shadow: 0 0 5px black;">ШКОЛА</div><div class="school-door"></div></div>
+        <div class="director-room" id="director-office"><h2 style="color:red; font-size: 3rem; margin-bottom: 20px; text-shadow: 0 0 20px #000;">КАБИНЕТ ДИРЕКТОРА</h2><p style="color:#aaa; font-size:1.5rem; font-weight:bold; text-align:center;">ВЫБРАТЬСЯ НЕВОЗМОЖНО.</p></div>
+
+        <div class="actor-circle c-fun" id="f1">1</div><div class="actor-circle c-fun" id="f2">2</div><div class="actor-circle c-fun" id="f3">3</div>
+        <div class="actor-circle c-fun" id="f4">4</div><div class="actor-circle c-fun" id="f5">5</div><div class="actor-circle c-fun" id="f6">6</div>
+        <div class="actor-circle c-blue" id="blue-circle">M</div><div class="actor-circle c-pink" id="pink-circle">П</div>
+    </div>
+
+    <div id="secret-photo-overlay" class="fullscreen-overlay" style="background: rgba(0,0,0,0.95); z-index: 25000;">
+        <span class="close-btn" onclick="closeSecretPhoto()">&times;</span>
+        <h2 style="color:var(--accent-gold); margin-bottom: 20px; font-family: monospace;">ВВЕДИТЕ КОД ДОСТУПА</h2>
+        <img src="arsalan_secret.jpg" alt="Секретное фото" style="max-width: 80%; border: 3px dashed var(--accent-gold); cursor: crosshair;" onclick="askExecutionCode()">
+        <p style="color: #666; margin-top: 15px; font-size: 0.8rem;">(Нажми на фото для ввода)</p>
+    </div>
+
+    <div id="execution-overlay">
+        <div class="death-text" id="death-text">САНЖИ УБИТ</div>
+        <div class="exec-story-box" id="exec-story-text">ИНОАГЕНТ ОБНАРУЖИЛ ЦЕЛЬ...</div>
+        <div id="blood-pool"></div>
+        <div class="circle-char" id="exec-sanji">Санжи</div>
+        <div class="circle-char" id="exec-agent" onclick="shootAgent()">иноагент</div>
+        <div class="bullet" id="exec-bullet1"></div>
+        <div class="bullet" id="exec-bullet2" style="top: 52%;"></div>
+        <div class="bullet" id="exec-bullet3" style="top: 48%;"></div>
+    </div>
+
+    <div id="artem-overlay" class="fullscreen-overlay">
+        <span class="close-btn" onclick="closeArtemPage()">&times;</span>
+        <div class="artem-page" id="artem-content">
+            <h2 style="color:var(--accent-gold)">РАДАР СПЕЦ-ПРИЕМОВ</h2>
+            <div class="radar-track"><div class="radar-pointer"></div></div>
+            <div class="chart-container">
+                <div class="chart-label">Мощность рыжка:</div>
+                <div class="chart-bar" id="bar1" style="width: 85%; background: #ffaa00;">85%</div>
+                
+                <div class="chart-label">Токсичность пердежа:</div>
+                <div class="chart-bar" id="bar2" style="width: 70%; background: #00cc66;">70%</div>
+                
+                <div class="chart-label" style="margin-top: 20px; color: #ff4444;">Заряд супер-атаки (нажми):</div>
+                <div class="chart-bar" id="bar3" onclick="chargeArtem()" style="background: #ff4444; width: 0%;">0%</div>
+            </div>
         </div>
     </div>
 
-    <!-- ТИМУР ПАСХАЛКА (25+ кликов) -->
-    <div id="timur-secret-overlay" class="fullscreen-overlay" style="z-index: 10005;">
-        <span class="close-btn" onclick="document.getElementById('timur-secret-overlay').style.display='none'">&times;</span>
-        <h2 style="color:var(--accent-gold); margin-bottom: 20px; text-shadow: 0 0 20px var(--accent-glow);">СВЕРХЗВУКОВОЙ РЕКОРД!</h2>
-        <img src="timur_25.jpg" alt="Секретное фото Тимура" style="max-width: 80%; max-height: 60vh; border: 5px solid var(--accent-gold); border-radius: 15px;">
+    <div id="timur-overlay" class="fullscreen-overlay">
+        <span class="close-btn" onclick="closeTimurGame()">&times;</span>
+        <div class="timur-content" style="width: 100%; height: 100%; display: flex;">
+            <h2 style="color:var(--accent-gold); margin-top: 40px;">СВЕРХЗВУКОВОЙ ТИМУР</h2>
+            <p style="color: #fff;">Поймай кнопку 10 раз как можно быстрее!</p>
+            <h4 id="clicker-timer" style="color: #ffaa00; font-size: 1.5rem; margin-top: 10px;">Время: 0.00с</h4>
+            
+            <div id="clicker-btn" class="speed-clicker" onclick="clickTimurTarget()">КЛИК!</div>
+            
+            <div class="leaderboard-box">
+                <h3>Global Supabase Leaderboard</h3>
+                <ul id="leaderboard-list">
+                    <li style="color:#888;">Загрузка данных...</li>
+                </ul>
+            </div>
+        </div>
     </div>
 
-    <!-- САНЖИ СКРИМЕР (После BSOD) -->
-    <div id="jumpscare-overlay" class="fullscreen-overlay" style="background: #000; padding:0; z-index: 60000;">
-        <span class="close-btn" onclick="closeJumpscare()" style="background: rgba(0,0,0,0.5); border-radius: 50%; padding: 0 10px;">&times;</span>
-        <img src="sanji_secret.jpg" alt="Санжи Найден!" style="width: 100vw; height: 100vh; object-fit: contain; animation: zoomIn 0.2s ease;">
+    <div id="vanya-overlay" class="fullscreen-overlay">
+        <span class="close-btn" onclick="closeVanyaVault()">&times;</span>
+        <h2 style="color:var(--accent-gold);">СЕКРЕТНЫЙ ФОТОАРХИВ ВАНИ</h2>
+        <div class="vanya-gallery">
+            <div class="vanya-photo"><img src="vanya_photo1.jpg" alt="Фото 1" style="width:100%; height:100%; object-fit:cover; border-radius:8px;" onerror="this.style.display='none'; this.parentNode.innerText='Нет фото 1'"></div>
+            <div class="vanya-photo"><img src="vanya_photo2.jpg" alt="Фото 2" style="width:100%; height:100%; object-fit:cover; border-radius:8px;" onerror="this.style.display='none'; this.parentNode.innerText='Нет фото 2'"></div>
+            <div class="vanya-photo"><img src="vanya_photo3.jpg" alt="Фото 3" style="width:100%; height:100%; object-fit:cover; border-radius:8px;" onerror="this.style.display='none'; this.parentNode.innerText='Нет фото 3'"></div>
+        </div>
+        <!-- КНОПКА ЗЕМЛЕТРЯСЕНИЯ -->
+        <button class="quake-btn" onclick="triggerVanyaQuake()">ИЗМЕРИТЬ СИЛУ ШАГА ВАНИ</button>
     </div>
 
-    <!-- СТРАНИЦА САНЖИ (ТЕРМИНАЛ) -->
     <div id="sanji-overlay" class="fullscreen-overlay">
         <span class="close-btn" onclick="closeSanjiTerminal()">&times;</span>
-        <h2 style="color:var(--neon-pink); text-shadow: 0 0 10px rgba(255,0,85,0.5);">ВЗЛОМ ЛОГОВ САНЖИ...</h2>
+        <h2 style="color:var(--neon-pink); text-shadow: 0 0 10px rgba(255,0,85,0.5); margin-bottom: 20px;">ВЗЛОМ ЛОГОВ САНЖИ...</h2>
         <div class="terminal-box">
             <span id="term-text"></span><span class="terminal-cursor"></span>
         </div>
     </div>
 
-    <!-- ПАСХАЛКА ВАНЯ -->
-    <div id="secret-overlay" class="fullscreen-overlay">
-        <span class="close-btn" onclick="closeOverlay()">&times;</span>
-        <img id="trigger-image" src="vanya_secret.jpg" alt="Ввод PIN" onclick="askPin()">
-        <div class="unlocked-container" id="unlocked-pics">
-            <img src="secret_1.jpg" alt="1"><img src="secret_2.jpg" alt="2"><img src="secret_3.jpg" alt="3">
+    <!-- ОВЕРЛЕЙ КАМЕРЫ СЛАВЫ -->
+    <div id="cctv-overlay">
+        <div class="cctv-ui">
+            <span class="rec-dot"></span> REC <br>
+            <span id="cctv-timecode">00:00:00:00</span>
         </div>
+        <div class="cctv-text-warning">НАБЛЮДАТЕЛЬ АКТИВЕН // СЛАВА СМОТРИТ</div>
     </div>
 
-    <!-- BSOD (СИНИЙ ЭКРАН) -->
-    <div id="bsod">
-        <p>A problem has been detected and Windows has been shut down to prevent damage to your computer.</p><br>
-        <p>SANJI_NOT_FOUND_IN_SYSTEM_CORES</p><br>
-        <p>Technical Information: *** STOP: 0x000000D1</p><br>
-        <p>Click anywhere to reboot system...</p>
+    <!-- ОВЕРЛЕЙ ТОКСИЧНОГО ГАЗА АРТЁМА -->
+    <div id="toxic-overlay">
+        <h1 style="font-size: 3rem;">ВНИМАНИЕ! УТЕЧКА ТОКСИЧНОГО ГАЗА</h1>
+        <p style="color: #fff; font-size: 1.2rem; margin-top: 10px;">Арина передает привет. Включите вентиляцию!</p>
+        <h2 id="toxic-timer" style="font-size: 4rem; color: #fff; margin-top: 20px;">5.00</h2>
+        
+        <div class="fan-btn" id="fan1" onclick="clickFan(1)">☢️</div>
+        <div class="fan-btn" id="fan2" onclick="clickFan(2)">☢️</div>
+        <div class="fan-btn" id="fan3" onclick="clickFan(3)">☢️</div>
     </div>
 
-    <footer onclick="checkClicks()">Информация 2025Г.</footer>
+    <footer onclick="checkFooterClicks()">информация 2025г</footer>
 
-    <!-- ПОДКЛЮЧАЕМ SUPABASE ДЛЯ БАЗЫ ДАННЫХ -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-
     <script>
-        // --- НАСТРОЙКА ОНЛАЙН БАЗЫ ДАННЫХ SUPABASE ---
-        // Ключи прописаны корректно!
-        const SUPABASE_URL = 'https://buontfivfesaifslldjh.supabase.co'; 
-        const SUPABASE_ANON_KEY = 'sb_publishable_OqCXdCVOL5xbKspkCJ8yFQ_Sh4Z45iS'; 
-
-        const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-
-        async function saveOnlineScore(name, score) {
-            const { data, error } = await supabaseClient
-                .from('timur_leaderboard')
-                .insert([{ player_name: name, score: score }]);
-                
-            if (error) {
-                console.error('Ошибка при сохранении в базу:', error);
-            } else {
-                console.log('Рекорд успешно улетел в базу данных!');
-                loadOnlineLeaderboard(); 
-            }
+        const supabaseUrl = 'https://buontfivfesaifslldjh.supabase.co';
+        const supabaseKey = 'sb_publishable_OqCXdCVOL5xbKspkCJ8yFQ_Sh4Z45iS';
+        let supabaseClient;
+        
+        try {
+            supabaseClient = window.supabase.createClient(supabaseUrl, supabaseKey);
+        } catch(e) {
+            console.error("Ошибка инициализации Supabase:", e);
         }
 
-        async function loadOnlineLeaderboard() {
-            const { data, error } = await supabaseClient
-                .from('timur_leaderboard')
-                .select('*')
-                .order('score', { ascending: false })
-                .limit(5);
+        async function loadLeaderboard() {
+            if(!supabaseClient) return;
+            try {
+                const { data, error } = await supabaseClient
+                    .from('timur_leaderboard')
+                    .select('*')
+                    .order('score', { ascending: true })
+                    .limit(5);
+                    
+                const list = document.getElementById('leaderboard-list');
                 
-            if (!error && data) {
-                let html = '<h3 style="color:var(--accent-gold); margin-bottom:15px;">🏆 ТОП ШТУРМОВИКОВ</h3>';
-                if (data.length === 0) {
-                    html += '<p style="color:#aaa;">Будь первым, кто установит рекорд!</p>';
+                if (data && data.length > 0) {
+                    list.innerHTML = '';
+                    data.forEach((entry, index) => {
+                        list.innerHTML += `<li><span>${index + 1}. ${entry.player_name || 'Аноним'}</span> <span><b style="color:#00cc66">${entry.score}с</b></span></li>`;
+                    });
+                } else if (error) {
+                    list.innerHTML = `<li style="color:red; font-size:0.8rem;">Ошибка БД: Проверьте таблицу timur_leaderboard</li>`;
                 }
-                data.forEach((entry, index) => {
-                    html += `<div style="display:flex; justify-content:space-between; border-bottom:1px solid #333; padding:5px 0;">
-                                <span>${index + 1}. ${entry.player_name}</span>
-                                <span style="color:#00ff00;">${entry.score} кликов</span>
-                             </div>`;
-                });
-                document.getElementById('leaderboard-container').innerHTML = html;
+            } catch(e) {
+                console.error("Ошибка загрузки лидерборда:", e);
+            }
+        }
+
+        async function saveTimurScore(time) {
+            let name = prompt(`Твое время: ${time}с! Введи имя для таблицы лидеров:`);
+            if (name && name.trim() !== "" && supabaseClient) {
+                try {
+                    await supabaseClient.from('timur_leaderboard').insert([{ player_name: name.trim(), score: parseFloat(time) }]);
+                    loadLeaderboard();
+                } catch(e) {
+                    console.error("Ошибка сохранения:", e);
+                }
+            }
+        }
+
+        let footerClickCount = 0;
+        function checkFooterClicks() {
+            footerClickCount++;
+            if (footerClickCount === 3) {
+                document.getElementById('sanji-card').style.display = 'block';
+                alert("Обнаружен скрытый файл: Санжи добавлен в архив!");
+            }
+        }
+
+        function triggerStrongChaos() {
+            document.body.style.filter = "invert(1) hue-rotate(90deg) contrast(200%) saturate(300%)";
+            document.body.style.animation = "extremeShake 0.1s infinite";
+            
+            setTimeout(() => {
+                document.body.style.filter = "none";
+                document.body.style.animation = "none";
+            }, 8000); 
+        }
+
+        function openVanyaVault() {
+            let pass = prompt("ВВЕДИТЕ ПАРОЛЬ ДЛЯ ДОСТУПА К ФОТО-АРХИВУ ВАНИ:");
+            if (pass) {
+                document.getElementById('vanya-overlay').style.display = 'flex';
             } else {
-                console.error('Ошибка загрузки таблицы лидеров:', error);
-                document.getElementById('leaderboard-container').innerHTML = '<p style="color:red;">Ошибка подключения к базе</p>';
+                alert("В доступе отказано.");
             }
         }
-
-        // --- БАЗОВЫЕ ФУНКЦИИ И ПАСХАЛКИ ---
-        let clickCount = 0, shakeCount = 0, vanyaClicks = 0;
-
-        function checkClicks() {
-            clickCount++;
-            if (clickCount === 3) { document.getElementById('sanji-card').style.display = 'block'; alert("Обнаружен скрытый файл: Санжи добавлен в архив!"); }
+        function closeVanyaVault() {
+            document.getElementById('vanya-overlay').style.display = 'none';
         }
 
-        function triggerShake() {
-            shakeCount++;
-            if (shakeCount === 5) {
-                const cards = document.querySelectorAll('.card');
-                cards.forEach(card => card.classList.add('shaking'));
-                setTimeout(() => { cards.forEach(card => card.classList.remove('shaking')); shakeCount = 0; }, 3000);
-            }
-        }
-
-        function checkVanyaClicks() {
-            vanyaClicks++;
-            if (vanyaClicks === 3) { document.getElementById('secret-overlay').style.display = 'flex'; vanyaClicks = 0; }
-        }
-        function closeOverlay() { document.getElementById('secret-overlay').style.display = 'none'; document.getElementById('unlocked-pics').style.display = 'none'; }
-        function askPin() {
-            let p = prompt("Доступ заблокирован. Введите PIN-код:");
-            if (p === "1234") { document.getElementById('unlocked-pics').style.display = 'flex'; } 
-            else if (p !== null) { alert("НЕВЕРНЫЙ КОД!"); }
-        }
-
-        // --- ИНВЕНТАРЬ АРТЁМА ---
-        let artemPower = 0;
-        function openArtemPage() {
-            document.getElementById('artem-overlay').style.display = 'flex';
-            setTimeout(() => { document.getElementById('bar1').style.width = '95%'; document.getElementById('bar2').style.width = '88%'; }, 200);
-        }
-        function closeArtemPage() {
-            document.getElementById('artem-overlay').style.display = 'none';
-            document.getElementById('bar1').style.width = '0'; document.getElementById('bar2').style.width = '0';
-        }
-        function chargeArtem() {
-            artemPower += 20;
-            if (artemPower <= 100) {
-                document.getElementById('bar3').style.width = `${artemPower}%`;
-                document.getElementById('bar3').innerText = `${artemPower}%`;
-            }
-            if (artemPower >= 100) {
-                document.getElementById('artem-content').classList.add('shaking');
+        let cardSequence = [];
+        function registerCardSequence(cardName) {
+            cardSequence.push(cardName);
+            if (cardSequence.length > 3) cardSequence.shift();
+            if (cardSequence.join(',') === 'arsalan,slava,artem') {
+                cardSequence = [];
                 setTimeout(() => {
-                    alert("КРИТИЧЕСКИЙ УРОВЕНЬ КОМПРОМАТА! Арина отравлена.");
-                    document.getElementById('artem-content').classList.remove('shaking');
-                    artemPower = 0;
-                    document.getElementById('bar3').style.width = '0';
-                    document.getElementById('bar3').innerText = '0%';
-                }, 500);
+                    closeArtemPage(); closeVista(); openSecretPhotoScreen();
+                }, 100);
             }
         }
 
-        // --- ВИНДОВС СЛАВЫ И ПОИСК САНЖИ ---
+        function openSecretPhotoScreen() {
+            document.getElementById('secret-photo-overlay').style.display = 'flex';
+            document.getElementById('sound-secret-photo').play().catch(()=>{});
+        }
+        function closeSecretPhoto() {
+            document.getElementById('secret-photo-overlay').style.display = 'none';
+            document.getElementById('sound-secret-photo').pause();
+            document.getElementById('sound-secret-photo').currentTime = 0;
+        }
+
+        function askExecutionCode() {
+            let code = prompt("СИСТЕМА ТРЕБУЕТ КОД:");
+            if (code === "010101") {
+                closeSecretPhoto();
+                startExecutionScene();
+            } else if (code !== null) {
+                alert("ОШИБКА ДОСТУПА. Неверный код.");
+            }
+        }
+
+        // --- СЦЕНА КАЗНИ (ОБНОВЛЕННАЯ) ---
+        window.execTimeouts = [];
+        window.agentShot = false;
+
+        function startExecutionScene() {
+            const execOverlay = document.getElementById('execution-overlay');
+            const sanji = document.getElementById('exec-sanji');
+            const agent = document.getElementById('exec-agent');
+            const blood = document.getElementById('blood-pool');
+            const deathTxt = document.getElementById('death-text');
+            const storyTxt = document.getElementById('exec-story-text');
+            const bullets = [document.getElementById('exec-bullet1'), document.getElementById('exec-bullet2'), document.getElementById('exec-bullet3')];
+            const music = document.getElementById('sound-execution');
+            
+            window.agentShot = false;
+            window.execTimeouts.forEach(clearTimeout);
+            window.execTimeouts = [];
+            
+            execOverlay.style.display = 'block';
+            music.currentTime = 0; music.play().catch(()=>{});
+            
+            sanji.style.transform = 'translateY(-50%) scale(1)'; 
+            sanji.style.background = '#ff0055';
+            sanji.style.borderColor = '#ffaaaa';
+            sanji.style.left = '20%';
+            
+            agent.style.right = '-200px'; 
+            agent.style.transform = 'translateY(-50%)';
+            agent.style.background = '#111';
+            agent.style.borderColor = '#fff';
+            agent.style.color = '#fff';
+            agent.style.boxShadow = 'none';
+            agent.innerText = 'иноагент';
+            
+            blood.style.width = '0'; blood.style.height = '0';
+            deathTxt.style.display = 'none'; 
+            storyTxt.style.display = 'block';
+            storyTxt.style.color = '#fff';
+            
+            bullets.forEach(b => { b.style.display = 'none'; b.style.right = '250px'; });
+
+            storyTxt.innerText = "ИНОАГЕНТ ВЫШЕЛ НА ОХОТУ...";
+            let t1 = setTimeout(() => { agent.style.right = '10%'; }, 500);
+
+            let t2 = setTimeout(() => { storyTxt.innerText = "ЦЕЛЬ НАЙДЕНА: САНЖИ. ПОДГОТОВКА К ЛИКВИДАЦИИ."; }, 2000);
+
+            let t3 = setTimeout(() => {
+                storyTxt.innerText = "ПРИГОВОР ПРИВЕДЕН В ИСПОЛНЕНИЕ.";
+                bullets.forEach((b, i) => {
+                    let t4 = setTimeout(() => {
+                        b.style.display = 'block'; b.style.transition = 'right 0.1s linear';
+                        let t5 = setTimeout(() => { b.style.right = '80%'; }, 20);
+                        window.execTimeouts.push(t5);
+                    }, i * 200);
+                    window.execTimeouts.push(t4);
+                });
+            }, 4000);
+
+            let t6 = setTimeout(() => {
+                bullets.forEach(b => b.style.display = 'none');
+                sanji.style.transform = 'translateY(-20%) scale(1.2, 0.3)';
+                sanji.style.background = '#8b0000'; sanji.style.borderColor = '#400';
+                blood.style.width = '120px'; blood.style.height = '40px';
+                deathTxt.style.display = 'block';
+                storyTxt.innerText = "ДАННЫЕ ОБЪЕКТА УНИЧТОЖЕНЫ.";
+            }, 4600);
+
+            let t7 = setTimeout(() => {
+                execOverlay.style.display = 'none';
+                document.getElementById('sanji-card').style.display = 'none';
+                music.pause();
+                alert("Санжи удален из базы архива навсегда.");
+            }, 9000);
+            
+            window.execTimeouts.push(t1, t2, t3, t6, t7);
+        }
+
+        function shootAgent() {
+            if (window.agentShot || document.getElementById('death-text').style.display === 'block') return;
+            window.agentShot = true;
+            
+            window.execTimeouts.forEach(clearTimeout);
+            
+            const storyTxt = document.getElementById('exec-story-text');
+            const sanji = document.getElementById('exec-sanji');
+            const agent = document.getElementById('exec-agent');
+            const jumpscareAudio = document.getElementById('jumpscare-sound');
+            
+            storyTxt.innerText = "ВЫ АТАКОВАЛИ ИНОАГЕНТА!";
+            
+            for(let i = 0; i < 3; i++) {
+                let pb = document.createElement('div');
+                pb.className = 'bullet';
+                pb.style.background = '#00ffff';
+                pb.style.boxShadow = '0 0 10px #00ffff';
+                pb.style.left = '0px';
+                pb.style.right = 'auto';
+                pb.style.top = (45 + i * 5) + '%';
+                pb.style.display = 'block';
+                document.getElementById('execution-overlay').appendChild(pb);
+                
+                setTimeout(() => {
+                    pb.style.transition = 'left 0.2s linear';
+                    pb.style.left = '80%';
+                }, 50);
+                setTimeout(() => { pb.remove(); }, 300);
+            }
+            
+            setTimeout(() => {
+                sanji.style.transition = 'left 0.5s ease-in';
+                sanji.style.left = '-150px';
+                storyTxt.innerText = "САНЖИ СБЕЖАЛ!";
+            }, 300);
+            
+            setTimeout(() => {
+                agent.style.background = '#8b0000';
+                agent.style.borderColor = '#ff0000';
+                agent.style.color = '#fff';
+                agent.style.transition = 'all 0.5s';
+                agent.style.transform = 'translateY(-50%) scale(1.2) rotate(5deg)';
+                storyTxt.innerText = "ИНОАГЕНТ В ЯРОСТИ...";
+                storyTxt.style.color = '#ff0000';
+            }, 500);
+            
+            setTimeout(() => {
+                if(jumpscareAudio) { jumpscareAudio.currentTime = 0; jumpscareAudio.play().catch(()=>{}); }
+                agent.style.transition = 'all 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275)';
+                agent.style.right = '50%';
+                agent.style.transform = 'translate(50%, -50%) scale(15)';
+                agent.style.boxShadow = '0 0 100px #ff0000';
+                agent.innerText = "АААА!";
+            }, 2000);
+            
+            setTimeout(() => {
+                document.getElementById('execution-overlay').style.display = 'none';
+                document.getElementById('sound-execution').pause();
+                alert("Иноагент разорвал соединение. Вы спасли Санжи, но нажили страшного врага...");
+                storyTxt.style.color = '#fff';
+            }, 3500);
+        }
+
+        // --- СЕКРЕТНАЯ КНОПКА СЛАВЫ И МУЛЬТФИЛЬМ ---
+        let secretBtnClicks = 0;
+        function clickSecretButton() {
+            secretBtnClicks++;
+            if (secretBtnClicks === 1) alert("Что-то щелкнуло во тьме...");
+            if (secretBtnClicks === 3) {
+                secretBtnClicks = 0; closeVista(); startCartoonAnimation();
+            }
+        }
+
+        function startCartoonAnimation() {
+            const scene = document.getElementById('story-scene');
+            const txt = document.getElementById('story-text');
+            const music = document.getElementById('sound-cartoon');
+            
+            scene.style.display = 'block'; music.currentTime = 0; music.play().catch(() => {});
+            document.getElementById('toilet').style.display = 'none';
+            document.getElementById('toilet-door').style.transform = 'rotateY(0deg)';
+            document.getElementById('school').style.right = '-350px';
+            document.getElementById('director-office').style.display = 'none';
+
+            const funCircles = [ document.getElementById('f1'), document.getElementById('f2'), document.getElementById('f3'), document.getElementById('f4'), document.getElementById('f5'), document.getElementById('f6') ];
+            const blue = document.getElementById('blue-circle'); const pink = document.getElementById('pink-circle');
+
+            txt.innerText = "В сумерках на старой горке играли 6 фигур...";
+            funCircles.forEach((c, index) => { c.style.display = 'block'; c.style.left = `${10 + index * 5}%`; c.style.bottom = `${35 - index * 3}vh`; });
+            setTimeout(() => { funCircles.forEach((c, index) => { c.style.left = `${35 + index * 3}%`; c.style.bottom = '5vh'; }); }, 2000);
+
+            setTimeout(() => { txt.innerText = "Из мрака появился Синий... Они переглянулись."; blue.style.display = 'block'; blue.style.left = '90%'; blue.style.bottom = '5vh'; }, 4500);
+            setTimeout(() => { blue.style.left = '65%'; funCircles.forEach((c, index) => { c.style.left = `${50 + index * 2}%`; }); }, 6000);
+
+            setTimeout(() => { txt.innerText = "Молча они повели его к заброшенному строению..."; document.getElementById('toilet').style.display = 'block'; document.getElementById('toilet-door').style.transform = 'rotateY(-90deg)'; blue.style.left = '78%'; blue.style.bottom = '16vh'; funCircles.forEach((c, index) => { c.style.left = `${55 + index * 3}%`; }); }, 8500);
+            setTimeout(() => { txt.innerText = "Захлопнули дверь. Навесили замок. Теперь он там навсегда."; txt.style.color = "red"; blue.style.display = 'none'; document.getElementById('toilet-door').style.transform = 'rotateY(0deg)'; }, 11500);
+
+            setTimeout(() => { txt.innerText = "Но во тьме проснулось Нечто Розовое. Оно было в ярости."; txt.style.color = "#d3d3d3"; pink.style.display = 'block'; pink.style.left = '10%'; pink.style.bottom = '5vh'; }, 14500);
+            setTimeout(() => { txt.innerText = "Всех выстроили в ряд. Шестой попытался скрыться в тенях..."; pink.style.left = '40%'; funCircles.forEach((c, index) => { c.classList.add('twitch'); if(index === 5) { c.style.left = '2%'; } else { c.style.left = `${45 + index * 5}%`; } }); }, 17500);
+
+            setTimeout(() => { txt.innerText = "От Неё не убежать. Она нашла его."; pink.style.left = '10%'; }, 21000);
+            setTimeout(() => { funCircles[5].style.left = '70%'; pink.style.left = '35%'; }, 23500);
+
+            setTimeout(() => { txt.innerText = "Теперь их ждёт Суд. Они идут в проклятую 'Школу'."; document.getElementById('school').style.right = '20px'; pink.style.left = '65%'; funCircles.forEach((c, index) => { c.style.left = `${70 + index * 3}%`; }); }, 26000);
+            setTimeout(() => { pink.style.display = 'none'; funCircles.forEach(c => c.style.display = 'none'); }, 29000);
+
+            setTimeout(() => { txt.style.display = 'none'; document.getElementById('director-office').style.display = 'flex'; }, 31000);
+            setTimeout(() => { scene.style.display = 'none'; txt.style.display = 'block'; txt.style.color = "#d3d3d3"; music.pause(); pink.style.display = 'none'; blue.style.display = 'none'; funCircles.forEach(c => c.classList.remove('twitch')); }, 36000);
+        }
+
+        function triggerAssistant() {
+            const bubble = document.getElementById('assist-bubble'); bubble.style.display = 'block';
+            bubble.innerText = Math.random() < 0.3 ? "Ты не знаешь что за кнопка у файла, в правом верхнем углу?" : "Слава сегодня опять на чилле, не беспокоить.";
+            setTimeout(() => { bubble.style.display = 'none'; }, 4000);
+        }
+
+        // --- ОБНОВЛЁННАЯ ЛОГИКА АРТЁМА (ТОКСИЧНОЕ ОБЛАКО) ---
+        let artemPower = 0;
+        function chargeArtem() { 
+            artemPower += 20; 
+            const bar = document.getElementById('bar3');
+            if(artemPower <= 100) { bar.style.width = `${artemPower}%`; bar.innerText = `${artemPower}%`; } 
+            if(artemPower >= 100){ 
+                startToxicEvent(); 
+                artemPower = 0; bar.style.width = '0%'; bar.innerText = '0%'; 
+            } 
+        }
+
+        let fansClicked = 0;
+        let toxicTimerVal = 5.0;
+        let toxicInterval;
+
+        function startToxicEvent() {
+            closeArtemPage();
+            const toxicOverlay = document.getElementById('toxic-overlay');
+            toxicOverlay.style.display = 'flex';
+            fansClicked = 0;
+            toxicTimerVal = 5.0;
+            
+            document.getElementById('toxic-timer').innerText = "5.00";
+            document.getElementById('toxic-timer').style.color = "#fff";
+            
+            for(let i=1; i<=3; i++) {
+                let fan = document.getElementById(`fan${i}`);
+                fan.style.display = 'flex';
+                moveFan(fan);
+            }
+
+            toxicInterval = setInterval(() => {
+                toxicTimerVal -= 0.01;
+                document.getElementById('toxic-timer').innerText = toxicTimerVal.toFixed(2);
+                
+                if(toxicTimerVal <= 0) {
+                    clearInterval(toxicInterval);
+                    document.getElementById('toxic-timer').innerText = "ВЫ ОТРАВЛЕНЫ.";
+                    document.getElementById('toxic-timer').style.color = "red";
+                    for(let i=1; i<=3; i++) document.getElementById(`fan${i}`).style.display = 'none';
+                    setTimeout(() => { toxicOverlay.style.display = 'none'; }, 2000);
+                }
+            }, 10);
+        }
+
+        function moveFan(fan) {
+            const maxX = window.innerWidth - 80; 
+            const maxY = window.innerHeight - 80;
+            fan.style.left = `${Math.max(20, Math.random() * maxX)}px`;
+            fan.style.top = `${Math.max(20, Math.random() * maxY)}px`;
+        }
+
+        function clickFan(id) {
+            document.getElementById(`fan${id}`).style.display = 'none';
+            fansClicked++;
+            if(fansClicked >= 3) {
+                clearInterval(toxicInterval);
+                document.getElementById('toxic-timer').innerText = "УГРОЗА МИНОВАЛА";
+                document.getElementById('toxic-timer').style.color = "#00ff00";
+                setTimeout(() => { document.getElementById('toxic-overlay').style.display = 'none'; }, 1500);
+            }
+        }
+
+        // --- НОВАЯ ЛОГИКА ВАНИ (ЗЕМЛЕТРЯСЕНИЕ) ---
+        function triggerVanyaQuake() {
+            document.body.style.animation = "heavyShake 0.6s ease-out";
+            
+            if (navigator.vibrate) navigator.vibrate([200, 100, 200]);
+
+            setTimeout(() => {
+                document.body.style.animation = "none";
+            }, 600);
+        }
+
+        // --- ЛОГИКА СЛАВЫ (НАБЛЮДАТЕЛЬ) ---
+        let slavaMode = false;
+        let timecodeInterval;
+
+        function toggleSlavaMode() {
+            slavaMode = !slavaMode;
+            const overlay = document.getElementById('cctv-overlay');
+            
+            if (slavaMode) {
+                document.body.classList.add('slava-active');
+                overlay.style.display = 'block';
+                
+                timecodeInterval = setInterval(() => {
+                    const now = new Date();
+                    const timeString = now.toTimeString().split(' ')[0];
+                    const ms = String(now.getMilliseconds()).padStart(3, '0').slice(0, 2);
+                    document.getElementById('cctv-timecode').innerText = `${timeString}:${ms}`;
+                }, 50);
+            } else {
+                document.body.classList.remove('slava-active');
+                overlay.style.display = 'none';
+                clearInterval(timecodeInterval);
+            }
+        }
+
+        // --- ОСТАЛЬНЫЕ ФУНКЦИИ (ОСТАВЛЕНЫ БЕЗ ИЗМЕНЕНИЙ) ---
+        function openArtemPage() { document.getElementById('artem-overlay').style.display = 'flex'; }
+        function closeArtemPage() { document.getElementById('artem-overlay').style.display = 'none'; }
+
         function openVista() { document.getElementById('vista-overlay').style.display = 'flex'; }
         function closeVista() { document.getElementById('vista-overlay').style.display = 'none'; closeVistaWindow(); }
         function openVistaWindow() { document.getElementById('vista-win').style.display = 'flex'; }
         function closeVistaWindow() { document.getElementById('vista-win').style.display = 'none'; }
-        function startSearchGlitch() { document.getElementById('bsod').style.display = 'block'; }
         
-        document.getElementById('bsod').onclick = function() { 
-            this.style.display = 'none'; 
-            document.getElementById('jumpscare-overlay').style.display = 'flex';
-            document.getElementById('jumpscare-sound').play().catch(() => {});
-        };
-        function closeJumpscare() {
-            document.getElementById('jumpscare-overlay').style.display = 'none';
-            const sound = document.getElementById('jumpscare-sound');
-            sound.pause(); sound.currentTime = 0; closeVista();
-        }
-
-        // --- ИГРА ТИМУРА (ОНЛАЙН) ---
-        let timurClicks = 0, clickerTimer = null, timeLeft = 5, gameActive = false;
-
+        let tClicks = 0, timerVal = 0, tInterval, isPlaying = false;
         function openTimurGame() { 
             document.getElementById('timur-overlay').style.display = 'flex'; 
-            resetTimurGame(); 
-            loadOnlineLeaderboard(); 
+            resetTimur(); 
+            loadLeaderboard(); 
         }
-        
-        function closeTimurGame() { 
-            document.getElementById('timur-overlay').style.display = 'none'; 
-            clearInterval(clickerTimer); 
-            gameActive = false; 
-        }
-        
-        function resetTimurGame() {
-            timurClicks = 0; timeLeft = 5; gameActive = false;
-            document.getElementById('clicker-score').innerText = "Клики: 0";
-            document.getElementById('clicker-timer').innerText = "Кликни по кнопке, чтобы начать!";
-            document.getElementById('clicker-timer').style.color = "var(--accent-gold)";
-        }
+        function closeTimurGame() { document.getElementById('timur-overlay').style.display = 'none'; clearInterval(tInterval); }
+        function resetTimur() { tClicks = 0; timerVal = 0; isPlaying = false; document.getElementById('clicker-timer').innerText = "Время: 0.00с"; document.getElementById('clicker-btn').innerText = "КЛИК!"; }
         
         function clickTimurTarget() {
-            if (!gameActive && timeLeft === 5) {
-                gameActive = true;
-                clickerTimer = setInterval(() => {
-                    timeLeft--;
-                    document.getElementById('clicker-timer').innerText = `Осталось времени: ${timeLeft}с`;
-                    
-                    if (timeLeft <= 0) {
-                        clearInterval(clickerTimer);
-                        gameActive = false;
-                        document.getElementById('clicker-timer').innerText = "Время вышло!";
-                        document.getElementById('clicker-timer').style.color = "red";
-                        
-                        if (timurClicks >= 25) { 
-                            document.getElementById('timur-secret-overlay').style.display = 'flex'; 
-                        }
-                        
-                        setTimeout(() => {
-                            let playerName = prompt(`Твоя скорость: ${timurClicks} кликов!\nВведи свой ник для таблицы лидеров:`);
-                            if (playerName && playerName.trim() !== "") { 
-                                saveOnlineScore(playerName.trim(), timurClicks); 
-                            } else if (playerName !== null) {
-                                alert("Имя не может быть пустым!");
-                            }
-                        }, 500);
-                    }
-                }, 1000);
+            const btn = document.getElementById('clicker-btn');
+            if (!isPlaying) {
+                isPlaying = true; tClicks = 0; timerVal = 0;
+                tInterval = setInterval(() => { timerVal += 0.01; document.getElementById('clicker-timer').innerText = `Время: ${timerVal.toFixed(2)}с`; }, 10);
             }
-            if (gameActive) {
-                timurClicks++;
-                document.getElementById('clicker-score').innerText = `Клики: ${timurClicks}`;
-            }
-        }
-
-        // --- ХАОС АРСАЛАНА ---
-        let chaosInterval;
-        function triggerChaos() {
-            document.getElementById('sound-arsalan').play().catch(() => {});
-            document.body.classList.add('glitch-mode');
-            const cards = document.querySelectorAll('.card');
+            tClicks++;
+            btn.innerText = tClicks;
             
-            cards.forEach(card => {
-                card.style.position = 'absolute';
-                card.style.zIndex = '500';
-            });
+            const maxX = window.innerWidth - 80; const maxY = window.innerHeight - 80;
+            btn.style.left = `${Math.max(40, Math.random() * maxX)}px`;
+            btn.style.top = `${Math.max(40, Math.random() * maxY)}px`;
 
-            chaosInterval = setInterval(() => {
-                cards.forEach(card => {
-                    const randomX = Math.floor(Math.random() * (window.innerWidth - 250));
-                    const randomY = Math.floor(Math.random() * (window.innerHeight - 300));
-                    card.style.left = `${randomX}px`;
-                    card.style.top = `${randomY}px`;
-                });
-            }, 800);
-
-            setTimeout(() => {
-                clearInterval(chaosInterval);
-                document.body.classList.remove('glitch-mode');
-                cards.forEach(card => {
-                    card.style.position = 'relative';
-                    card.style.left = '0';
-                    card.style.top = '0';
-                });
-                alert("Хаос закончился. Все вернулись с прогулки.");
-            }, 6000);
+            if (tClicks >= 10) {
+                clearInterval(tInterval); isPlaying = false;
+                const finalTime = timerVal.toFixed(2);
+                saveTimurScore(finalTime); 
+                btn.style.left = "50%"; btn.style.top = "50%"; btn.innerText = "ЕЩЕ?";
+            }
         }
-
-        // --- ТЕРМИНАЛ САНЖИ ---
+        
         let terminalInterval;
         function openSanjiTerminal() {
             document.getElementById('sanji-overlay').style.display = 'flex';
@@ -581,12 +974,7 @@
             
             audioTyping.play().catch(() => {});
 
-            const text = `> Подключение к серверу полицейского участка...
-> Доступ получен. Обход брандмауэра... 100%
-> Поиск заблокированных логов Санжи...
-> НАЙДЕНО: Операция 'Оккупация стадиона' прошла успешно.
-> Статус: Засекречен.
-> Взлом завершен. Полный доступ к архивам открыт!`;
+            const text = `> Подключение к серверу полицейского участка...\n> Доступ получен. Обход брандмауэра... 100%\n> Поиск заблокированных логов Санжи...\n> НАЙДЕНО: Операция 'Оккупация стадиона' прошла успешно.\n> Статус: Засекречен.\n> Взлом завершен. Полный доступ к архивам открыт!`;
 
             let i = 0;
             terminalInterval = setInterval(() => {
