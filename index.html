@@ -486,13 +486,12 @@
             <div class="vanya-photo"><img src="vanya_photo2.jpg" alt="Фото 2" style="width:100%; height:100%; object-fit:cover; border-radius:8px;" onerror="this.style.display='none'; this.parentNode.innerText='Нет фото 2'"></div>
             <div class="vanya-photo"><img src="vanya_photo3.jpg" alt="Фото 3" style="width:100%; height:100%; object-fit:cover; border-radius:8px;" onerror="this.style.display='none'; this.parentNode.innerText='Нет фото 3'"></div>
         </div>
-        <!-- КНОПКА ЗЕМЛЕТРЯСЕНИЯ -->
         <button class="quake-btn" onclick="triggerVanyaQuake()">ИЗМЕРИТЬ СИЛУ ШАГА ВАНИ</button>
     </div>
 
     <div id="sanji-overlay" class="fullscreen-overlay">
         <span class="close-btn" onclick="closeSanjiTerminal()">&times;</span>
-        <h2 style="color:var(--neon-pink); text-shadow: 0 0 10px rgba(255,0,85,0.5); margin-bottom: 20px;">ВЗЛОМ ЛОГОВ САНЖИ...</h2>
+        <h2 style="color:var(--neon-pink); text-shadow: 0 0 10px rgba(255,0,85,0.5); margin-bottom: 20px;">ПОИСК: САНЖИ</h2>
         <div class="terminal-box">
             <span id="term-text"></span><span class="terminal-cursor"></span>
         </div>
@@ -532,27 +531,37 @@
             console.error("Ошибка инициализации Supabase:", e);
         }
 
+        // ИСПРАВЛЕННАЯ ФУНКЦИЯ ЗАГРУЗКИ ЛИДЕРБОРДА
         async function loadLeaderboard() {
-            if(!supabaseClient) return;
+            const list = document.getElementById('leaderboard-list');
+            if (!supabaseClient) {
+                list.innerHTML = '<li style="color:red;">Нет подключения к БД</li>';
+                return;
+            }
             try {
                 const { data, error } = await supabaseClient
                     .from('timur_leaderboard')
                     .select('*')
                     .order('score', { ascending: true })
                     .limit(5);
-                    
-                const list = document.getElementById('leaderboard-list');
-                
-                if (data && data.length > 0) {
-                    list.innerHTML = '';
-                    data.forEach((entry, index) => {
-                        list.innerHTML += `<li><span>${index + 1}. ${entry.player_name || 'Аноним'}</span> <span><b style="color:#00cc66">${entry.score}с</b></span></li>`;
-                    });
-                } else if (error) {
-                    list.innerHTML = `<li style="color:red; font-size:0.8rem;">Ошибка БД: Проверьте таблицу timur_leaderboard</li>`;
+
+                if (error) {
+                    list.innerHTML = `<li style="color:red;">Ошибка: ${error.message}</li>`;
+                    return;
                 }
-            } catch(e) {
-                console.error("Ошибка загрузки лидерборда:", e);
+
+                if (!data || data.length === 0) {
+                    list.innerHTML = '<li style="color:#aaa;">🏆 Пока нет результатов. Стань первым!</li>';
+                    return;
+                }
+
+                list.innerHTML = '';
+                data.forEach((entry, index) => {
+                    list.innerHTML += `<li><span>${index + 1}. ${entry.player_name || 'Аноним'}</span> <span><b style="color:#00cc66">${entry.score}с</b></span></li>`;
+                });
+            } catch (e) {
+                console.error(e);
+                list.innerHTML = '<li style="color:red;">Ошибка соединения</li>';
             }
         }
 
@@ -925,7 +934,7 @@
             }
         }
 
-        // --- ОСТАЛЬНЫЕ ФУНКЦИИ (ОСТАВЛЕНЫ БЕЗ ИЗМЕНЕНИЙ) ---
+        // --- ОСТАЛЬНЫЕ ФУНКЦИИ ---
         function openArtemPage() { document.getElementById('artem-overlay').style.display = 'flex'; }
         function closeArtemPage() { document.getElementById('artem-overlay').style.display = 'none'; }
 
@@ -934,36 +943,46 @@
         function openVistaWindow() { document.getElementById('vista-win').style.display = 'flex'; }
         function closeVistaWindow() { document.getElementById('vista-win').style.display = 'none'; }
         
-        let tClicks = 0, timerVal = 0, tInterval, isPlaying = false;
-        function openTimurGame() { 
-            document.getElementById('timur-overlay').style.display = 'flex'; 
-            resetTimur(); 
-            loadLeaderboard(); 
-        }
-        function closeTimurGame() { document.getElementById('timur-overlay').style.display = 'none'; clearInterval(tInterval); }
-        function resetTimur() { tClicks = 0; timerVal = 0; isPlaying = false; document.getElementById('clicker-timer').innerText = "Время: 0.00с"; document.getElementById('clicker-btn').innerText = "КЛИК!"; }
-        
-        function clickTimurTarget() {
-            const btn = document.getElementById('clicker-btn');
-            if (!isPlaying) {
-                isPlaying = true; tClicks = 0; timerVal = 0;
-                tInterval = setInterval(() => { timerVal += 0.01; document.getElementById('clicker-timer').innerText = `Время: ${timerVal.toFixed(2)}с`; }, 10);
-            }
-            tClicks++;
-            btn.innerText = tClicks;
+        // НОВАЯ ФУНКЦИЯ ПОИСКА САНЖИ ИЗ "КУДА ПРОПАЛ САНЖИ"
+        function startSearchGlitch() {
+            closeVistaWindow(); // закрываем окошко Vista
+            document.getElementById('sanji-overlay').style.display = 'flex';
+            const termText = document.getElementById('term-text');
+            termText.innerHTML = "";
             
-            const maxX = window.innerWidth - 80; const maxY = window.innerHeight - 80;
-            btn.style.left = `${Math.max(40, Math.random() * maxX)}px`;
-            btn.style.top = `${Math.max(40, Math.random() * maxY)}px`;
+            // Можно использовать звук печати
+            const audioTyping = document.getElementById('sound-typing');
+            audioTyping.play().catch(() => {});
 
-            if (tClicks >= 10) {
-                clearInterval(tInterval); isPlaying = false;
-                const finalTime = timerVal.toFixed(2);
-                saveTimurScore(finalTime); 
-                btn.style.left = "50%"; btn.style.top = "50%"; btn.innerText = "ЕЩЕ?";
-            }
+            const searchText = `> Поиск местоположения Санжи...\n> Сканирование полицейского участка...\n> Анализ данных...\n> Результат: объект не найден.`;
+            
+            let i = 0;
+            const searchInterval = setInterval(() => {
+                if (i < searchText.length) {
+                    if (searchText.charAt(i) === '\n') {
+                        termText.innerHTML += '<br><br>';
+                    } else {
+                        termText.innerHTML += searchText.charAt(i);
+                    }
+                    i++;
+                } else {
+                    clearInterval(searchInterval);
+                    audioTyping.pause();
+                    audioTyping.currentTime = 0;
+                }
+            }, 40);
+            
+            // Переопределяем закрытие, чтобы остановить печать
+            const oldClose = closeSanjiTerminal;
+            closeSanjiTerminal = function() {
+                clearInterval(searchInterval);
+                document.getElementById('sanji-overlay').style.display = 'none';
+                document.getElementById('sound-typing').pause();
+                closeSanjiTerminal = oldClose;
+            };
         }
-        
+
+        // Старая функция терминала Санжи (для его карточки) остаётся без изменений
         let terminalInterval;
         function openSanjiTerminal() {
             document.getElementById('sanji-overlay').style.display = 'flex';
@@ -998,7 +1017,38 @@
             document.getElementById('sanji-overlay').style.display = 'none'; 
             clearInterval(terminalInterval);
             document.getElementById('sound-typing').pause();
+            // Восстанавливаем стандартное закрытие, если было переопределено
+        }
+
+        let tClicks = 0, timerVal = 0, tInterval, isPlaying = false;
+        function openTimurGame() { 
+            document.getElementById('timur-overlay').style.display = 'flex'; 
+            resetTimur(); 
+            loadLeaderboard(); 
+        }
+        function closeTimurGame() { document.getElementById('timur-overlay').style.display = 'none'; clearInterval(tInterval); }
+        function resetTimur() { tClicks = 0; timerVal = 0; isPlaying = false; document.getElementById('clicker-timer').innerText = "Время: 0.00с"; document.getElementById('clicker-btn').innerText = "КЛИК!"; }
+        
+        function clickTimurTarget() {
+            const btn = document.getElementById('clicker-btn');
+            if (!isPlaying) {
+                isPlaying = true; tClicks = 0; timerVal = 0;
+                tInterval = setInterval(() => { timerVal += 0.01; document.getElementById('clicker-timer').innerText = `Время: ${timerVal.toFixed(2)}с`; }, 10);
+            }
+            tClicks++;
+            btn.innerText = tClicks;
+            
+            const maxX = window.innerWidth - 80; const maxY = window.innerHeight - 80;
+            btn.style.left = `${Math.max(40, Math.random() * maxX)}px`;
+            btn.style.top = `${Math.max(40, Math.random() * maxY)}px`;
+
+            if (tClicks >= 10) {
+                clearInterval(tInterval); isPlaying = false;
+                const finalTime = timerVal.toFixed(2);
+                saveTimurScore(finalTime); 
+                btn.style.left = "50%"; btn.style.top = "50%"; btn.innerText = "ЕЩЕ?";
+            }
         }
     </script>
 </body>
-    </html>
+</html> 
