@@ -334,6 +334,45 @@
             50% { transform: translateY(5px); }
             100% { transform: translateY(0); }
         }
+
+        /* ===== СТИЛИ ДЛЯ ВТОРОЙ СРЕДЫ (ХОРРОР) ===== */
+        body.second-env {
+            background: #050000;
+            filter: grayscale(80%) sepia(50%) hue-rotate(320deg);
+        }
+        body.second-env h1 {
+            color: darkred;
+            text-shadow: 0 0 10px red;
+            animation: glitchText 0.2s infinite;
+        }
+        body.second-env .card:not(#sanji-card) {
+            opacity: 0.3;
+            pointer-events: none; /* Урезаем функции */
+            border-color: #300;
+        }
+        body.second-env #sanji-card {
+            border-color: #ff0000;
+            box-shadow: 0 0 30px #ff0000;
+            animation: twitch 0.1s infinite;
+        }
+        @keyframes glitchText {
+            0% { transform: translate(1px, -1px); opacity: 1; }
+            50% { transform: translate(-2px, 2px); opacity: 0.8; }
+            100% { transform: translate(1px, 1px); opacity: 1; }
+        }
+
+        /* ===== СТИЛИ ДЛЯ ГОЛОВОЛОМОК ===== */
+        #puzzle-overlay {
+            display: none; position: fixed; inset: 0; background: rgba(20, 0, 0, 0.98); 
+            z-index: 45000; flex-direction: column; align-items: center; justify-content: center;
+            color: white; font-family: monospace; text-align: center;
+        }
+        .puzzle-stage { display: none; flex-direction: column; align-items: center; gap: 20px; }
+        .runes span { font-size: 3rem; cursor: pointer; margin: 0 15px; transition: transform 0.2s; }
+        .runes span:hover { transform: scale(1.3); }
+        .puzzle-input { background: #000; border: 1px solid red; color: red; padding: 10px; font-size: 1.5rem; text-align: center; }
+        .puzzle-btn { background: red; color: white; border: none; padding: 10px 20px; font-size: 1.2rem; cursor: pointer; font-weight: bold; }
+        
     </style>
 </head>
 <body>
@@ -345,8 +384,11 @@
     <audio id="sound-cartoon" src="cartoon_music.mp3" loop preload="auto"></audio>
     <audio id="sound-secret-photo" src="arsalan_secret.mp3" loop preload="auto"></audio>
     <audio id="sound-execution" src="execution_theme.mp3" preload="auto"></audio>
+    
+    <audio id="sound-ghost" src="https://www.myinstants.com/media/sounds/fnaf-2-hallway-sound.mp3" preload="auto"></audio>
+    <audio id="sound-gunshot" src="https://www.myinstants.com/media/sounds/awp_1.mp3" preload="auto"></audio>
 
-    <header><h1>Досье: Главные Лица</h1></header>
+    <header><h1 id="main-title">Досье: Главные Лица</h1></header>
     
     <div class="container" id="cards-container">
         <div class="card" id="card-artem" onclick="registerCardSequence('artem'); openArtemPage();">
@@ -380,11 +422,54 @@
             <div class="name">Арсалан</div><div class="bio-text">Всегда зовет гулять. (Двойной клик по фото = Жесткий Хаос)</div>
         </div>
 
-        <div class="card" id="sanji-card" onclick="openSanjiTerminal();">
-            <div class="avatar-container"><img src="sanji.jpg" alt="Санжи"><span class="status-badge" style="background: #ff0055; color: #fff;">Штурмовик</span></div>
+        <div class="card" id="sanji-card" onclick="handleSanjiClick();">
+            <div class="avatar-container"><img id="sanji-img" src="sanji.jpg" alt="Санжи"><span class="status-badge" style="background: #ff0055; color: #fff;">Штурмовик</span></div>
             <div class="name">Санжи</div><div class="bio-text">Атаковал полицейские участки и т.д. Он за них.</div>
             <div class="stats-highlight" style="color: #ff0055;">Особо опасен (Архив Системы)</div>
         </div>
+    </div>
+
+    <div id="ghost-sanji-overlay" class="fullscreen-overlay" style="background: black; z-index: 40000; justify-content: center;">
+        <img id="creepy-sanji-img" src="sanji_creepy.jpg" alt="" style="width:300px; height:300px; border-radius:50%; filter:grayscale(100%) contrast(200%); opacity:0.6; display:none;" onerror="this.src='https://upload.wikimedia.org/wikipedia/commons/thumb/c/c4/Skull_and_crossbones.svg/500px-Skull_and_crossbones.svg.png'">
+        <div id="ghost-text" style="color:red; font-size:3rem; font-weight:bold; font-family:monospace; margin-top:40px; text-shadow:0 0 20px red;"></div>
+    </div>
+
+    <div id="broken-archive-overlay" class="fullscreen-overlay" style="background: rgba(10,0,0,0.95); z-index: 41000;">
+        <h1 style="color:darkred; font-size: 4rem; text-shadow: 0 0 20px red; animation: twitch 0.1s infinite;">АРХИВ ПОЛОМАН</h1>
+        <p style="color:#aaa; font-size:1.2rem; margin-bottom:30px;">Системная ошибка. Файл "Санжи" был стерт Иноагентом.</p>
+        <button class="quake-btn" onclick="startPuzzles()">ВОССТАНОВИТЬ ДАННЫЕ</button>
+    </div>
+
+    <div id="puzzle-overlay">
+        <h2 style="color:red; margin-bottom: 30px; font-size: 2rem; text-shadow: 0 0 10px red;">ПРОТОКОЛ ВОССТАНОВЛЕНИЯ</h2>
+        
+        <div id="stage1" class="puzzle-stage">
+            <p>Этап 1: Введи правильный порядок жертвоприношения.</p>
+            <p style="color:#555; font-size:0.8rem;">(Подсказка: Сначала смотришь, потом режешь, потом остается лишь прах)</p>
+            <div class="runes">
+                <span onclick="checkRune('🔪')">🔪</span>
+                <span onclick="checkRune('💀')">💀</span>
+                <span onclick="checkRune('👁️')">👁️</span>
+            </div>
+            <p id="rune-feedback" style="color:darkred; height: 20px;"></p>
+        </div>
+
+        <div id="stage2" class="puzzle-stage">
+            <p>Этап 2: Кто предпочитает сохранять стратегический нейтралитет?</p>
+            <input type="text" id="puzzle-ans" class="puzzle-input" placeholder="Имя...">
+            <button class="puzzle-btn" onclick="checkAnswer()">ПОДТВЕРДИТЬ</button>
+        </div>
+
+        <div id="stage3" class="puzzle-stage" style="width:100%; height:300px; position:relative;">
+            <p>Этап 3: ПОЙМАЙ ЯДРО ВОССТАНОВЛЕНИЯ!</p>
+            <p id="glitch-timer" style="color:red; font-size:2rem;">5.00</p>
+            <button id="glitch-btn" class="puzzle-btn" style="position:absolute; top:50%; left:50%; transform:translate(-50%,-50%);" onmouseover="moveGlitchBtn()" onclick="finishPuzzles()">ВЕРНУТЬСЯ В ПРОШЛОЕ</button>
+        </div>
+    </div>
+
+    <div id="worst-ending-overlay" class="fullscreen-overlay" style="background: red; z-index: 50000; mix-blend-mode: color-burn;">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/e/e4/Bullet_hole.png/480px-Bullet_hole.png" style="position:absolute; top:50%; left:50%; transform:translate(-50%,-50%) scale(2); opacity:0.8; pointer-events:none;">
+        <h1 style="color:black; font-size:6rem; transform: rotate(-10deg);">ВЫБОР СДЕЛАН.</h1>
     </div>
 
     <div id="vista-overlay" class="fullscreen-overlay" style="padding:0;">
@@ -497,7 +582,6 @@
         </div>
     </div>
 
-    <!-- ОВЕРЛЕЙ КАМЕРЫ СЛАВЫ -->
     <div id="cctv-overlay">
         <div class="cctv-ui">
             <span class="rec-dot"></span> REC <br>
@@ -506,7 +590,6 @@
         <div class="cctv-text-warning">НАБЛЮДАТЕЛЬ АКТИВЕН // СЛАВА СМОТРИТ</div>
     </div>
 
-    <!-- ОВЕРЛЕЙ ТОКСИЧНОГО ГАЗА АРТЁМА -->
     <div id="toxic-overlay">
         <h1 style="font-size: 3rem;">ВНИМАНИЕ! УТЕЧКА ТОКСИЧНОГО ГАЗА</h1>
         <p style="color: #fff; font-size: 1.2rem; margin-top: 10px;">Арина передает привет. Включите вентиляцию!</p>
@@ -529,6 +612,18 @@
             supabaseClient = window.supabase.createClient(supabaseUrl, supabaseKey);
         } catch(e) {
             console.error("Ошибка инициализации Supabase:", e);
+        }
+
+        // ПЕРЕМЕННЫЕ ХОРРОР-СЮЖЕТА
+        window.isSecondEnvironment = false;
+        window.hasTimeTraveled = false;
+
+        function handleSanjiClick() {
+            if (window.isSecondEnvironment) {
+                document.getElementById('broken-archive-overlay').style.display = 'flex';
+            } else {
+                openSanjiTerminal();
+            }
         }
 
         // ИСПРАВЛЕННАЯ ФУНКЦИЯ ЗАГРУЗКИ ЛИДЕРБОРДА
@@ -582,11 +677,12 @@
             footerClickCount++;
             if (footerClickCount === 3) {
                 document.getElementById('sanji-card').style.display = 'block';
-                alert("Обнаружен скрытый файл: Санжи добавлен в архив!");
+                if(!window.isSecondEnvironment) alert("Обнаружен скрытый файл: Санжи добавлен в архив!");
             }
         }
 
         function triggerStrongChaos() {
+            if(window.isSecondEnvironment) return; // Урезаем функцию во второй среде
             document.body.style.filter = "invert(1) hue-rotate(90deg) contrast(200%) saturate(300%)";
             document.body.style.animation = "extremeShake 0.1s infinite";
             
@@ -597,6 +693,7 @@
         }
 
         function openVanyaVault() {
+            if(window.isSecondEnvironment) return; // Урезаем функцию
             let pass = prompt("ВВЕДИТЕ ПАРОЛЬ ДЛЯ ДОСТУПА К ФОТО-АРХИВУ ВАНИ:");
             if (pass) {
                 document.getElementById('vanya-overlay').style.display = 'flex';
@@ -640,7 +737,7 @@
             }
         }
 
-        // --- СЦЕНА КАЗНИ (ОБНОВЛЕННАЯ) ---
+        // --- СЦЕНА КАЗНИ (ОБНОВЛЕННАЯ С ХОРРОРОМ И ВРЕМЕННОЙ ПЕТЛЕЙ) ---
         window.execTimeouts = [];
         window.agentShot = false;
 
@@ -681,7 +778,7 @@
             
             bullets.forEach(b => { b.style.display = 'none'; b.style.right = '250px'; });
 
-            storyTxt.innerText = "ИНОАГЕНТ ВЫШЕЛ НА ОХОТУ...";
+            storyTxt.innerText = window.hasTimeTraveled ? "ВРЕМЕННАЯ ПЕТЛЯ: ИНОАГЕНТ СНОВА ЗДЕСЬ..." : "ИНОАГЕНТ ВЫШЕЛ НА ОХОТУ...";
             let t1 = setTimeout(() => { agent.style.right = '10%'; }, 500);
 
             let t2 = setTimeout(() => { storyTxt.innerText = "ЦЕЛЬ НАЙДЕНА: САНЖИ. ПОДГОТОВКА К ЛИКВИДАЦИИ."; }, 2000);
@@ -709,10 +806,16 @@
 
             let t7 = setTimeout(() => {
                 execOverlay.style.display = 'none';
-                document.getElementById('sanji-card').style.display = 'none';
                 music.pause();
-                alert("Санжи удален из базы архива навсегда.");
-            }, 9000);
+                
+                // ЛОГИКА КОНЦОВОК
+                if (window.hasTimeTraveled) {
+                    triggerWorstEnding(); // Худшая концовка: если опять не спас
+                } else {
+                    document.getElementById('sanji-card').style.display = 'none';
+                    triggerGhostSanjiScene(); // Идем во Вторую Среду
+                }
+            }, 8000);
             
             window.execTimeouts.push(t1, t2, t3, t6, t7);
         }
@@ -776,14 +879,180 @@
             setTimeout(() => {
                 document.getElementById('execution-overlay').style.display = 'none';
                 document.getElementById('sound-execution').pause();
-                alert("Иноагент разорвал соединение. Вы спасли Санжи, но нажили страшного врага...");
-                storyTxt.style.color = '#fff';
+                
+                if (window.hasTimeTraveled) {
+                    triggerGoodEnding();
+                } else {
+                    alert("Иноагент разорвал соединение. Вы спасли Санжи, но нажили страшного врага...");
+                    storyTxt.style.color = '#fff';
+                }
             }, 3500);
         }
+
+        // ======================= ХОРРОР ЛОГИКА =======================
+
+        function triggerGhostSanjiScene() {
+            const ghostOverlay = document.getElementById('ghost-sanji-overlay');
+            const ghostText = document.getElementById('ghost-text');
+            const soundGhost = document.getElementById('sound-ghost');
+            
+            ghostOverlay.style.display = 'flex';
+            setTimeout(()=> { document.getElementById('creepy-sanji-img').style.display = 'block'; }, 1000);
+            
+            soundGhost.currentTime = 0;
+            soundGhost.play().catch(()=>{});
+
+            const phrases = ["Ты меня не спас...", "Ты предатель...", "Ты мог меня спасти..."];
+            let phraseIndex = 0;
+
+            function typePhrase() {
+                if (phraseIndex >= phrases.length) {
+                    setTimeout(() => {
+                        ghostOverlay.style.display = 'none';
+                        soundGhost.pause();
+                        initSecondEnvironment();
+                    }, 2000);
+                    return;
+                }
+                
+                ghostText.innerHTML = "";
+                let text = phrases[phraseIndex];
+                let i = 0;
+                
+                let typeInterval = setInterval(() => {
+                    ghostText.innerHTML += text.charAt(i);
+                    i++;
+                    if (i >= text.length) {
+                        clearInterval(typeInterval);
+                        phraseIndex++;
+                        setTimeout(typePhrase, 1500);
+                    }
+                }, 100); // средняя скорость
+            }
+
+            setTimeout(typePhrase, 1500);
+        }
+
+        function initSecondEnvironment() {
+            window.isSecondEnvironment = true;
+            document.body.classList.add('second-env');
+            document.getElementById('main-title').innerText = "АРХИВ ПОВРЕЖДЕН";
+            
+            // Возвращаем карточку Санжи, но видоизмененную
+            const sanjiCard = document.getElementById('sanji-card');
+            sanjiCard.style.display = 'block';
+            document.getElementById('sanji-img').src = 'sanji_creepy.jpg'; // изменит фотку
+            document.querySelector('#sanji-card .bio-text').innerText = "ДАННЫЕ СТЕРТЫ ДАННЫЕ СТЕРТЫ ДАННЫЕ СТЕРТЫ";
+            
+            alert("СИСТЕМА: Инициализирована Вторая Среда. Доступ к функциям ограничен.");
+        }
+
+        // --- ГОЛОВОЛОМКИ ВОССТАНОВЛЕНИЯ ---
+        function startPuzzles() {
+            document.getElementById('broken-archive-overlay').style.display = 'none';
+            document.getElementById('puzzle-overlay').style.display = 'flex';
+            document.getElementById('stage1').style.display = 'flex';
+        }
+
+        let runeSequence = [];
+        const correctRunes = ['👁️', '🔪', '💀']; // Сначала смотришь, потом режешь, потом прах
+        function checkRune(rune) {
+            runeSequence.push(rune);
+            if (runeSequence[runeSequence.length - 1] !== correctRunes[runeSequence.length - 1]) {
+                document.getElementById('rune-feedback').innerText = "ОШИБКА ПОСЛЕДОВАТЕЛЬНОСТИ. НАЧНИ ЗАНОВО.";
+                runeSequence = [];
+                setTimeout(()=> document.getElementById('rune-feedback').innerText = "", 1500);
+            } else if (runeSequence.length === 3) {
+                document.getElementById('rune-feedback').style.color = "green";
+                document.getElementById('rune-feedback').innerText = "ЭТАП 1 ПРОЙДЕН.";
+                setTimeout(() => {
+                    document.getElementById('stage1').style.display = 'none';
+                    document.getElementById('stage2').style.display = 'flex';
+                }, 1000);
+            }
+        }
+
+        function checkAnswer() {
+            const ans = document.getElementById('puzzle-ans').value.toLowerCase().trim();
+            if (ans === 'слава' || ans === 'slava') {
+                document.getElementById('stage2').style.display = 'none';
+                startStage3();
+            } else {
+                document.getElementById('puzzle-ans').value = "";
+                document.getElementById('puzzle-ans').placeholder = "НЕВЕРНО...";
+            }
+        }
+
+        let glitchTimerVal = 2.00;
+        let glitchInterval;
+        function startStage3() {
+            document.getElementById('stage3').style.display = 'flex';
+            glitchTimerVal = 5.00;
+            glitchInterval = setInterval(() => {
+                glitchTimerVal -= 0.01;
+                document.getElementById('glitch-timer').innerText = glitchTimerVal.toFixed(2);
+                if (glitchTimerVal <= 0) {
+                    clearInterval(glitchInterval);
+                    alert("ВРЕМЯ ИСТЕКЛО. СИСТЕМА ПЕРЕЗАГРУЖАЕТСЯ...");
+                    location.reload(); // Жесткий сброс при поражении
+                }
+            }, 10);
+        }
+
+        function moveGlitchBtn() {
+            const btn = document.getElementById('glitch-btn');
+            const stage = document.getElementById('stage3');
+            const maxX = stage.clientWidth - btn.clientWidth - 20;
+            const maxY = stage.clientHeight - btn.clientHeight - 20;
+            btn.style.left = `${Math.random() * maxX}px`;
+            btn.style.top = `${Math.random() * maxY}px`;
+        }
+
+        function finishPuzzles() {
+            clearInterval(glitchInterval);
+            document.getElementById('puzzle-overlay').style.display = 'none';
+            
+            document.body.style.animation = "extremeShake 0.1s infinite";
+            document.body.style.filter = "invert(1)";
+            
+            setTimeout(() => {
+                document.body.style.animation = "none";
+                document.body.style.filter = "none";
+                window.hasTimeTraveled = true; // Триггер возврата
+                alert("СИСТЕМА: ВРЕМЕННАЯ ЛИНИЯ ОТМОТАНА НАЗАД. ВТОРОЙ ШАНС.");
+                startExecutionScene(); // Снова запускаем суд!
+            }, 2000);
+        }
+
+        function triggerWorstEnding() {
+            const gunshot = document.getElementById('sound-gunshot');
+            gunshot.currentTime = 0;
+            gunshot.play().catch(()=>{});
+            
+            document.getElementById('worst-ending-overlay').style.display = 'flex';
+            document.body.style.animation = "extremeShake 0.1s infinite";
+        }
+
+        function triggerGoodEnding() {
+            window.isSecondEnvironment = false;
+            window.hasTimeTraveled = false;
+            document.body.classList.remove('second-env');
+            document.getElementById('main-title').innerText = "Досье: Главные Лица";
+            document.getElementById('sanji-img').src = 'sanji.jpg';
+            document.querySelector('#sanji-card .bio-text').innerText = "Атаковал полицейские участки и т.д. Он за них.";
+            
+            document.body.style.background = "#fff";
+            setTimeout(() => { document.body.style.background = ""; }, 500); // Вспышка света
+            
+            alert("ВРЕМЕННАЯ ПЕТЛЯ РАЗОРВАНА. ВЫ СПАСЛИ САНЖИ, ИСКУПИВ ВИНУ. АРХИВ ВОССТАНОВЛЕН!");
+        }
+        
+        // =============================================================
 
         // --- СЕКРЕТНАЯ КНОПКА СЛАВЫ И МУЛЬТФИЛЬМ ---
         let secretBtnClicks = 0;
         function clickSecretButton() {
+            if(window.isSecondEnvironment) return; // Урезаем
             secretBtnClicks++;
             if (secretBtnClicks === 1) alert("Что-то щелкнуло во тьме...");
             if (secretBtnClicks === 3) {
@@ -857,7 +1126,7 @@
             fansClicked = 0;
             toxicTimerVal = 5.0;
             
-            document.getElementById('toxic-timer').innerText = "5.00";
+            document.getElementById('toxic-timer').innerText = "2.00";
             document.getElementById('toxic-timer').style.color = "#fff";
             
             for(let i=1; i<=3; i++) {
@@ -914,6 +1183,7 @@
         let timecodeInterval;
 
         function toggleSlavaMode() {
+            if(window.isSecondEnvironment) return; // Урезаем
             slavaMode = !slavaMode;
             const overlay = document.getElementById('cctv-overlay');
             
@@ -935,22 +1205,20 @@
         }
 
         // --- ОСТАЛЬНЫЕ ФУНКЦИИ ---
-        function openArtemPage() { document.getElementById('artem-overlay').style.display = 'flex'; }
+        function openArtemPage() { if(!window.isSecondEnvironment) document.getElementById('artem-overlay').style.display = 'flex'; }
         function closeArtemPage() { document.getElementById('artem-overlay').style.display = 'none'; }
 
-        function openVista() { document.getElementById('vista-overlay').style.display = 'flex'; }
+        function openVista() { if(!window.isSecondEnvironment) document.getElementById('vista-overlay').style.display = 'flex'; }
         function closeVista() { document.getElementById('vista-overlay').style.display = 'none'; closeVistaWindow(); }
         function openVistaWindow() { document.getElementById('vista-win').style.display = 'flex'; }
         function closeVistaWindow() { document.getElementById('vista-win').style.display = 'none'; }
         
-        // НОВАЯ ФУНКЦИЯ ПОИСКА САНЖИ ИЗ "КУДА ПРОПАЛ САНЖИ"
         function startSearchGlitch() {
-            closeVistaWindow(); // закрываем окошко Vista
+            closeVistaWindow(); 
             document.getElementById('sanji-overlay').style.display = 'flex';
             const termText = document.getElementById('term-text');
             termText.innerHTML = "";
             
-            // Можно использовать звук печати
             const audioTyping = document.getElementById('sound-typing');
             audioTyping.play().catch(() => {});
 
@@ -972,7 +1240,6 @@
                 }
             }, 40);
             
-            // Переопределяем закрытие, чтобы остановить печать
             const oldClose = closeSanjiTerminal;
             closeSanjiTerminal = function() {
                 clearInterval(searchInterval);
@@ -982,7 +1249,6 @@
             };
         }
 
-        // Старая функция терминала Санжи (для его карточки) остаётся без изменений
         let terminalInterval;
         function openSanjiTerminal() {
             document.getElementById('sanji-overlay').style.display = 'flex';
@@ -1017,11 +1283,11 @@
             document.getElementById('sanji-overlay').style.display = 'none'; 
             clearInterval(terminalInterval);
             document.getElementById('sound-typing').pause();
-            // Восстанавливаем стандартное закрытие, если было переопределено
         }
 
         let tClicks = 0, timerVal = 0, tInterval, isPlaying = false;
         function openTimurGame() { 
+            if(window.isSecondEnvironment) return; // Урезаем
             document.getElementById('timur-overlay').style.display = 'flex'; 
             resetTimur(); 
             loadLeaderboard(); 
@@ -1051,4 +1317,4 @@
         }
     </script>
 </body>
-</html> 
+</html>
