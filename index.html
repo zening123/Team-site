@@ -661,15 +661,27 @@
         }
 
         async function saveTimurScore(time) {
-            let name = prompt(`Твое время: ${time}с! Введи имя для таблицы лидеров:`);
-            if (name && name.trim() !== "" && supabaseClient) {
-                try {
-                    await supabaseClient.from('timur_leaderboard').insert([{ player_name: name.trim(), score: parseFloat(time) }]);
-                    loadLeaderboard();
-                } catch(e) {
-                    console.error("Ошибка сохранения:", e);
-                }
+    let name = prompt(`Твое время: ${time}с! Введи имя для таблицы лидеров:`);
+    if (name && name.trim() !== "" && supabaseClient) {
+        try {
+            // Отправляем данные и сохраняем ответ в переменные { data, error }
+            const { data, error } = await supabaseClient
+                .from('timur_leaderboard')
+                .insert([{ player_name: name.trim(), score: parseFloat(time) }]);
+            
+            // Если Supabase вернул ошибку, мы её увидим в окне alert
+            if (error) {
+                alert("База данных отклонила рекорд! Ошибка: " + error.message);
+                console.error(error);
+            } else {
+                // Если всё прошло успешно, обновляем топ
+                alert("Рекорд успешно сохранен в базу!");
+                loadLeaderboard();
             }
+        } catch(e) {
+            alert("Ошибка в самом коде скрипта: " + e.message);
+        }
+    }
         }
 
         let footerClickCount = 0;
