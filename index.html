@@ -2,7 +2,7 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, maximum-scale=1.0, touch-action: manipulation">
     <title>Архив: Легендарная Пятерка</title>
     <style>
         /* === ОРИГИНАЛЬНЫЕ СТИЛИ (НЕ ТРОГАТЬ) === */
@@ -33,6 +33,7 @@
             padding: 20px;
             overflow-x: hidden;
             transition: filter 0.3s ease;
+            touch-action: manipulation;
         }
 
         header { text-align: center; margin-bottom: 30px; margin-top: 20px; }
@@ -141,7 +142,7 @@
 
         .artem-page { background: #07090e; width: 100%; height: 100%; color: #fff; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 30px; }
         .radar-track { width: 180px; height: 180px; border: 2px dashed var(--accent-gold); border-radius: 50%; position: relative; animation: spin 4s linear infinite; display: flex; align-items: center; justify-content: center; }
-        .radar-pointer { width: 18px; height: 18px; background: red; border-radius: 50%; position: absolute; top: 10px; box-shadow: 0 0 15px red; }
+        .radar-pointer { width: 18px; height: 18px; background: red; border-radius: 50%; position: absolute; top: 10px; box-shadow: 0 0 15px red; cursor: pointer; }
         .chart-container { width: 100%; max-width: 400px; background: #111; padding: 20px; border-radius: 15px; border: 1px solid #333; }
         .chart-bar { background: var(--accent-gold); height: 25px; margin: 5px 0 15px 0; display: flex; align-items: center; padding-left: 10px; color: #000; font-weight: bold; border-radius: 5px; transition: width 0.3s ease; cursor: pointer;}
         .chart-label { color: #fff; font-size: 0.9rem; font-weight: bold; margin-bottom: 5px; }
@@ -348,7 +349,7 @@
         }
         body.second-env .card:not(#sanji-card) {
             opacity: 0.3;
-            pointer-events: none; /* Урезаем функции */
+            pointer-events: none;
             border-color: #300;
         }
         body.second-env #sanji-card {
@@ -386,12 +387,10 @@
         .history-item:hover { background: #282a36; border-color: #ff5555; }
         .history-meta { font-size: 0.8rem; color: #6272a4; font-family: monospace; }
         
-        /* Скример браузера (ОСТАВЛЕН В КОДЕ) */
         #scream-canvas { position: fixed; inset: 0; background: #000; z-index: 60000; display: none; flex-direction: column; align-items: center; justify-content: center; overflow: hidden; }
         .scary-eye { width: 200px; height: 200px; background: radial-gradient(circle, red 10%, black 70%); border-radius: 50%; animation: twitch 0.05s infinite; filter: blur(2px); }
         .scary-text { color: #ff0000; font-family: monospace; font-size: 2.5rem; text-align: center; margin-top: 30px; font-weight: bold; text-shadow: 0 0 30px red; letter-spacing: 5px; }
 
-        /* ===== СТИЛИ ДЛЯ ПРОТОКОЛА ВОССТАНОВЛЕНИЯ (СКРЫТ В 1 СРЕДЕ) ===== */
         #puzzle-overlay {
             display: none;
             position: fixed;
@@ -412,7 +411,6 @@
         .puzzle-input { background: #111; border: 1px solid red; color: #fff; padding: 10px; font-size: 1.2rem; text-align: center; border-radius: 5px; outline: none; }
         .puzzle-btn { background: darkred; color: #fff; border: 1px solid #fff; padding: 10px 20px; font-size: 1.1rem; cursor: pointer; border-radius: 5px; }
 
-        /* ===== НОВЫЕ СТИЛИ (0 И 3 СРЕДЫ) ===== */
         @keyframes beat { 0% { transform: scale(1); } 50% { transform: scale(1.2); } 100% { transform: scale(1); } }
         @keyframes pulseColor { 0% { filter: hue-rotate(0deg); } 100% { filter: hue-rotate(360deg); } }
         
@@ -438,7 +436,6 @@
         .matrix-rain { position:absolute; color:#0f0; font-family:monospace; font-size:1.5rem; animation: fall linear forwards; font-weight:bold; text-shadow:0 0 5px #0f0;}
         @keyframes fall { to { transform: translateY(110vh); opacity:0; } }
 
-        /* === НОВЫЕ СТИЛИ ДЛЯ УЛУЧШЕННОГО DOOM-ИНТЕРФЕЙСА === */
         .crt-container {
             position: relative;
             width: 100%;
@@ -447,7 +444,6 @@
             border-radius: 15px;
             box-shadow: inset 0 0 60px rgba(0,0,0,0.8);
         }
-
         .crt-container::after {
             content: "";
             position: absolute;
@@ -462,7 +458,6 @@
             pointer-events: none;
             z-index: 2;
         }
-
         .crt-container iframe {
             width: 100%;
             height: 100%;
@@ -513,7 +508,6 @@
             border: 1px solid #444;
             display: none;
         }
-
         .diagnostic-panel.active {
             display: block;
         }
@@ -523,14 +517,12 @@
             justify-content: space-between;
             margin-bottom: 10px;
         }
-
         .check-dot {
             width: 16px;
             height: 16px;
             border-radius: 50%;
             background: red;
         }
-
         .check-dot.ok { background: #33ff33; }
 
         .ctrl-panel {
@@ -540,7 +532,6 @@
             justify-content: center;
             margin: 10px;
         }
-
         .ctrl-key {
             width: 50px;
             height: 50px;
@@ -557,13 +548,11 @@
             transition: background 0.1s, border-color 0.1s;
             user-select: none;
         }
-
         .ctrl-key.pressed {
             background: #ff0055;
             border-color: #ffaa00;
             box-shadow: 0 0 10px #ff0055;
         }
-
         .ctrl-key.rebind-active {
             background: #ffaa00;
             animation: pulse 0.5s infinite;
@@ -576,7 +565,6 @@
             margin: 10px;
             flex-wrap: wrap;
         }
-
         .save-slot {
             background: #1a1a2e;
             border: 1px solid #555;
@@ -587,7 +575,6 @@
             color: #ccc;
             font-family: monospace;
         }
-
         .save-slot .screenshot {
             width: 100%;
             height: 60px;
@@ -600,7 +587,6 @@
             font-size: 12px;
             color: #666;
         }
-
         .save-slot button {
             margin: 2px;
             font-size: 10px;
@@ -611,9 +597,96 @@
             border-radius: 4px;
             cursor: pointer;
         }
-
         .save-slot button:hover {
             background: #444;
+        }
+
+        /* ===== СТИЛИ ДЛЯ БИТВЫ С АРИНОЙ ===== */
+        .battle-btn {
+            background: #222;
+            color: white;
+            border: 1px solid #aaa;
+            padding: 10px 15px;
+            font-family: monospace;
+            cursor: pointer;
+            transition: background 0.2s;
+            font-size: 1rem;
+            touch-action: manipulation;
+        }
+        .battle-btn:hover { background: #444; }
+        .battle-btn:disabled { opacity: 0.5; cursor: not-allowed; background: #111; }
+        .arina-projectile {
+            position: absolute;
+            width: 40px;
+            height: 40px;
+            background-image: url('arina_paper.png');
+            background-size: contain;
+            background-repeat: no-repeat;
+            animation: none;
+            pointer-events: none;
+        }
+        @keyframes paperFloat {
+            0% { transform: translateY(0) rotate(0deg); }
+            50% { transform: translateY(-20px) rotate(10deg); }
+            100% { transform: translateY(0) rotate(0deg); }
+        }
+
+        /* Улучшенный интерфейс битвы */
+        #arina-fight-overlay {
+            background: #000;
+            z-index: 40001;
+            overflow: hidden;
+            padding: 0;
+            justify-content: flex-start;
+        }
+        .battle-hud {
+            width: 100%;
+            padding: 8px 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: rgba(0,0,0,0.8);
+            border-bottom: 1px solid #333;
+            flex-shrink: 0;
+        }
+        .battle-hp-bar {
+            width: 150px;
+            height: 12px;
+            background: #333;
+            border-radius: 6px;
+            overflow: hidden;
+            margin-top: 4px;
+        }
+        .battle-hp-fill { height: 100%; background: red; transition: width 0.5s; }
+        #battle-area {
+            flex: 1;
+            width: 100%;
+            position: relative;
+            background: radial-gradient(circle at center, #1a1a2e, #000);
+            touch-action: none;
+            overflow: hidden;
+        }
+        .battle-controls {
+            width: 100%;
+            padding: 10px;
+            display: flex;
+            gap: 8px;
+            justify-content: center;
+            flex-wrap: wrap;
+            background: rgba(0,0,0,0.9);
+            border-top: 1px solid #333;
+            flex-shrink: 0;
+        }
+        .mobile-joystick {
+            position: absolute;
+            bottom: 20px;
+            left: 20px;
+            width: 100px;
+            height: 100px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 50%;
+            border: 2px solid rgba(255,255,255,0.3);
+            z-index: 5;
         }
     </style>
 </head>
@@ -631,16 +704,17 @@
     <audio id="sound-gunshot" src="https://www.myinstants.com/media/sounds/awp_1.mp3" preload="auto"></audio>
     
     <audio id="sound-glitch" src="https://www.myinstants.com/media/sounds/static-noise.mp3" loop preload="auto"></audio>
-    <audio id="sound-scream" src="https://www.myinstants.com/media/sounds/fnaf-scream.mp3" preload="auto"></audio><audio id="sound-explosion" src="https://www.myinstants.com/media/sounds/explosion.mp3" preload="auto"></audio>
-<audio id="sound-evil-laugh" src="https://www.myinstants.com/media/sounds/evil-laugh.mp3" preload="auto"></audio>
-<audio id="sound-siren" src="https://www.myinstants.com/media/sounds/police-siren.mp3" preload="auto"></audio>
-<audio id="sound-punch" src="https://www.myinstants.com/media/sounds/punch.mp3" preload="auto"></audio>
-<audio id="sound-electricity" src="https://www.myinstants.com/media/sounds/electricity.mp3" preload="auto"></audio>
-<audio id="sound-footsteps" src="https://www.myinstants.com/media/sounds/footsteps.mp3" preload="auto"></audio>
-<audio id="sound-door-creak" src="https://www.myinstants.com/media/sounds/door-creak.mp3" preload="auto"></audio>
-<audio id="sound-monster-growl" src="https://www.myinstants.com/media/sounds/monster-growl.mp3" preload="auto"></audio>
-<audio id="sound-phone-ring" src="https://www.myinstants.com/media/sounds/phone-ring.mp3" preload="auto"></audio>
-<audio id="sound-rain" src="https://www.myinstants.com/media/sounds/rain.mp3" preload="auto"></audio>
+    <audio id="sound-scream" src="https://www.myinstants.com/media/sounds/fnaf-scream.mp3" preload="auto"></audio>
+    <audio id="sound-explosion" src="https://www.myinstants.com/media/sounds/explosion.mp3" preload="auto"></audio>
+    <audio id="sound-evil-laugh" src="https://www.myinstants.com/media/sounds/evil-laugh.mp3" preload="auto"></audio>
+    <audio id="sound-siren" src="https://www.myinstants.com/media/sounds/police-siren.mp3" preload="auto"></audio>
+    <audio id="sound-punch" src="https://www.myinstants.com/media/sounds/punch.mp3" preload="auto"></audio>
+    <audio id="sound-electricity" src="https://www.myinstants.com/media/sounds/electricity.mp3" preload="auto"></audio>
+    <audio id="sound-footsteps" src="https://www.myinstants.com/media/sounds/footsteps.mp3" preload="auto"></audio>
+    <audio id="sound-door-creak" src="https://www.myinstants.com/media/sounds/door-creak.mp3" preload="auto"></audio>
+    <audio id="sound-monster-growl" src="https://www.myinstants.com/media/sounds/monster-growl.mp3" preload="auto"></audio>
+    <audio id="sound-phone-ring" src="https://www.myinstants.com/media/sounds/phone-ring.mp3" preload="auto"></audio>
+    <audio id="sound-rain" src="https://www.myinstants.com/media/sounds/rain.mp3" preload="auto"></audio>
 
     <header><h1 id="main-title">Досье: Главные Лица</h1></header>
     
@@ -758,9 +832,7 @@
             <div class="vista-window" id="doom-win" style="width: 90vw; height: 85vh; max-width: 900px; left: 50%; top: 50%; transform: translate(-50%, -50%);">
                 <div class="vista-title"><span>DOOM.EXE</span><button class="vista-close" onclick="closeDoomWindow()">X</button></div>
                 <div class="vista-body" style="padding:0; height:100%; display:flex; flex-direction:column; overflow: hidden;">
-                    <div id="doom-loader-container" style="flex:1; display:flex; align-items:center; justify-content:center; background:#000;">
-                        <!-- Здесь будет лоадер -->
-                    </div>
+                    <div id="doom-loader-container" style="flex:1; display:flex; align-items:center; justify-content:center; background:#000;"></div>
                     <div id="doom-game-container" style="flex:1; display:none; position:relative;">
                         <div class="crt-container" id="crt-game"></div>
                     </div>
@@ -778,12 +850,8 @@
                         <button onclick="switchDoomEngine('archive')" style="margin:3px; background:#222; color:#aaa; border:1px solid #555; padding:3px 8px; border-radius:4px;">Archive.org</button>
                         <button onclick="switchDoomEngine('emulation')" style="margin:3px; background:#222; color:#aaa; border:1px solid #555; padding:3px 8px; border-radius:4px;">Emulation (wasm)</button>
                     </div>
-                    <div id="keyboard-panel" class="ctrl-panel" style="display:none;">
-                        <!-- Динамически заполняется -->
-                    </div>
-                    <div id="save-slots-panel" class="save-slots" style="display:none;">
-                        <!-- Динамически -->
-                    </div>
+                    <div id="keyboard-panel" class="ctrl-panel" style="display:none;"></div>
+                    <div id="save-slots-panel" class="save-slots" style="display:none;"></div>
                 </div>
             </div>
 
@@ -828,14 +896,12 @@
         <span class="close-btn" onclick="closeArtemPage()">&times;</span>
         <div class="artem-page" id="artem-content">
             <h2 style="color:var(--accent-gold)">РАДАР СПЕЦ-ПРИЕМОВ</h2>
-            <div class="radar-track"><div class="radar-pointer"></div></div>
+            <div class="radar-track"><div class="radar-pointer" id="radar-pointer"></div></div>
             <div class="chart-container">
                 <div class="chart-label">Мощность рыжка:</div>
                 <div class="chart-bar" id="bar1" style="width: 85%; background: #ffaa00;">85%</div>
-                
                 <div class="chart-label">Токсичность пердежа:</div>
                 <div class="chart-bar" id="bar2" style="width: 70%; background: #00cc66;">70%</div>
-                
                 <div class="chart-label" style="margin-top: 20px; color: #ff4444;">Заряд супер-атаки (нажми):</div>
                 <div class="chart-bar" id="bar3" onclick="chargeArtem()" style="background: #ff4444; width: 0%;">0%</div>
             </div>
@@ -947,6 +1013,58 @@
         <div class="fan-btn" id="fan3" onclick="clickFan(3)">☢️</div>
     </div>
 
+    <!-- ===== ОВЕРЛЕЙ БИТВЫ АРТЁМА ПРОТИВ АРИНЫ (ОПТИМИЗИРОВАН) ===== -->
+    <div id="arina-fight-overlay" class="fullscreen-overlay">
+        <span class="close-btn" onclick="closeArinaBattle()" style="z-index: 10;">&times;</span>
+        <div id="battle-container" style="display: flex; width: 100%; height: 100%; flex-direction: column; font-family: monospace; color: white;">
+            <div class="battle-hud">
+                <div>
+                    <span style="color: #ff8888;">Арина</span>
+                    <div class="battle-hp-bar"><div class="battle-hp-fill" id="arina-hp-bar" style="width: 100%;"></div></div>
+                    <span id="arina-hp-text" style="font-size: 0.8rem;">26000 / 26000</span>
+                </div>
+                <div>
+                    <span>Артём</span>
+                    <div style="display: flex; gap: 10px; font-size: 0.8rem;">
+                        <span>HP: <b id="artem-hp">20</b></span>
+                        <span>Жир: <b id="artem-fat">99</b></span>
+                    </div>
+                </div>
+            </div>
+            <div id="battle-area">
+                <div id="player-soul" style="position: absolute; width: 30px; height: 30px; background: red; border-radius: 50%; left: 50%; top: 50%; transform: translate(-50%, -50%); z-index: 10; box-shadow: 0 0 15px red;"></div>
+            </div>
+            <div class="battle-controls">
+                <button class="battle-btn" id="btn-attack" onclick="actionAttack()">💨 Рыгнуть</button>
+                <button class="battle-btn" id="btn-act" onclick="actionAct()">🔄 Действовать</button>
+                <button class="battle-btn" id="btn-item" onclick="actionItem()">🎒 Вещь</button>
+                <button class="battle-btn" id="btn-mercy" onclick="actionMercy()" disabled>🕊️ Пощадить</button>
+            </div>
+            <div id="battle-log" style="padding: 4px 10px; font-size: 0.9rem; color: #aaa; min-height: 20px; text-align: center; background: rgba(0,0,0,0.5);"></div>
+        </div>
+    </div>
+
+    <!-- ===== СКРЫТАЯ DEV-ПАНЕЛЬ (ДЛЯ ДРУГА) ===== -->
+    <div id="dev-panel" style="display:none; position:fixed; top:50%; left:50%; transform:translate(-50%,-50%); background:#000; border:2px solid #00ff00; z-index:100000; padding:20px; flex-direction:column; gap:12px; font-family:monospace; color:#00ff00; max-width:450px; width:90%; max-height:80vh; overflow-y:auto;">
+        <h3 style="color:#fff; text-align:center; margin-bottom:5px;">🚀 ВЫЗОВ ВСЕХ ФУНКЦИЙ</h3>
+        <button class="dev-btn" onclick="startExecutionScene()">🔫 Запустить казнь Санжи</button>
+        <button class="dev-btn" onclick="triggerGhostSanjiScene()">👻 Запустить вину (призрак)</button>
+        <button class="dev-btn" onclick="initSecondEnvironment()">🌑 Активировать 2-ю среду</button>
+        <button class="dev-btn" onclick="initThirdEnvironment()">🌀 Активировать 3-ю среду</button>
+        <button class="dev-btn" onclick="initEnv0()">💖 Открыть 0-ю среду</button>
+        <button class="dev-btn" onclick="startToxicEvent()">☣️ Токсичное облако Артёма</button>
+        <button class="dev-btn" onclick="startArinaBattle()">⚔️ Битва с Ариной</button>
+        <button class="dev-btn" onclick="triggerVanyaQuake()">💥 Землетрясение Вани</button>
+        <button class="dev-btn" onclick="triggerStrongChaos()">🌈 Хаос Арсалана</button>
+        <button class="dev-btn" onclick="startCartoonAnimation()">🎬 Мультфильм</button>
+        <button class="dev-btn" onclick="openSecretPhotoScreen()">🕵️ Секретное фото</button>
+        <button class="dev-btn" onclick="triggerVanyaRage()">😡 Ярость Вани (скример)</button>
+        <button class="dev-btn" onclick="toggleSlavaMode()">📹 Режим Наблюдателя</button>
+        <button class="dev-btn" onclick="resetAllStates()">🔄 Сбросить всё</button>
+        <button class="dev-btn" onclick="location.reload()">↺ Перезагрузить</button>
+        <button class="dev-btn" onclick="document.getElementById('dev-panel').style.display='none'" style="margin-top:10px; background:#333;">❌ Закрыть</button>
+    </div>
+
     <footer onclick="checkFooterClicks()">информация 2025г</footer>
 
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
@@ -972,7 +1090,6 @@
             }
         }
 
-        // НОВАЯ ФУНКЦИЯ ПРОБУЖДЕНИЯ САНЖИ (ДВОЙНОЙ КЛИК)
         function triggerSanjiAwakening() {
             if(window.isSecondEnvironment) return;
             alert("СИСТЕМА ВЗЛОМАНА. САНЖИ ПРОБУЖДАЕТСЯ!");
@@ -1036,10 +1153,8 @@
         function triggerVanyaRage() {
             closeVanyaBrowser();
             closeVanyaVault();
-            
             document.body.style.animation = "extremeShake 0.1s infinite";
             document.body.style.filter = "saturate(500%) hue-rotate(90deg)";
-            
             let rageText = document.createElement('h1');
             rageText.innerText = "ВАНЯ ЗОЛ: ТЫ КУДА ПОЛЕЗ?!";
             rageText.style.position = 'fixed';
@@ -1050,7 +1165,6 @@
             rageText.style.textShadow = '0 0 20px yellow';
             rageText.style.zIndex = '100000';
             document.body.appendChild(rageText);
-
             setTimeout(() => {
                 document.body.style.animation = "none";
                 document.body.style.filter = "none";
@@ -1059,7 +1173,6 @@
             }, 3000);
         }
 
-        // ================= 0 СРЕДА ЛОГИКА =================
         function initEnv0() {
             const env0 = document.getElementById('env0-overlay');
             env0.style.display = 'flex';
@@ -1069,27 +1182,19 @@
         function startUltimateMinigame() {
             document.getElementById('site-heart').style.display = 'none';
             document.querySelector('#env0-overlay h1').innerText = "ИСПЫТАНИЕ НАЧАЛОСЬ";
-            
             const ui = document.getElementById('ultimate-minigame-ui');
             ui.style.display = 'flex';
-            
             ui.innerHTML = "<h2>ФАЗА 1: СКОРОСТЬ ТИМУРА</h2><p>Поймай сферу 5 раз за 4 секунды!</p><div id='ult-timer' style='font-size:3rem; color:yellow;'>4.00</div><div id='ult-target' style='width:50px; height:50px; background:white; border-radius:50%; position:absolute; cursor:pointer;'></div>";
-            
             let time = 4.0;
             let hits = 0;
             const target = document.getElementById('ult-target');
             target.style.top = '50%'; target.style.left = '50%';
-            
             target.onclick = () => {
                 hits++;
                 target.style.top = Math.random() * 80 + 10 + '%';
                 target.style.left = Math.random() * 80 + 10 + '%';
-                if(hits >= 5) {
-                    clearInterval(ultTimer);
-                    startUltPhase2();
-                }
+                if(hits >= 5) { clearInterval(ultTimer); startUltPhase2(); }
             };
-            
             ultTimer = setInterval(() => {
                 time -= 0.01;
                 document.getElementById('ult-timer').innerText = time.toFixed(2);
@@ -1100,11 +1205,9 @@
         function startUltPhase2() {
             const ui = document.getElementById('ultimate-minigame-ui');
             ui.innerHTML = "<h2>ФАЗА 2: ГАЗ АРТЁМА</h2><p>Обезвредь 3 вентилятора за 3 секунды! (по 2 клика)</p><div id='ult-timer' style='font-size:3rem; color:yellow;'>3.00</div>";
-            
             let time = 3.0;
             let cleared = 0;
             let clicks = {1:0, 2:0, 3:0};
-            
             for(let i=1; i<=3; i++) {
                 let fan = document.createElement('div');
                 fan.innerText = "☢️";
@@ -1123,15 +1226,11 @@
                     if(clicks[i] >= 2) {
                         fan.style.display = 'none';
                         cleared++;
-                        if(cleared >= 3) {
-                            clearInterval(ultTimer);
-                            startUltPhase3();
-                        }
+                        if(cleared >= 3) { clearInterval(ultTimer); startUltPhase3(); }
                     }
                 };
                 ui.appendChild(fan);
             }
-            
             ultTimer = setInterval(() => {
                 time -= 0.01;
                 document.getElementById('ult-timer').innerText = time.toFixed(2);
@@ -1142,19 +1241,12 @@
         function startUltPhase3() {
             const ui = document.getElementById('ultimate-minigame-ui');
             ui.innerHTML = "<h2>ФАЗА 3: КОД ДОСТУПА</h2><p>Введи '010101' за 5 секунд!</p><div id='ult-timer' style='font-size:3rem; color:yellow;'>5.00</div><input type='text' id='ult-input' style='font-size:2rem; text-align:center; margin-top:20px;'><br><button id='ult-btn' style='padding:10px 20px; font-size:1.5rem; margin-top:10px; cursor:pointer;'>ОК</button>";
-            
             let time = 5.0;
             document.getElementById('ult-input').focus();
-            
             document.getElementById('ult-btn').onclick = () => {
-                if(document.getElementById('ult-input').value === '010101') {
-                    clearInterval(ultTimer);
-                    ultSuccess();
-                } else {
-                    document.getElementById('ult-input').value = '';
-                }
+                if(document.getElementById('ult-input').value === '010101') { clearInterval(ultTimer); ultSuccess(); }
+                else document.getElementById('ult-input').value = '';
             };
-            
             ultTimer = setInterval(() => {
                 time -= 0.01;
                 document.getElementById('ult-timer').innerText = time.toFixed(2);
@@ -1174,8 +1266,6 @@
             document.querySelector('#env0-overlay h1').innerText = "СЕРДЦЕ СИСТЕМЫ";
             alert("ВЫ ПРОШЛИ 0 СРЕДУ! СИСТЕМА ВОССТАНОВЛЕНА.");
         }
-
-        // ================= ОСТАЛЬНОЙ КОД =================
 
         function triggerScreamerEvent() {
             closeVanyaBrowser(); closeVanyaVault();
@@ -1256,7 +1346,6 @@
             alert("СИСТЕМА: Инициализирована Вторая Среда. Доступ к функциям ограничен.");
         }
 
-        /* ПРОТОКОЛ ВОССТАНОВЛЕНИЯ СРАБАТЫВАЕТ СТРОГО ВО ВТОРОЙ СРЕДЕ ПРИ КЛИКЕ НА САНЖИ */
         function startPuzzles() { 
             document.getElementById('broken-archive-overlay').style.display = 'none'; 
             document.getElementById('puzzle-overlay').style.display = 'flex'; 
@@ -1320,27 +1409,22 @@
             fanClickCounts = {1:0, 2:0, 3:0};
             fansCleared = 0;
             toxicTimerVal = 2.0;
-            
             document.getElementById('toxic-timer').innerText = "2.00";
             document.getElementById('toxic-timer').style.color = "#fff";
-            
             for(let i=1; i<=3; i++) {
                 let fan = document.getElementById(`fan${i}`);
                 fan.style.display = 'flex';
                 fan.innerText = "☢️";
                 moveFan(fan);
             }
-
             toxicInterval = setInterval(() => {
                 toxicTimerVal -= 0.01;
                 document.getElementById('toxic-timer').innerText = toxicTimerVal.toFixed(2);
-                
                 if(toxicTimerVal <= 0) {
                     clearInterval(toxicInterval);
                     document.getElementById('toxic-timer').innerText = "ВЫ ОТРАВЛЕНЫ.";
                     document.getElementById('toxic-timer').style.color = "red";
                     for(let i=1; i<=3; i++) document.getElementById(`fan${i}`).style.display = 'none';
-                    
                     setTimeout(() => { 
                         toxicOverlay.style.display = 'none';
                         document.querySelectorAll('.card').forEach(c => c.style.display = 'none');
@@ -1361,7 +1445,6 @@
             let fan = document.getElementById(`fan${id}`);
             fan.innerText = "💥";
             setTimeout(() => fan.innerText = "☢️", 100);
-
             if(fanClickCounts[id] >= 2) {
                 fan.style.display = 'none';
                 fansCleared++;
@@ -1381,7 +1464,6 @@
             document.body.style.animation = "heavyShake 0.6s ease-out";
             if (navigator.vibrate) navigator.vibrate([200, 100, 200]);
             setTimeout(() => { document.body.style.animation = "none"; }, 600);
-            
             vanyaQuakeCount++;
             if(vanyaQuakeCount === 3) {
                 setTimeout(initThirdEnvironment, 1000);
@@ -1392,13 +1474,11 @@
             closeVanyaVault();
             document.body.classList.add('third-env');
             alert("ИНИЦИАЛИЗАЦИЯ 3 СРЕДЫ... ГРАВИТАЦИЯ НАРУШЕНА. МАТРИЦА ОТКРЫТА.");
-            
             let env3ui = document.createElement('div');
             env3ui.id = 'env3-ui';
             env3ui.style.display = 'block';
             env3ui.innerHTML = "<div>3 СРЕДА [СТАТУС: АКТИВНО]</div><div style='font-size:1rem; color:#aaa;'>(Кликай по фону для создания черных дыр)</div>";
             document.body.appendChild(env3ui);
-
             setInterval(() => {
                 let drop = document.createElement('div');
                 drop.className = 'matrix-rain';
@@ -1409,7 +1489,6 @@
                 document.body.appendChild(drop);
                 setTimeout(() => drop.remove(), 3000);
             }, 100);
-
             document.body.addEventListener('click', createBlackHole);
         }
 
@@ -1421,7 +1500,6 @@
             bh.style.boxShadow = '0 0 50px 20px purple'; bh.style.borderRadius = '50%';
             bh.style.transform = 'translate(-50%, -50%)'; bh.style.zIndex = '5000'; bh.style.transition = 'all 2s';
             document.body.appendChild(bh);
-            
             setTimeout(() => { bh.style.transform = 'translate(-50%, -50%) scale(20)'; bh.style.opacity = '0'; }, 50);
             setTimeout(() => { bh.remove(); }, 2000);
         }
@@ -1433,7 +1511,7 @@
             if (slavaMode) { document.body.classList.add('slava-active'); overlay.style.display = 'block'; timecodeInterval = setInterval(() => { const now = new Date(); const timeString = now.toTimeString().split(' ')[0]; const ms = String(now.getMilliseconds()).padStart(3, '0').slice(0, 2); document.getElementById('cctv-timecode').innerText = `${timeString}:${ms}`; }, 50); } else { document.body.classList.remove('slava-active'); overlay.style.display = 'none'; clearInterval(timecodeInterval); }
         }
 
-        // --- Расширенный DOOM-интерфейс ---
+        // --- DOOM ---
         const doomKeyMap = {
             'ArrowUp': '↑', 'ArrowDown': '↓', 'ArrowLeft': '←', 'ArrowRight': '→',
             'w': 'W', 'a': 'A', 's': 'S', 'd': 'D',
@@ -1469,30 +1547,16 @@
             container.innerHTML = '';
             const loaderDiv = document.createElement('div');
             loaderDiv.className = 'doom-loader';
-            loaderDiv.innerHTML = `
-                <div>Loading DOOM.WAD... <span id="loader-log"></span></div>
-                <div class="progress-bar"><div class="progress-fill" id="loader-progress"></div></div>
-            `;
+            loaderDiv.innerHTML = `<div>Loading DOOM.WAD... <span id="loader-log"></span></div><div class="progress-bar"><div class="progress-fill" id="loader-progress"></div></div>`;
             container.appendChild(loaderDiv);
             const logEl = document.getElementById('loader-log');
             const progressEl = document.getElementById('loader-progress');
-            
-            const logMessages = [
-                "Initializing DOS/4GW...",
-                "Checking WebGL support... OK",
-                "Loading textures... 45%",
-                "Initializing sound blaster emulation...",
-                "Loading maps E1M1... 80%",
-                "Startup complete."
-            ];
-            let logIndex = 0;
-            let progress = 0;
-            
+            const logMessages = ["Initializing DOS/4GW...","Checking WebGL support... OK","Loading textures... 45%","Initializing sound blaster emulation...","Loading maps E1M1... 80%","Startup complete."];
+            let logIndex = 0, progress = 0;
             window.doomLoaderInterval = setInterval(() => {
                 progress += Math.random() * 15 + 5;
                 if (progress > 100) progress = 100;
                 progressEl.style.width = progress + '%';
-                
                 if (progress > 20 && logIndex < 1) { logEl.innerHTML += '<br>' + logMessages[0]; logIndex++; }
                 if (progress > 40 && logIndex < 2) { logEl.innerHTML += '<br>' + logMessages[1]; logIndex++; }
                 if (progress > 60 && logIndex < 3) { logEl.innerHTML += '<br>' + logMessages[2]; logIndex++; }
@@ -1517,13 +1581,7 @@
             document.getElementById('check-wasm').className = 'check-dot' + (wasm ? ' ok' : '');
         }
 
-        function clearDoomCache() {
-            if (confirm('Очистить кэш игры (демо)?')) {
-                localStorage.removeItem('doom_saves');
-                alert('Кэш очищен.');
-            }
-        }
-
+        function clearDoomCache() { if (confirm('Очистить кэш игры (демо)?')) { localStorage.removeItem('doom_saves'); alert('Кэш очищен.'); } }
         function switchDoomEngine(engine) {
             const gameFrame = document.getElementById('crt-game');
             let url = 'https://silentspacemarine.com/';
@@ -1547,9 +1605,7 @@
         }
 
         function startRebind(keyEl) {
-            if (rebindTarget) {
-                rebindTarget.classList.remove('rebind-active');
-            }
+            if (rebindTarget) rebindTarget.classList.remove('rebind-active');
             rebindTarget = keyEl;
             keyEl.classList.add('rebind-active');
             keyEl.textContent = '...';
@@ -1571,30 +1627,17 @@
         function handleDoomKeyDown(e) {
             const key = e.key;
             const code = Object.keys(currentDoomKeys).find(k => k === key || k === e.code);
-            if (code) {
-                const el = document.querySelector(`.ctrl-key[data-code="${code}"]`);
-                if (el) el.classList.add('pressed');
-            }
+            if (code) { const el = document.querySelector(`.ctrl-key[data-code="${code}"]`); if (el) el.classList.add('pressed'); }
         }
 
         function handleDoomKeyUp(e) {
             const key = e.key;
             const code = Object.keys(currentDoomKeys).find(k => k === key || k === e.code);
-            if (code) {
-                const el = document.querySelector(`.ctrl-key[data-code="${code}"]`);
-                if (el) el.classList.remove('pressed');
-            }
+            if (code) { const el = document.querySelector(`.ctrl-key[data-code="${code}"]`); if (el) el.classList.remove('pressed'); }
         }
 
-        function toggleKeyboardPanel() {
-            const panel = document.getElementById('keyboard-panel');
-            panel.style.display = panel.style.display === 'none' ? 'flex' : 'none';
-        }
-
-        function toggleDiagnostic() {
-            const panel = document.getElementById('diagnostic-panel');
-            panel.classList.toggle('active');
-        }
+        function toggleKeyboardPanel() { const panel = document.getElementById('keyboard-panel'); panel.style.display = panel.style.display === 'none' ? 'flex' : 'none'; }
+        function toggleDiagnostic() { const panel = document.getElementById('diagnostic-panel'); panel.classList.toggle('active'); }
 
         function buildSaveSlots() {
             const panel = document.getElementById('save-slots-panel');
@@ -1603,13 +1646,7 @@
                 const slot = document.createElement('div');
                 slot.className = 'save-slot';
                 const savedData = JSON.parse(localStorage.getItem('doom_save_' + i));
-                slot.innerHTML = `
-                    <div class="screenshot">${savedData ? '📷 Slot ' + i : 'Пусто'}</div>
-                    <div style="font-size:10px;">Слот ${i}</div>
-                    <button onclick="saveGame(${i})">💾 Сохр.</button>
-                    <button onclick="loadGame(${i})">📂 Загр.</button>
-                    <button onclick="downloadSave(${i})">⬇️ Скач.</button>
-                `;
+                slot.innerHTML = `<div class="screenshot">${savedData ? '📷 Slot ' + i : 'Пусто'}</div><div style="font-size:10px;">Слот ${i}</div><button onclick="saveGame(${i})">💾 Сохр.</button><button onclick="loadGame(${i})">📂 Загр.</button><button onclick="downloadSave(${i})">⬇️ Скач.</button>`;
                 panel.appendChild(slot);
             }
         }
@@ -1623,11 +1660,7 @@
 
         function loadGame(slot) {
             const data = localStorage.getItem('doom_save_' + slot);
-            if (data) {
-                alert('Загружено сохранение из слота ' + slot + ' (демо)');
-            } else {
-                alert('Слот пуст.');
-            }
+            if (data) { alert('Загружено сохранение из слота ' + slot + ' (демо)'); } else { alert('Слот пуст.'); }
         }
 
         function downloadSave(slot) {
@@ -1638,15 +1671,10 @@
                 a.href = URL.createObjectURL(blob);
                 a.download = `doom_save_${slot}.json`;
                 a.click();
-            } else {
-                alert('Нет данных для скачивания.');
-            }
+            } else { alert('Нет данных для скачивания.'); }
         }
 
-        function toggleSaveSlots() {
-            const panel = document.getElementById('save-slots-panel');
-            panel.style.display = panel.style.display === 'none' ? 'flex' : 'none';
-        }
+        function toggleSaveSlots() { const panel = document.getElementById('save-slots-panel'); panel.style.display = panel.style.display === 'none' ? 'flex' : 'none'; }
 
         function openArtemPage() { if(!window.isSecondEnvironment) document.getElementById('artem-overlay').style.display = 'flex'; }
         function closeArtemPage() { document.getElementById('artem-overlay').style.display = 'none'; }
@@ -1687,6 +1715,402 @@
             btn.style.left = `${Math.max(40, Math.random() * maxX)}px`; btn.style.top = `${Math.max(40, Math.random() * maxY)}px`;
             if (tClicks >= 10) { clearInterval(tInterval); isPlaying = false; const finalTime = timerVal.toFixed(2); saveTimurScore(finalTime); btn.style.left = "50%"; btn.style.top = "50%"; btn.innerText = "ЕЩЕ?"; }
         }
+
+        function resetAllStates() {
+            window.isSecondEnvironment = false;
+            window.hasTimeTraveled = false;
+            document.body.classList.remove('second-env', 'third-env');
+            document.getElementById('main-title').innerText = "Досье: Главные Лица";
+            const sanjiCard = document.getElementById('sanji-card');
+            sanjiCard.style.display = 'none';
+            document.getElementById('sanji-img').src = 'sanji.jpg';
+            document.querySelector('#sanji-card .bio-text').innerText = "Атаковал полицейские участки и т.д. Он за них.";
+            document.querySelectorAll('.fullscreen-overlay').forEach(ov => ov.style.display = 'none');
+            document.body.style.animation = '';
+            document.body.style.filter = '';
+            alert("Все состояния сброшены!");
+        }
+
+        let headerClicks = 0;
+        let radarClicks = 0;
+
+        document.querySelector('h1').addEventListener('click', function(e) {
+            headerClicks++;
+            if (headerClicks === 3) {
+                headerClicks = 0;
+                let pin = prompt("Введите пин-код (Кнопка только для Арсалана.):");
+                if (pin === "4242" || pin === "1337" || pin === "beta") {
+                    if (pin === "beta") alert("Привет, друг! Это панель для вызова всех секретных функций. Нажимай кнопки и смотри, что происходит. Если что-то сломается – просто перезагрузи страницу.");
+                    document.getElementById('dev-panel').style.display = 'flex';
+                } else {
+                    alert("Неверный код!");
+                }
+            }
+            setTimeout(() => { if (headerClicks < 3) headerClicks = 0; }, 1500);
+        });
+
+        // ===== БИТВА С АРИНОЙ (ПОЛНОСТЬЮ ПЕРЕРАБОТАНА) =====
+        let arinaHP = 26000;
+        let artemHP = 20;
+        let artemFat = 99;
+        let burpMultiplier = 1;
+        let battleActive = false;
+        let playerTurn = true;
+        let battlePause = false;
+        let soulElement = null;
+        let battleArea = null;
+        let soulPos = { x: 50, y: 50 };
+        let activeProjectiles = [];
+        let projectileCheckInterval = null;
+
+        document.getElementById('radar-pointer').addEventListener('click', function(e) {
+            e.stopPropagation();
+            radarClicks++;
+            if (radarClicks >= 3) {
+                radarClicks = 0;
+                closeArtemPage();
+                startArinaBattle();
+            }
+            setTimeout(() => { if (radarClicks < 3) radarClicks = 0; }, 1000);
+        });
+
+        function closeArinaBattle() {
+            battleActive = false;
+            playerTurn = true;
+            clearAllProjectiles();
+            if (projectileCheckInterval) clearInterval(projectileCheckInterval);
+            document.getElementById('arina-fight-overlay').style.display = 'none';
+            document.removeEventListener('keydown', onSoulKeyDown);
+            document.removeEventListener('keyup', onSoulKeyUp);
+            if (battleArea) {
+                battleArea.removeEventListener('mousemove', onSoulMouseMove);
+                battleArea.removeEventListener('touchmove', onSoulTouchMove);
+            }
+        }
+
+        function startArinaBattle() {
+            const overlay = document.getElementById('arina-fight-overlay');
+            overlay.style.display = 'flex';
+            document.getElementById('battle-container').style.display = 'flex';
+            battleActive = true;
+            playerTurn = true;
+            battlePause = false;
+            arinaHP = 26000;
+            artemHP = 20;
+            artemFat = 99;
+            burpMultiplier = 1;
+            activeProjectiles = [];
+            updateBattleUI();
+            setAllButtonsDisabled(false);
+            document.getElementById('battle-log').innerText = "Арина бросает тебе вызов!";
+            soulElement = document.getElementById('player-soul');
+            battleArea = document.getElementById('battle-area');
+            soulPos = { x: 50, y: 50 };
+            updateSoulPosition();
+            document.addEventListener('keydown', onSoulKeyDown);
+            document.addEventListener('keyup', onSoulKeyUp);
+            battleArea.addEventListener('mousemove', onSoulMouseMove);
+            battleArea.addEventListener('touchmove', onSoulTouchMove, { passive: false });
+            if (projectileCheckInterval) clearInterval(projectileCheckInterval);
+            projectileCheckInterval = setInterval(checkProjectileCollisions, 30);
+            setTimeout(() => arinaAttack(), 1500);
+        }
+
+        function updateBattleUI() {
+            const hpPercent = Math.max(0, (arinaHP / 26000) * 100);
+            document.getElementById('arina-hp-bar').style.width = hpPercent + '%';
+            document.getElementById('arina-hp-text').innerText = `${arinaHP} / 26000`;
+            document.getElementById('artem-hp').innerText = artemHP;
+            document.getElementById('artem-fat').innerText = artemFat;
+            document.getElementById('btn-mercy').disabled = (arinaHP > 0);
+        }
+
+        function setAllButtonsDisabled(disabled) {
+            document.getElementById('btn-attack').disabled = disabled;
+            document.getElementById('btn-act').disabled = disabled;
+            document.getElementById('btn-item').disabled = disabled;
+            if (arinaHP > 0) document.getElementById('btn-mercy').disabled = disabled;
+        }
+
+        function updateSoulPosition() {
+            if (!soulElement || !battleArea) return;
+            const areaRect = battleArea.getBoundingClientRect();
+            const soulW = 30, soulH = 30;
+            const maxX = areaRect.width - soulW;
+            const maxY = areaRect.height - soulH;
+            const px = (soulPos.x / 100) * maxX;
+            const py = (soulPos.y / 100) * maxY;
+            soulElement.style.left = px + 'px';
+            soulElement.style.top = py + 'px';
+        }
+
+        function moveSoul(dx, dy) {
+            const step = 1.8;
+            soulPos.x = Math.min(100, Math.max(0, soulPos.x + dx * step));
+            soulPos.y = Math.min(100, Math.max(0, soulPos.y + dy * step));
+            updateSoulPosition();
+        }
+
+        function onSoulKeyDown(e) { 
+            if (!battleActive) return;
+            const key = e.key;
+            if (key === 'ArrowLeft' || key === 'a') moveSoul(-1, 0);
+            if (key === 'ArrowRight' || key === 'd') moveSoul(1, 0);
+            if (key === 'ArrowUp' || key === 'w') moveSoul(0, -1);
+            if (key === 'ArrowDown' || key === 's') moveSoul(0, 1);
+        }
+        function onSoulKeyUp(e) {}
+
+        function onSoulMouseMove(e) {
+            if (!battleActive) return;
+            const rect = battleArea.getBoundingClientRect();
+            const x = e.clientX - rect.left;
+            const y = e.clientY - rect.top;
+            soulPos.x = (x / rect.width) * 100;
+            soulPos.y = (y / rect.height) * 100;
+            updateSoulPosition();
+        }
+
+        function onSoulTouchMove(e) {
+            e.preventDefault();
+            if (!battleActive) return;
+            const touch = e.touches[0];
+            const rect = battleArea.getBoundingClientRect();
+            const x = touch.clientX - rect.left;
+            const y = touch.clientY - rect.top;
+            soulPos.x = Math.min(100, Math.max(0, (x / rect.width) * 100));
+            soulPos.y = Math.min(100, Math.max(0, (y / rect.height) * 100));
+            updateSoulPosition();
+        }
+
+        function actionAttack() {
+            if (!battleActive || !playerTurn || battlePause) return;
+            playerTurn = false;
+            setAllButtonsDisabled(true);
+            const damage = 600 * burpMultiplier;
+            arinaHP = Math.max(0, arinaHP - damage);
+            burpMultiplier = 1;
+            updateBattleUI();
+            document.getElementById('battle-log').innerText = `Артём рыгнул и нанёс ${damage} урона!`;
+            if (arinaHP <= 0) {
+                document.getElementById('battle-log').innerText = "Арина ослабла! Можно пощадить.";
+                updateBattleUI();
+                playerTurn = true;
+                setAllButtonsDisabled(false);
+                return;
+            }
+            setTimeout(() => {
+                if (battleActive) arinaAttack();
+            }, 600);
+        }
+
+        function actionAct() {
+            if (!battleActive || !playerTurn || battlePause) return;
+            playerTurn = false;
+            setAllButtonsDisabled(true);
+            burpMultiplier = 2;
+            document.getElementById('battle-log').innerText = "Артём накапливает мощную рыкоту...";
+            setTimeout(() => {
+                if (battleActive) arinaAttack();
+            }, 600);
+        }
+
+        function actionItem() {
+            if (!battleActive || !playerTurn || battlePause) return;
+            playerTurn = false;
+            setAllButtonsDisabled(true);
+            const items = [
+                { name: 'Кириешки', fat: 20 },
+                { name: 'Булочка', fat: 40 }
+            ];
+            const choice = prompt(`Выбери предмет:\n1. ${items[0].name} (+${items[0].fat} жира)\n2. ${items[1].name} (+${items[1].fat} жира)`);
+            if (choice === '1') {
+                artemFat = Math.min(99, artemFat + items[0].fat);
+                document.getElementById('battle-log').innerText = `Съедены ${items[0].name}. Жир +${items[0].fat}.`;
+            } else if (choice === '2') {
+                artemFat = Math.min(99, artemFat + items[1].fat);
+                document.getElementById('battle-log').innerText = `Съедена ${items[1].name}. Жир +${items[1].fat}.`;
+            } else {
+                playerTurn = true;
+                setAllButtonsDisabled(false);
+                return;
+            }
+            updateBattleUI();
+            setTimeout(() => {
+                if (battleActive) arinaAttack();
+            }, 600);
+        }
+
+        function actionMercy() {
+            if (arinaHP <= 0 && battleActive) {
+                battleActive = false;
+                clearAllProjectiles();
+                if (projectileCheckInterval) clearInterval(projectileCheckInterval);
+                alert("Ты пощадил Арину! Бой окончен.");
+                document.getElementById('arina-fight-overlay').style.display = 'none';
+            } else if (arinaHP > 0) {
+                alert("Арина не принимает пощаду, пока не будет побеждена.");
+            }
+        }
+
+        function clearAllProjectiles() {
+            activeProjectiles.forEach(p => { if (p.parentNode) p.remove(); });
+            activeProjectiles = [];
+        }
+
+        function arinaAttack() {
+            if (!battleActive) return;
+            battlePause = true;
+            clearAllProjectiles();
+            document.getElementById('battle-log').innerText = "Арина швыряет листки бумаги! Уклоняйся!";
+            const areaRect = battleArea.getBoundingClientRect();
+            const patterns = [
+                { type: 'horizontal', count: 7, speed: 2200, stagger: 100 },
+                { type: 'vertical', count: 6, speed: 2000, stagger: 120 },
+                { type: 'diagonal', count: 8, speed: 1800, stagger: 80 },
+                { type: 'spiral', count: 10, speed: 2500, stagger: 60 },
+                { type: 'crossfire', count: 8, speed: 1900, stagger: 100 }
+            ];
+            const pattern = patterns[Math.floor(Math.random() * patterns.length)];
+            let totalDuration = 0;
+            for (let i = 0; i < pattern.count; i++) {
+                const delay = i * pattern.stagger;
+                totalDuration = Math.max(totalDuration, delay + pattern.speed);
+                setTimeout(() => {
+                    if (!battleActive) return;
+                    spawnProjectile(pattern.type, i, pattern.count, pattern.speed, areaRect);
+                }, delay);
+            }
+            setTimeout(() => {
+                battlePause = false;
+                playerTurn = true;
+                setAllButtonsDisabled(false);
+                document.getElementById('battle-log').innerText = "Твой ход!";
+            }, totalDuration + 400);
+        }
+
+        function spawnProjectile(type, index, total, speed, areaRect) {
+            const paper = document.createElement('div');
+            paper.className = 'arina-projectile';
+            paper.style.position = 'absolute';
+            const startPos = { x: 0, y: 0 };
+            const endPos = { x: 0, y: 0 };
+            switch (type) {
+                case 'horizontal':
+                    startPos.x = -5;
+                    startPos.y = (10 + index * (75 / total));
+                    endPos.x = 105;
+                    endPos.y = startPos.y;
+                    break;
+                case 'vertical':
+                    startPos.x = (10 + index * (80 / total));
+                    startPos.y = -5;
+                    endPos.x = startPos.x;
+                    endPos.y = 105;
+                    break;
+                case 'diagonal':
+                    if (index % 2 === 0) {
+                        startPos.x = -5; startPos.y = (10 + index * (80 / total));
+                        endPos.x = 105; endPos.y = (90 - index * (80 / total));
+                    } else {
+                        startPos.x = 105; startPos.y = (10 + index * (80 / total));
+                        endPos.x = -5; endPos.y = (90 - index * (80 / total));
+                    }
+                    break;
+                case 'spiral':
+                    const angle = (index / total) * Math.PI * 2;
+                    const cx = 50, cy = 50, rx = 45, ry = 45;
+                    startPos.x = cx + Math.cos(angle) * rx * 1.5;
+                    startPos.y = cy + Math.sin(angle) * ry * 1.5;
+                    endPos.x = cx - Math.cos(angle) * rx * 1.5;
+                    endPos.y = cy - Math.sin(angle) * ry * 1.5;
+                    break;
+                case 'crossfire':
+                    const row = Math.floor(index / 2);
+                    const col = index % 2;
+                    startPos.x = col === 0 ? -5 : 105;
+                    startPos.y = 10 + row * (80 / Math.ceil(total / 2));
+                    endPos.x = col === 0 ? 105 : -5;
+                    endPos.y = 90 - row * (80 / Math.ceil(total / 2));
+                    break;
+            }
+            paper.style.left = startPos.x + '%';
+            paper.style.top = startPos.y + '%';
+            paper.startPos = startPos;
+            paper.endPos = endPos;
+            paper.speed = speed;
+            paper.startTime = performance.now();
+            paper.dataset.type = type;
+            battleArea.appendChild(paper);
+            activeProjectiles.push(paper);
+            requestAnimationFrame(() => animateProjectile(paper));
+        }
+
+        function animateProjectile(paper) {
+            if (!battleActive || !paper.parentNode) {
+                const idx = activeProjectiles.indexOf(paper);
+                if (idx > -1) activeProjectiles.splice(idx, 1);
+                return;
+            }
+            const elapsed = performance.now() - paper.startTime;
+            const progress = Math.min(1, elapsed / paper.speed);
+            const x = paper.startPos.x + (paper.endPos.x - paper.startPos.x) * progress;
+            const y = paper.startPos.y + (paper.endPos.y - paper.startPos.y) * progress;
+            paper.style.left = x + '%';
+            paper.style.top = y + '%';
+            if (progress < 1) {
+                requestAnimationFrame(() => animateProjectile(paper));
+            } else {
+                if (paper.parentNode) paper.remove();
+                const idx = activeProjectiles.indexOf(paper);
+                if (idx > -1) activeProjectiles.splice(idx, 1);
+            }
+        }
+
+        function checkProjectileCollisions() {
+            if (!battleActive || !soulElement) return;
+            const soulRect = soulElement.getBoundingClientRect();
+            const shrinkFactor = 0.4;
+            const shrunkSoul = {
+                left: soulRect.left + soulRect.width * shrinkFactor,
+                right: soulRect.right - soulRect.width * shrinkFactor,
+                top: soulRect.top + soulRect.height * shrinkFactor,
+                bottom: soulRect.bottom - soulRect.height * shrinkFactor
+            };
+            for (let i = activeProjectiles.length - 1; i >= 0; i--) {
+                const paper = activeProjectiles[i];
+                if (!paper.parentNode) { activeProjectiles.splice(i, 1); continue; }
+                const paperRect = paper.getBoundingClientRect();
+                if (rectsOverlap(shrunkSoul, paperRect)) {
+                    applyDamageToPlayer(6);
+                    paper.remove();
+                    activeProjectiles.splice(i, 1);
+                }
+            }
+        }
+
+        function rectsOverlap(r1, r2) {
+            return !(r1.right < r2.left || r1.left > r2.right || r1.bottom < r2.top || r1.top > r2.bottom);
+        }
+
+        function applyDamageToPlayer(percent) {
+            const hpDamage = Math.ceil(20 * (percent / 100));
+            let remaining = hpDamage;
+            if (artemFat > 0) {
+                const fatLoss = Math.min(artemFat, remaining);
+                artemFat -= fatLoss;
+                remaining -= fatLoss;
+            }
+            artemHP = Math.max(0, artemHP - remaining);
+            updateBattleUI();
+            if (artemHP <= 0) {
+                battleActive = false;
+                clearAllProjectiles();
+                if (projectileCheckInterval) clearInterval(projectileCheckInterval);
+                alert("Артём потерял сознание...");
+                document.getElementById('arina-fight-overlay').style.display = 'none';
+            }
+        }
     </script>
 </body>
-                    </html>
+    </html>
