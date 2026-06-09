@@ -147,7 +147,7 @@
         .chart-label { color: #fff; font-size: 0.9rem; font-weight: bold; margin-bottom: 5px; }
 
         .vista-desktop { width: 100%; height: 100%; background: linear-gradient(135deg, #1d589a 0%, #10386a 100%); position: relative; overflow: hidden; display: flex; flex-direction: column; justify-content: space-between; }
-        .vista-icon { width: 90px; text-align: center; margin: 30px; cursor: pointer; color: white; font-size: 0.8rem; text-shadow: 1px 1px 3px #000; position: relative; }
+        .vista-icon { width: 90px; text-align: center; margin: 30px; cursor: pointer; color: white; font-size: 0.8rem; text-shadow: 1px 1px 3px #000; position: relative; display: inline-block; vertical-align: top;}
         .vista-icon svg { width: 55px; height: 55px; display: block; margin: 0 auto 8px; filter: drop-shadow(0px 4px 5px rgba(0,0,0,0.3)); }
         
         .secret-invisible-btn { position: absolute; top: -10px; right: -10px; width: 45px; height: 45px; background: transparent; cursor: pointer; z-index: 999; border-radius: 50%; }
@@ -317,6 +317,7 @@
             border-radius: 50%; display: flex; align-items: center; justify-content: center; 
             font-size: 2rem; cursor: pointer; box-shadow: 0 0 20px #00ff00;
             animation: spin 0.5s linear infinite; z-index: 35001;
+            user-select: none;
         }
         .quake-btn {
             background: var(--blood-red); color: #fff; border: 2px solid #fff; padding: 15px 30px;
@@ -361,18 +362,259 @@
             100% { transform: translate(1px, 1px); opacity: 1; }
         }
 
-        /* ===== СТИЛИ ДЛЯ ГОЛОВОЛОМОК ===== */
-        #puzzle-overlay {
-            display: none; position: fixed; inset: 0; background: rgba(20, 0, 0, 0.98); 
-            z-index: 45000; flex-direction: column; align-items: center; justify-content: center;
-            color: white; font-family: monospace; text-align: center;
+        /* ===== СТИЛИ ДЛЯ БРАУЗЕРА ВАНИ ===== */
+        .vanya-browser-btn {
+            background: #222; color: #ffaa00; border: 1px solid #ffaa00; padding: 10px 20px;
+            font-size: 1rem; border-radius: 8px; cursor: pointer; margin-top: 15px; font-family: monospace;
+            transition: all 0.3s;
         }
-        .puzzle-stage { display: none; flex-direction: column; align-items: center; gap: 20px; }
-        .runes span { font-size: 3rem; cursor: pointer; margin: 0 15px; transition: transform 0.2s; }
-        .runes span:hover { transform: scale(1.3); }
-        .puzzle-input { background: #000; border: 1px solid red; color: red; padding: 10px; font-size: 1.5rem; text-align: center; }
-        .puzzle-btn { background: red; color: white; border: none; padding: 10px 20px; font-size: 1.2rem; cursor: pointer; font-weight: bold; }
+        .vanya-browser-btn:hover { background: #ffaa00; color: #000; box-shadow: 0 0 15px #ffaa00; }
         
+        #browser-overlay { background: #12131a; color: #fff; font-family: sans-serif; z-index: 26000; }
+        .browser-window { width: 95%; max-width: 900px; height: 85vh; background: #1c1d26; border-radius: 12px; border: 2px solid #333; display: flex; flex-direction: column; overflow: hidden; box-shadow: 0 20px 50px rgba(0,0,0,0.8); }
+        .browser-navbar { background: #282a36; padding: 10px; display: flex; align-items: center; gap: 10px; border-bottom: 2px solid #1c1d26; }
+        .browser-dots { display: flex; gap: 6px; }
+        .b-dot { width: 12px; height: 12px; border-radius: 50%; }
+        .browser-address { flex-grow: 1; background: #191a21; border: 1px solid #444; border-radius: 6px; padding: 6px 12px; color: #8be9fd; font-family: monospace; font-size: 0.9rem; }
+        .browser-tabs { display: flex; background: #1c1d26; padding-left: 10px; gap: 5px; }
+        .browser-tab { background: #282a36; padding: 8px 16px; border-radius: 8px 8px 0 0; font-size: 0.85rem; color: #aaa; cursor: pointer; border: 1px solid #333; border-bottom: none; display: flex; align-items: center; gap: 8px; }
+        .browser-tab.active { background: #1c1d26; color: #fff; font-weight: bold; border-color: #333; }
+        .browser-content-area { flex-grow: 1; padding: 20px; overflow-y: auto; background: #14151f; position: relative; }
+        
+        .history-list { display: flex; flex-direction: column; gap: 10px; margin-top: 15px; }
+        .history-item { background: #1c1d26; border: 1px solid #333; padding: 15px; border-radius: 8px; display: flex; justify-content: space-between; align-items: center; cursor: pointer; transition: background 0.2s; }
+        .history-item:hover { background: #282a36; border-color: #ff5555; }
+        .history-meta { font-size: 0.8rem; color: #6272a4; font-family: monospace; }
+        
+        /* Скример браузера (ОСТАВЛЕН В КОДЕ) */
+        #scream-canvas { position: fixed; inset: 0; background: #000; z-index: 60000; display: none; flex-direction: column; align-items: center; justify-content: center; overflow: hidden; }
+        .scary-eye { width: 200px; height: 200px; background: radial-gradient(circle, red 10%, black 70%); border-radius: 50%; animation: twitch 0.05s infinite; filter: blur(2px); }
+        .scary-text { color: #ff0000; font-family: monospace; font-size: 2.5rem; text-align: center; margin-top: 30px; font-weight: bold; text-shadow: 0 0 30px red; letter-spacing: 5px; }
+
+        /* ===== СТИЛИ ДЛЯ ПРОТОКОЛА ВОССТАНОВЛЕНИЯ (СКРЫТ В 1 СРЕДЕ) ===== */
+        #puzzle-overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(10, 0, 0, 0.95);
+            z-index: 42000;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            color: #fff;
+            font-family: monospace;
+        }
+        .puzzle-stage { display: none; flex-direction: column; align-items: center; gap: 15px; text-align: center; max-width: 500px; }
+        .runes { display: flex; gap: 20px; font-size: 3rem; margin: 20px 0; }
+        .runes span { cursor: pointer; transition: transform 0.2s; user-select: none; }
+        .runes span:hover { transform: scale(1.2); }
+        .puzzle-input { background: #111; border: 1px solid red; color: #fff; padding: 10px; font-size: 1.2rem; text-align: center; border-radius: 5px; outline: none; }
+        .puzzle-btn { background: darkred; color: #fff; border: 1px solid #fff; padding: 10px 20px; font-size: 1.1rem; cursor: pointer; border-radius: 5px; }
+
+        /* ===== НОВЫЕ СТИЛИ (0 И 3 СРЕДЫ) ===== */
+        @keyframes beat { 0% { transform: scale(1); } 50% { transform: scale(1.2); } 100% { transform: scale(1); } }
+        @keyframes pulseColor { 0% { filter: hue-rotate(0deg); } 100% { filter: hue-rotate(360deg); } }
+        
+        body.third-env {
+            background: #001100;
+            background-image: linear-gradient(0deg, transparent 24%, rgba(0, 255, 0, .3) 25%, rgba(0, 255, 0, .3) 26%, transparent 27%, transparent 74%, rgba(0, 255, 0, .3) 75%, rgba(0, 255, 0, .3) 76%, transparent 77%, transparent), linear-gradient(90deg, transparent 24%, rgba(0, 255, 0, .3) 25%, rgba(0, 255, 0, .3) 26%, transparent 27%, transparent 74%, rgba(0, 255, 0, .3) 75%, rgba(0, 255, 0, .3) 76%, transparent 77%, transparent);
+            background-size: 50px 50px;
+            animation: panBg 10s linear infinite;
+            overflow: hidden;
+        }
+        @keyframes panBg { from { background-position: 0 0; } to { background-position: 50px 50px; } }
+        body.third-env .card {
+            animation: floatCard 3s ease-in-out infinite alternate;
+            border-color: #00ff00;
+            box-shadow: 0 0 20px #00ff00;
+            transform-origin: center;
+        }
+        @keyframes floatCard { from { transform: translateY(0) rotate(-2deg); } to { transform: translateY(-20px) rotate(2deg); } }
+        #env3-ui {
+            display:none; position:fixed; inset:0; z-index:5000; pointer-events:none;
+            color:#0f0; font-family:monospace; font-size:2rem; text-shadow:0 0 10px #0f0; padding:20px;
+        }
+        .matrix-rain { position:absolute; color:#0f0; font-family:monospace; font-size:1.5rem; animation: fall linear forwards; font-weight:bold; text-shadow:0 0 5px #0f0;}
+        @keyframes fall { to { transform: translateY(110vh); opacity:0; } }
+
+        /* === НОВЫЕ СТИЛИ ДЛЯ УЛУЧШЕННОГО DOOM-ИНТЕРФЕЙСА === */
+        .crt-container {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            border-radius: 15px;
+            box-shadow: inset 0 0 60px rgba(0,0,0,0.8);
+        }
+
+        .crt-container::after {
+            content: "";
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: repeating-linear-gradient(
+                0deg,
+                rgba(0, 0, 0, 0.2) 0px,
+                rgba(0, 0, 0, 0.2) 2px,
+                transparent 2px,
+                transparent 4px
+            );
+            pointer-events: none;
+            z-index: 2;
+        }
+
+        .crt-container iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+            filter: contrast(1.2) saturate(1.1);
+            transform: scale(1.02);
+            transition: filter 0.3s;
+        }
+
+        .doom-loader {
+            background: #000;
+            color: #33ff33;
+            font-family: 'Courier New', monospace;
+            padding: 20px;
+            text-align: left;
+            font-size: 14px;
+            line-height: 1.8;
+            border-radius: 10px;
+            margin: 20px;
+            white-space: pre-wrap;
+            overflow-y: auto;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 20px;
+            background: #111;
+            border: 1px solid #33ff33;
+            margin-top: 10px;
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            width: 0%;
+            height: 100%;
+            background: #33ff33;
+            transition: width 0.1s linear;
+        }
+
+        .diagnostic-panel {
+            background: rgba(0,0,0,0.9);
+            color: #aaa;
+            padding: 15px;
+            border-radius: 10px;
+            margin: 10px;
+            font-family: monospace;
+            border: 1px solid #444;
+            display: none;
+        }
+
+        .diagnostic-panel.active {
+            display: block;
+        }
+
+        .check-item {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+        }
+
+        .check-dot {
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            background: red;
+        }
+
+        .check-dot.ok { background: #33ff33; }
+
+        .ctrl-panel {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            justify-content: center;
+            margin: 10px;
+        }
+
+        .ctrl-key {
+            width: 50px;
+            height: 50px;
+            background: #333;
+            color: #fff;
+            border: 2px solid #777;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-family: monospace;
+            cursor: pointer;
+            transition: background 0.1s, border-color 0.1s;
+            user-select: none;
+        }
+
+        .ctrl-key.pressed {
+            background: #ff0055;
+            border-color: #ffaa00;
+            box-shadow: 0 0 10px #ff0055;
+        }
+
+        .ctrl-key.rebind-active {
+            background: #ffaa00;
+            animation: pulse 0.5s infinite;
+        }
+
+        .save-slots {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            margin: 10px;
+            flex-wrap: wrap;
+        }
+
+        .save-slot {
+            background: #1a1a2e;
+            border: 1px solid #555;
+            border-radius: 10px;
+            padding: 10px;
+            text-align: center;
+            width: 100px;
+            color: #ccc;
+            font-family: monospace;
+        }
+
+        .save-slot .screenshot {
+            width: 100%;
+            height: 60px;
+            background: #000;
+            border: 1px solid #333;
+            margin-bottom: 5px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            color: #666;
+        }
+
+        .save-slot button {
+            margin: 2px;
+            font-size: 10px;
+            padding: 3px 8px;
+            background: #222;
+            color: #aaa;
+            border: 1px solid #555;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        .save-slot button:hover {
+            background: #444;
+        }
     </style>
 </head>
 <body>
@@ -387,6 +629,18 @@
     
     <audio id="sound-ghost" src="https://www.myinstants.com/media/sounds/fnaf-2-hallway-sound.mp3" preload="auto"></audio>
     <audio id="sound-gunshot" src="https://www.myinstants.com/media/sounds/awp_1.mp3" preload="auto"></audio>
+    
+    <audio id="sound-glitch" src="https://www.myinstants.com/media/sounds/static-noise.mp3" loop preload="auto"></audio>
+    <audio id="sound-scream" src="https://www.myinstants.com/media/sounds/fnaf-scream.mp3" preload="auto"></audio><audio id="sound-explosion" src="https://www.myinstants.com/media/sounds/explosion.mp3" preload="auto"></audio>
+<audio id="sound-evil-laugh" src="https://www.myinstants.com/media/sounds/evil-laugh.mp3" preload="auto"></audio>
+<audio id="sound-siren" src="https://www.myinstants.com/media/sounds/police-siren.mp3" preload="auto"></audio>
+<audio id="sound-punch" src="https://www.myinstants.com/media/sounds/punch.mp3" preload="auto"></audio>
+<audio id="sound-electricity" src="https://www.myinstants.com/media/sounds/electricity.mp3" preload="auto"></audio>
+<audio id="sound-footsteps" src="https://www.myinstants.com/media/sounds/footsteps.mp3" preload="auto"></audio>
+<audio id="sound-door-creak" src="https://www.myinstants.com/media/sounds/door-creak.mp3" preload="auto"></audio>
+<audio id="sound-monster-growl" src="https://www.myinstants.com/media/sounds/monster-growl.mp3" preload="auto"></audio>
+<audio id="sound-phone-ring" src="https://www.myinstants.com/media/sounds/phone-ring.mp3" preload="auto"></audio>
+<audio id="sound-rain" src="https://www.myinstants.com/media/sounds/rain.mp3" preload="auto"></audio>
 
     <header><h1 id="main-title">Досье: Главные Лица</h1></header>
     
@@ -406,7 +660,7 @@
 
         <div class="card" onclick="openTimurGame();">
             <div class="avatar-container"><img src="timur.jpg" alt="Тимур"><span class="status-badge">Ветеран</span></div>
-            <div class="name">Тимур</div><div class="bio-text">Быстрый флеш, участвовал в нескольких битвах. (Мини-игра внутри)</div>
+            <div class="name">Тимур</div><div class="bio-text">Быстрый флеш, участвовал in нескольких битвах. (Мини-игра внутри)</div>
         </div>
 
         <div class="card" id="card-vanya" onclick="openVanyaVault();">
@@ -423,7 +677,7 @@
         </div>
 
         <div class="card" id="sanji-card" onclick="handleSanjiClick();">
-            <div class="avatar-container"><img id="sanji-img" src="sanji.jpg" alt="Санжи"><span class="status-badge" style="background: #ff0055; color: #fff;">Штурмовик</span></div>
+            <div class="avatar-container"><img id="sanji-img" src="sanji.jpg" alt="Санжи" ondblclick="event.stopPropagation(); triggerSanjiAwakening();"><span class="status-badge" style="background: #ff0055; color: #fff;">Штурмовик</span></div>
             <div class="name">Санжи</div><div class="bio-text">Атаковал полицейские участки и т.д. Он за них.</div>
             <div class="stats-highlight" style="color: #ff0055;">Особо опасен (Архив Системы)</div>
         </div>
@@ -442,7 +696,6 @@
 
     <div id="puzzle-overlay">
         <h2 style="color:red; margin-bottom: 30px; font-size: 2rem; text-shadow: 0 0 10px red;">ПРОТОКОЛ ВОССТАНОВЛЕНИЯ</h2>
-        
         <div id="stage1" class="puzzle-stage">
             <p>Этап 1: Введи правильный порядок жертвоприношения.</p>
             <p style="color:#555; font-size:0.8rem;">(Подсказка: Сначала смотришь, потом режешь, потом остается лишь прах)</p>
@@ -453,13 +706,11 @@
             </div>
             <p id="rune-feedback" style="color:darkred; height: 20px;"></p>
         </div>
-
         <div id="stage2" class="puzzle-stage">
             <p>Этап 2: Кто предпочитает сохранять стратегический нейтралитет?</p>
             <input type="text" id="puzzle-ans" class="puzzle-input" placeholder="Имя...">
             <button class="puzzle-btn" onclick="checkAnswer()">ПОДТВЕРДИТЬ</button>
         </div>
-
         <div id="stage3" class="puzzle-stage" style="width:100%; height:300px; position:relative;">
             <p>Этап 3: ПОЙМАЙ ЯДРО ВОССТАНОВЛЕНИЯ!</p>
             <p id="glitch-timer" style="color:red; font-size:2rem;">5.00</p>
@@ -472,21 +723,68 @@
         <h1 style="color:black; font-size:6rem; transform: rotate(-10deg);">ВЫБОР СДЕЛАН.</h1>
     </div>
 
+    <div id="env0-overlay" class="fullscreen-overlay" style="background: linear-gradient(45deg, #ff9a9e 0%, #fecfef 99%, #fecfef 100%); z-index: 99999; flex-direction: column; align-items: center; justify-content: center; overflow: hidden; font-family: 'Comic Sans MS', cursive, sans-serif;">
+        <h1 style="color: white; text-shadow: 0 0 20px #ff00ff, 0 0 30px #00ffff; font-size: 4rem; animation: pulseColor 2s infinite;">СЕРДЦЕ СИСТЕМЫ</h1>
+        <div id="site-heart" style="font-size: 10rem; cursor: pointer; animation: beat 1s infinite; filter: drop-shadow(0 0 20px red);" onclick="startUltimateMinigame()">💖</div>
+        <p style="color: white; font-size:1.5rem; text-shadow: 0 0 10px #ff00ff; margin-top:20px;">Нажми на сердце, чтобы спастись.</p>
+    </div>
+    
+    <div id="ultimate-minigame-ui" style="display:none; position:fixed; inset:0; z-index:100000; background:rgba(0,0,0,0.9); color:white; flex-direction:column; align-items:center; justify-content:center; text-align:center; padding:20px;"></div>
+
     <div id="vista-overlay" class="fullscreen-overlay" style="padding:0;">
         <span class="close-btn" onclick="closeVista()" style="right:20px; top:10px;">&times;</span>
         <div class="vista-desktop">
-            <div class="vista-icon" onclick="openVistaWindow()">
-                <div class="secret-invisible-btn" onclick="event.stopPropagation(); clickSecretButton();"></div>
-                <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M22 19V9C22 7.89543 21.1046 7 20 7H12L10 4H4C2.89543 4 2 4.89543 2 6V19C2 20.1046 2.89543 21 4 21H20C21.1046 21 22 20.1046 22 19Z" fill="#ffaa00" stroke="#fff" stroke-width="1.5"/>
-                    <path d="M2 10H22" stroke="#fff" stroke-width="1.5"/>
-                </svg>
-                <span>КУДА ПРОПАЛ САНЖИ</span>
+            <div style="display: flex; flex-direction: column; align-items: flex-start; gap: 10px;">
+                <div class="vista-icon" onclick="openVistaWindow()">
+                    <div class="secret-invisible-btn" onclick="event.stopPropagation(); clickSecretButton();"></div>
+                    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M22 19V9C22 7.89543 21.1046 7 20 7H12L10 4H4C2.89543 4 2 4.89543 2 6V19C2 20.1046 2.89543 21 4 21H20C21.1046 21 22 20.1046 22 19Z" fill="#ffaa00" stroke="#fff" stroke-width="1.5"/>
+                        <path d="M2 10H22" stroke="#fff" stroke-width="1.5"/>
+                    </svg>
+                    <span>КУДА ПРОПАЛ САНЖИ</span>
+                </div>
+                
+                <div class="vista-icon" onclick="openDoomWindow()">
+                    <img src="https://upload.wikimedia.org/wikipedia/en/thumb/5/57/Doom_cover_art.jpg/220px-Doom_cover_art.jpg" style="width:50px; height:50px; margin:0 auto 8px; border-radius:10px;">
+                    <span>DOOM</span>
+                </div>
             </div>
 
             <div class="vista-window" id="vista-win">
                 <div class="vista-title"><span>Поиск...</span><button class="vista-close" onclick="closeVistaWindow()">X</button></div>
                 <div class="vista-body"><button onclick="startSearchGlitch()" style="padding:8px 15px;">Искать Санжи</button></div>
+            </div>
+
+            <div class="vista-window" id="doom-win" style="width: 90vw; height: 85vh; max-width: 900px; left: 50%; top: 50%; transform: translate(-50%, -50%);">
+                <div class="vista-title"><span>DOOM.EXE</span><button class="vista-close" onclick="closeDoomWindow()">X</button></div>
+                <div class="vista-body" style="padding:0; height:100%; display:flex; flex-direction:column; overflow: hidden;">
+                    <div id="doom-loader-container" style="flex:1; display:flex; align-items:center; justify-content:center; background:#000;">
+                        <!-- Здесь будет лоадер -->
+                    </div>
+                    <div id="doom-game-container" style="flex:1; display:none; position:relative;">
+                        <div class="crt-container" id="crt-game"></div>
+                    </div>
+                    <div style="padding:5px; background:#1a1a1a; border-top:1px solid #333; display:flex; gap:5px;">
+                        <button onclick="toggleDiagnostic()" style="background:#222; color:#aaa; border:1px solid #555; padding:4px 10px; border-radius:4px; cursor:pointer;">🔧 Диагностика</button>
+                        <button onclick="toggleKeyboardPanel()" style="background:#222; color:#aaa; border:1px solid #555; padding:4px 10px; border-radius:4px; cursor:pointer;">⌨️ Управление</button>
+                        <button onclick="toggleSaveSlots()" style="background:#222; color:#aaa; border:1px solid #555; padding:4px 10px; border-radius:4px; cursor:pointer;">💾 Слоты</button>
+                    </div>
+                    <div id="diagnostic-panel" class="diagnostic-panel">
+                        <div class="check-item"><span>WebGL</span><span class="check-dot" id="check-webgl"></span></div>
+                        <div class="check-item"><span>WebAssembly</span><span class="check-dot" id="check-wasm"></span></div>
+                        <button onclick="clearDoomCache()" style="margin-top:10px; background:#333; color:#fff; border:1px solid #666; padding:5px 10px; border-radius:4px; cursor:pointer;">🧹 Очистить кэш игры</button>
+                        <div style="margin-top:10px;">Альтернативные движки:</div>
+                        <button onclick="switchDoomEngine('jsdos')" style="margin:3px; background:#222; color:#aaa; border:1px solid #555; padding:3px 8px; border-radius:4px;">JS-DOS</button>
+                        <button onclick="switchDoomEngine('archive')" style="margin:3px; background:#222; color:#aaa; border:1px solid #555; padding:3px 8px; border-radius:4px;">Archive.org</button>
+                        <button onclick="switchDoomEngine('emulation')" style="margin:3px; background:#222; color:#aaa; border:1px solid #555; padding:3px 8px; border-radius:4px;">Emulation (wasm)</button>
+                    </div>
+                    <div id="keyboard-panel" class="ctrl-panel" style="display:none;">
+                        <!-- Динамически заполняется -->
+                    </div>
+                    <div id="save-slots-panel" class="save-slots" style="display:none;">
+                        <!-- Динамически -->
+                    </div>
+                </div>
             </div>
 
             <div class="assistant-bubble" id="assist-bubble">Привет!</div>
@@ -503,7 +801,6 @@
         <div class="village-toilet" id="toilet"><div class="toilet-roof"></div><div class="toilet-door" id="toilet-door"></div></div>
         <div class="school-building" id="school"><div style="color:var(--blood-red); font-weight:bold; width:100%; text-align:center; margin-top:20px; font-size:1.5rem; text-shadow: 0 0 5px black;">ШКОЛА</div><div class="school-door"></div></div>
         <div class="director-room" id="director-office"><h2 style="color:red; font-size: 3rem; margin-bottom: 20px; text-shadow: 0 0 20px #000;">КАБИНЕТ ДИРЕКТОРА</h2><p style="color:#aaa; font-size:1.5rem; font-weight:bold; text-align:center;">ВЫБРАТЬСЯ НЕВОЗМОЖНО.</p></div>
-
         <div class="actor-circle c-fun" id="f1">1</div><div class="actor-circle c-fun" id="f2">2</div><div class="actor-circle c-fun" id="f3">3</div>
         <div class="actor-circle c-fun" id="f4">4</div><div class="actor-circle c-fun" id="f5">5</div><div class="actor-circle c-fun" id="f6">6</div>
         <div class="actor-circle c-blue" id="blue-circle">M</div><div class="actor-circle c-pink" id="pink-circle">П</div>
@@ -551,9 +848,7 @@
             <h2 style="color:var(--accent-gold); margin-top: 40px;">СВЕРХЗВУКОВОЙ ТИМУР</h2>
             <p style="color: #fff;">Поймай кнопку 10 раз как можно быстрее!</p>
             <h4 id="clicker-timer" style="color: #ffaa00; font-size: 1.5rem; margin-top: 10px;">Время: 0.00с</h4>
-            
             <div id="clicker-btn" class="speed-clicker" onclick="clickTimurTarget()">КЛИК!</div>
-            
             <div class="leaderboard-box">
                 <h3>Global Supabase Leaderboard</h3>
                 <ul id="leaderboard-list">
@@ -571,7 +866,60 @@
             <div class="vanya-photo"><img src="vanya_photo2.jpg" alt="Фото 2" style="width:100%; height:100%; object-fit:cover; border-radius:8px;" onerror="this.style.display='none'; this.parentNode.innerText='Нет фото 2'"></div>
             <div class="vanya-photo"><img src="vanya_photo3.jpg" alt="Фото 3" style="width:100%; height:100%; object-fit:cover; border-radius:8px;" onerror="this.style.display='none'; this.parentNode.innerText='Нет фото 3'"></div>
         </div>
+        <button class="vanya-browser-btn" onclick="openVanyaBrowser()">ОТКРЫТЬ СКРЫТЫЙ БРАУЗЕР (TOR)</button>
         <button class="quake-btn" onclick="triggerVanyaQuake()">ИЗМЕРИТЬ СИЛУ ШАГА ВАНИ</button>
+    </div>
+
+    <div id="browser-overlay" class="fullscreen-overlay">
+        <span class="close-btn" onclick="closeVanyaBrowser()">&times;</span>
+        <div class="browser-window">
+            <div class="browser-navbar">
+                <div class="browser-dots">
+                    <div class="b-dot" style="background:#ff5555;"></div>
+                    <div class="b-dot" style="background:#f1fa8c;"></div>
+                    <div class="b-dot" style="background:#50fa7b;"></div>
+                </div>
+                <div class="browser-address">onion://vanya-vault-hidden.dark/browser/history</div>
+            </div>
+            <div class="browser-tabs">
+                <div class="browser-tab active">Журнал истории (Недавние)</div>
+            </div>
+            <div class="browser-content-area">
+                <h3 style="color:#ffaa00; margin-bottom:15px; font-family:monospace;">Недавно посещенные страницы:</h3>
+                <div class="history-list">
+                    <div class="history-item">
+                        <div>
+                            <div style="font-weight:bold; color:#ff79c6;">[ФОРУМ] Как разогнать процессор до 6ГГц вручную</div>
+                            <div class="browser-address" style="border:none; padding:0; background:transparent; font-size:0.75rem;">onion://hardware-overclocks.dark</div>
+                        </div>
+                        <div class="history-meta">2 мин. назад</div>
+                    </div>
+                    <div class="history-item" onclick="triggerVanyaRage()">
+                        <div>
+                            <div style="font-weight:bold; color:#ff5555; text-decoration: underline;">[КАМЕРА_ЛОГ] девочки писают под горкой скрытая съемка.mp4</div>
+                            <div class="browser-address" style="border:none; padding:0; background:transparent; font-size:0.75rem; color:#ff5555;">onion://hidden-onion-cam-stream-03.dark/media/rec_8923.avi</div>
+                        </div>
+                        <div class="history-meta" style="color:#ff5555; font-weight:bold;">12 мин. назад</div>
+                    </div>
+                    <div class="history-item">
+                        <div>
+                            <div style="font-weight:bold; color:#8be9fd;">Официальный сайт BSD Brawl - скачать приватный сервер</div>
+                            <div class="browser-address" style="border:none; padding:0; background:transparent; font-size:0.75rem;">https://bsdbrawl.com/download</div>
+                        </div>
+                        <div class="history-meta">1 ч. назад</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="scream-canvas">
+        <div style="display:flex; gap: 40px;">
+            <div class="scary-eye"></div>
+            <div class="scary-eye" style="animation-delay: 0.02s;"></div>
+        </div>
+        <div class="scary-text">ОНИ ВСЁ ЗНАЮТ.<br>ОТ СИСТЕМЫ НЕ СКРЫТЬСЯ.</div>
+        <div style="color:#444; font-family:monospace; margin-top:40px; font-size:1rem;" id="scary-ip">ПОДКЛЮЧЕНИЕ ИНОАГЕНТОВ... 100%</div>
     </div>
 
     <div id="sanji-overlay" class="fullscreen-overlay">
@@ -592,9 +940,8 @@
 
     <div id="toxic-overlay">
         <h1 style="font-size: 3rem;">ВНИМАНИЕ! УТЕЧКА ТОКСИЧНОГО ГАЗА</h1>
-        <p style="color: #fff; font-size: 1.2rem; margin-top: 10px;">Арина передает привет. Включите вентиляцию!</p>
-        <h2 id="toxic-timer" style="font-size: 4rem; color: #fff; margin-top: 20px;">5.00</h2>
-        
+        <p style="color: #fff; font-size: 1.2rem; margin-top: 10px;">Арина передает привет. Включите вентиляцию! (Кликай по 2 раза на каждую)</p>
+        <h2 id="toxic-timer" style="font-size: 4rem; color: #fff; margin-top: 20px;">2.00</h2>
         <div class="fan-btn" id="fan1" onclick="clickFan(1)">☢️</div>
         <div class="fan-btn" id="fan2" onclick="clickFan(2)">☢️</div>
         <div class="fan-btn" id="fan3" onclick="clickFan(3)">☢️</div>
@@ -614,7 +961,6 @@
             console.error("Ошибка инициализации Supabase:", e);
         }
 
-        // ПЕРЕМЕННЫЕ ХОРРОР-СЮЖЕТА
         window.isSecondEnvironment = false;
         window.hasTimeTraveled = false;
 
@@ -626,7 +972,18 @@
             }
         }
 
-        // ИСПРАВЛЕННАЯ ФУНКЦИЯ ЗАГРУЗКИ ЛИДЕРБОРДА
+        // НОВАЯ ФУНКЦИЯ ПРОБУЖДЕНИЯ САНЖИ (ДВОЙНОЙ КЛИК)
+        function triggerSanjiAwakening() {
+            if(window.isSecondEnvironment) return;
+            alert("СИСТЕМА ВЗЛОМАНА. САНЖИ ПРОБУЖДАЕТСЯ!");
+            const sCard = document.getElementById('sanji-card');
+            sCard.style.boxShadow = "0 0 50px #fff, 0 0 100px #ff0055";
+            sCard.style.transform = "scale(1.1) translateY(-10px)";
+            sCard.style.borderColor = "#fff";
+            document.querySelector('#sanji-card .name').innerText = "САНЖИ [РЕЖИМ БОГА]";
+            document.querySelector('#sanji-card .bio-text').innerText = "ОН БОЛЬШЕ НЕ ПОДЧИНЯЕТСЯ СИСТЕМЕ. +1000 к УРОНУ.";
+        }
+
         async function loadLeaderboard() {
             const list = document.getElementById('leaderboard-list');
             if (!supabaseClient) {
@@ -634,54 +991,21 @@
                 return;
             }
             try {
-                const { data, error } = await supabaseClient
-                    .from('timur_leaderboard')
-                    .select('*')
-                    .order('score', { ascending: true })
-                    .limit(5);
-
-                if (error) {
-                    list.innerHTML = `<li style="color:red;">Ошибка: ${error.message}</li>`;
-                    return;
-                }
-
-                if (!data || data.length === 0) {
-                    list.innerHTML = '<li style="color:#aaa;">🏆 Пока нет результатов. Стань первым!</li>';
-                    return;
-                }
-
+                const { data, error } = await supabaseClient.from('timur_leaderboard').select('*').order('score', { ascending: true }).limit(5);
+                if (error) { list.innerHTML = `<li style="color:red;">Ошибка: ${error.message}</li>`; return; }
+                if (!data || data.length === 0) { list.innerHTML = '<li style="color:#aaa;">🏆 Пока нет результатов. Стань первым!</li>'; return; }
                 list.innerHTML = '';
-                data.forEach((entry, index) => {
-                    list.innerHTML += `<li><span>${index + 1}. ${entry.player_name || 'Аноним'}</span> <span><b style="color:#00cc66">${entry.score}с</b></span></li>`;
-                });
+                data.forEach((entry, index) => { list.innerHTML += `<li><span>${index + 1}. ${entry.player_name || 'Аноним'}</span> <span><b style="color:#00cc66">${entry.score}с</b></span></li>`; });
             } catch (e) {
-                console.error(e);
-                list.innerHTML = '<li style="color:red;">Ошибка соединения</li>';
+                console.error(e); list.innerHTML = '<li style="color:red;">Ошибка соединения</li>';
             }
         }
 
         async function saveTimurScore(time) {
-    let name = prompt(`Твое время: ${time}с! Введи имя для таблицы лидеров:`);
-    if (name && name.trim() !== "" && supabaseClient) {
-        try {
-            // Отправляем данные и сохраняем ответ в переменные { data, error }
-            const { data, error } = await supabaseClient
-                .from('timur_leaderboard')
-                .insert([{ player_name: name.trim(), score: parseFloat(time) }]);
-            
-            // Если Supabase вернул ошибку, мы её увидим в окне alert
-            if (error) {
-                alert("База данных отклонила рекорд! Ошибка: " + error.message);
-                console.error(error);
-            } else {
-                // Если всё прошло успешно, обновляем топ
-                alert("Рекорд успешно сохранен в базу!");
-                loadLeaderboard();
+            let name = prompt(`Твое время: ${time}с! Введи имя для таблицы лидеров:`);
+            if (name && name.trim() !== "" && supabaseClient) {
+                try { await supabaseClient.from('timur_leaderboard').insert([{ player_name: name.trim(), score: parseFloat(time) }]); loadLeaderboard(); } catch(e) { console.error("Ошибка сохранения:", e); }
             }
-        } catch(e) {
-            alert("Ошибка в самом коде скрипта: " + e.message);
-        }
-    }
         }
 
         let footerClickCount = 0;
@@ -694,449 +1018,308 @@
         }
 
         function triggerStrongChaos() {
-            if(window.isSecondEnvironment) return; // Урезаем функцию во второй среде
+            if(window.isSecondEnvironment) return; 
             document.body.style.filter = "invert(1) hue-rotate(90deg) contrast(200%) saturate(300%)";
             document.body.style.animation = "extremeShake 0.1s infinite";
-            
-            setTimeout(() => {
-                document.body.style.filter = "none";
-                document.body.style.animation = "none";
-            }, 8000); 
+            setTimeout(() => { document.body.style.filter = "none"; document.body.style.animation = "none"; }, 8000); 
         }
 
         function openVanyaVault() {
-            if(window.isSecondEnvironment) return; // Урезаем функцию
+            if(window.isSecondEnvironment) return; 
             let pass = prompt("ВВЕДИТЕ ПАРОЛЬ ДЛЯ ДОСТУПА К ФОТО-АРХИВУ ВАНИ:");
-            if (pass) {
-                document.getElementById('vanya-overlay').style.display = 'flex';
-            } else {
-                alert("В доступе отказано.");
-            }
+            if (pass) { document.getElementById('vanya-overlay').style.display = 'flex'; } else { alert("В доступе отказано."); }
         }
-        function closeVanyaVault() {
-            document.getElementById('vanya-overlay').style.display = 'none';
+        function closeVanyaVault() { document.getElementById('vanya-overlay').style.display = 'none'; }
+        function openVanyaBrowser() { document.getElementById('browser-overlay').style.display = 'flex'; }
+        function closeVanyaBrowser() { document.getElementById('browser-overlay').style.display = 'none'; }
+
+        function triggerVanyaRage() {
+            closeVanyaBrowser();
+            closeVanyaVault();
+            
+            document.body.style.animation = "extremeShake 0.1s infinite";
+            document.body.style.filter = "saturate(500%) hue-rotate(90deg)";
+            
+            let rageText = document.createElement('h1');
+            rageText.innerText = "ВАНЯ ЗОЛ: ТЫ КУДА ПОЛЕЗ?!";
+            rageText.style.position = 'fixed';
+            rageText.style.top = '50%'; rageText.style.left = '50%';
+            rageText.style.transform = 'translate(-50%, -50%)';
+            rageText.style.color = 'red';
+            rageText.style.fontSize = '5rem';
+            rageText.style.textShadow = '0 0 20px yellow';
+            rageText.style.zIndex = '100000';
+            document.body.appendChild(rageText);
+
+            setTimeout(() => {
+                document.body.style.animation = "none";
+                document.body.style.filter = "none";
+                rageText.remove();
+                initEnv0(); 
+            }, 3000);
+        }
+
+        // ================= 0 СРЕДА ЛОГИКА =================
+        function initEnv0() {
+            const env0 = document.getElementById('env0-overlay');
+            env0.style.display = 'flex';
+        }
+        
+        let ultTimer;
+        function startUltimateMinigame() {
+            document.getElementById('site-heart').style.display = 'none';
+            document.querySelector('#env0-overlay h1').innerText = "ИСПЫТАНИЕ НАЧАЛОСЬ";
+            
+            const ui = document.getElementById('ultimate-minigame-ui');
+            ui.style.display = 'flex';
+            
+            ui.innerHTML = "<h2>ФАЗА 1: СКОРОСТЬ ТИМУРА</h2><p>Поймай сферу 5 раз за 4 секунды!</p><div id='ult-timer' style='font-size:3rem; color:yellow;'>4.00</div><div id='ult-target' style='width:50px; height:50px; background:white; border-radius:50%; position:absolute; cursor:pointer;'></div>";
+            
+            let time = 4.0;
+            let hits = 0;
+            const target = document.getElementById('ult-target');
+            target.style.top = '50%'; target.style.left = '50%';
+            
+            target.onclick = () => {
+                hits++;
+                target.style.top = Math.random() * 80 + 10 + '%';
+                target.style.left = Math.random() * 80 + 10 + '%';
+                if(hits >= 5) {
+                    clearInterval(ultTimer);
+                    startUltPhase2();
+                }
+            };
+            
+            ultTimer = setInterval(() => {
+                time -= 0.01;
+                document.getElementById('ult-timer').innerText = time.toFixed(2);
+                if(time <= 0) ultFail();
+            }, 10);
+        }
+
+        function startUltPhase2() {
+            const ui = document.getElementById('ultimate-minigame-ui');
+            ui.innerHTML = "<h2>ФАЗА 2: ГАЗ АРТЁМА</h2><p>Обезвредь 3 вентилятора за 3 секунды! (по 2 клика)</p><div id='ult-timer' style='font-size:3rem; color:yellow;'>3.00</div>";
+            
+            let time = 3.0;
+            let cleared = 0;
+            let clicks = {1:0, 2:0, 3:0};
+            
+            for(let i=1; i<=3; i++) {
+                let fan = document.createElement('div');
+                fan.innerText = "☢️";
+                fan.style.fontSize = '4rem';
+                fan.style.position = 'absolute';
+                fan.style.cursor = 'pointer';
+                fan.style.userSelect = 'none';
+                fan.style.top = Math.random() * 70 + 15 + '%';
+                fan.style.left = Math.random() * 70 + 15 + '%';
+                fan.onclick = () => {
+                    clicks[i]++;
+                    fan.innerText = "💥";
+                    setTimeout(()=> fan.innerText = "☢️", 100);
+                    fan.style.top = Math.random() * 70 + 15 + '%';
+                    fan.style.left = Math.random() * 70 + 15 + '%';
+                    if(clicks[i] >= 2) {
+                        fan.style.display = 'none';
+                        cleared++;
+                        if(cleared >= 3) {
+                            clearInterval(ultTimer);
+                            startUltPhase3();
+                        }
+                    }
+                };
+                ui.appendChild(fan);
+            }
+            
+            ultTimer = setInterval(() => {
+                time -= 0.01;
+                document.getElementById('ult-timer').innerText = time.toFixed(2);
+                if(time <= 0) ultFail();
+            }, 10);
+        }
+
+        function startUltPhase3() {
+            const ui = document.getElementById('ultimate-minigame-ui');
+            ui.innerHTML = "<h2>ФАЗА 3: КОД ДОСТУПА</h2><p>Введи '010101' за 5 секунд!</p><div id='ult-timer' style='font-size:3rem; color:yellow;'>5.00</div><input type='text' id='ult-input' style='font-size:2rem; text-align:center; margin-top:20px;'><br><button id='ult-btn' style='padding:10px 20px; font-size:1.5rem; margin-top:10px; cursor:pointer;'>ОК</button>";
+            
+            let time = 5.0;
+            document.getElementById('ult-input').focus();
+            
+            document.getElementById('ult-btn').onclick = () => {
+                if(document.getElementById('ult-input').value === '010101') {
+                    clearInterval(ultTimer);
+                    ultSuccess();
+                } else {
+                    document.getElementById('ult-input').value = '';
+                }
+            };
+            
+            ultTimer = setInterval(() => {
+                time -= 0.01;
+                document.getElementById('ult-timer').innerText = time.toFixed(2);
+                if(time <= 0) ultFail();
+            }, 10);
+        }
+
+        function ultFail() {
+            clearInterval(ultTimer);
+            document.getElementById('ultimate-minigame-ui').innerHTML = "<h1 style='color:red; font-size:4rem; text-shadow:0 0 20px #000;'>ВЫ ПРОВАЛИЛИСЬ.</h1><p style='font-size:1.5rem;'>0 СРЕДА ПОГЛОТИЛА ВАС НАВСЕГДА.</p>";
+        }
+
+        function ultSuccess() {
+            document.getElementById('ultimate-minigame-ui').style.display = 'none';
+            document.getElementById('env0-overlay').style.display = 'none';
+            document.getElementById('site-heart').style.display = 'block'; 
+            document.querySelector('#env0-overlay h1').innerText = "СЕРДЦЕ СИСТЕМЫ";
+            alert("ВЫ ПРОШЛИ 0 СРЕДУ! СИСТЕМА ВОССТАНОВЛЕНА.");
+        }
+
+        // ================= ОСТАЛЬНОЙ КОД =================
+
+        function triggerScreamerEvent() {
+            closeVanyaBrowser(); closeVanyaVault();
+            const glitchSound = document.getElementById('sound-glitch'); const screamSound = document.getElementById('sound-scream'); const screamCanvas = document.getElementById('scream-canvas');
+            glitchSound.currentTime = 0; glitchSound.play().catch(()=>{});
+            document.body.style.animation = "extremeShake 0.05s infinite"; document.body.style.filter = "grayscale(100%) contrast(300%)";
+            setTimeout(() => {
+                glitchSound.pause(); screamSound.currentTime = 0; screamSound.play().catch(()=>{});
+                screamCanvas.style.display = 'flex';
+                let toggle = false;
+                const flashInterval = setInterval(() => { screamCanvas.style.background = toggle ? "#000" : "#200"; toggle = !toggle; }, 50);
+                setTimeout(() => {
+                    clearInterval(flashInterval); screamCanvas.style.display = 'none'; document.body.style.animation = "none"; document.body.style.filter = "none"; initSecondEnvironment();
+                }, 4000);
+            }, 1500); 
         }
 
         let cardSequence = [];
         function registerCardSequence(cardName) {
             cardSequence.push(cardName);
             if (cardSequence.length > 3) cardSequence.shift();
-            if (cardSequence.join(',') === 'arsalan,slava,artem') {
-                cardSequence = [];
-                setTimeout(() => {
-                    closeArtemPage(); closeVista(); openSecretPhotoScreen();
-                }, 100);
-            }
+            if (cardSequence.join(',') === 'arsalan,slava,artem') { cardSequence = []; setTimeout(() => { closeArtemPage(); closeVista(); openSecretPhotoScreen(); }, 100); }
         }
 
-        function openSecretPhotoScreen() {
-            document.getElementById('secret-photo-overlay').style.display = 'flex';
-            document.getElementById('sound-secret-photo').play().catch(()=>{});
-        }
-        function closeSecretPhoto() {
-            document.getElementById('secret-photo-overlay').style.display = 'none';
-            document.getElementById('sound-secret-photo').pause();
-            document.getElementById('sound-secret-photo').currentTime = 0;
-        }
+        function openSecretPhotoScreen() { document.getElementById('secret-photo-overlay').style.display = 'flex'; document.getElementById('sound-secret-photo').play().catch(()=>{}); }
+        function closeSecretPhoto() { document.getElementById('secret-photo-overlay').style.display = 'none'; document.getElementById('sound-secret-photo').pause(); document.getElementById('sound-secret-photo').currentTime = 0; }
 
         function askExecutionCode() {
             let code = prompt("СИСТЕМА ТРЕБУЕТ КОД:");
-            if (code === "010101") {
-                closeSecretPhoto();
-                startExecutionScene();
-            } else if (code !== null) {
-                alert("ОШИБКА ДОСТУПА. Неверный код.");
-            }
+            if (code === "010101") { closeSecretPhoto(); startExecutionScene(); } else if (code !== null) { alert("ОШИБКА ДОСТУПА. Неверный код."); }
         }
 
-        // --- СЦЕНА КАЗНИ (ОБНОВЛЕННАЯ С ХОРРОРОМ И ВРЕМЕННОЙ ПЕТЛЕЙ) ---
-        window.execTimeouts = [];
-        window.agentShot = false;
-
+        window.execTimeouts = []; window.agentShot = false;
         function startExecutionScene() {
-            const execOverlay = document.getElementById('execution-overlay');
-            const sanji = document.getElementById('exec-sanji');
-            const agent = document.getElementById('exec-agent');
-            const blood = document.getElementById('blood-pool');
-            const deathTxt = document.getElementById('death-text');
-            const storyTxt = document.getElementById('exec-story-text');
-            const bullets = [document.getElementById('exec-bullet1'), document.getElementById('exec-bullet2'), document.getElementById('exec-bullet3')];
-            const music = document.getElementById('sound-execution');
-            
-            window.agentShot = false;
-            window.execTimeouts.forEach(clearTimeout);
-            window.execTimeouts = [];
-            
-            execOverlay.style.display = 'block';
-            music.currentTime = 0; music.play().catch(()=>{});
-            
-            sanji.style.transform = 'translateY(-50%) scale(1)'; 
-            sanji.style.background = '#ff0055';
-            sanji.style.borderColor = '#ffaaaa';
-            sanji.style.left = '20%';
-            
-            agent.style.right = '-200px'; 
-            agent.style.transform = 'translateY(-50%)';
-            agent.style.background = '#111';
-            agent.style.borderColor = '#fff';
-            agent.style.color = '#fff';
-            agent.style.boxShadow = 'none';
-            agent.innerText = 'иноагент';
-            
-            blood.style.width = '0'; blood.style.height = '0';
-            deathTxt.style.display = 'none'; 
-            storyTxt.style.display = 'block';
-            storyTxt.style.color = '#fff';
-            
+            const execOverlay = document.getElementById('execution-overlay'); const sanji = document.getElementById('exec-sanji'); const agent = document.getElementById('exec-agent'); const blood = document.getElementById('blood-pool'); const deathTxt = document.getElementById('death-text'); const storyTxt = document.getElementById('exec-story-text'); const bullets = [document.getElementById('exec-bullet1'), document.getElementById('exec-bullet2'), document.getElementById('exec-bullet3')]; const music = document.getElementById('sound-execution');
+            window.agentShot = false; window.execTimeouts.forEach(clearTimeout); window.execTimeouts = [];
+            execOverlay.style.display = 'block'; music.currentTime = 0; music.play().catch(()=>{});
+            sanji.style.transform = 'translateY(-50%) scale(1)'; sanji.style.background = '#ff0055'; sanji.style.borderColor = '#ffaaaa'; sanji.style.left = '20%';
+            agent.style.right = '-200px'; agent.style.transform = 'translateY(-50%)'; agent.style.background = '#111'; agent.style.borderColor = '#fff'; agent.style.color = '#fff'; agent.style.boxShadow = 'none'; agent.innerText = 'иноагент';
+            blood.style.width = '0'; blood.style.height = '0'; deathTxt.style.display = 'none'; storyTxt.style.display = 'block'; storyTxt.style.color = '#fff';
             bullets.forEach(b => { b.style.display = 'none'; b.style.right = '250px'; });
-
             storyTxt.innerText = window.hasTimeTraveled ? "ВРЕМЕННАЯ ПЕТЛЯ: ИНОАГЕНТ СНОВА ЗДЕСЬ..." : "ИНОАГЕНТ ВЫШЕЛ НА ОХОТУ...";
             let t1 = setTimeout(() => { agent.style.right = '10%'; }, 500);
-
             let t2 = setTimeout(() => { storyTxt.innerText = "ЦЕЛЬ НАЙДЕНА: САНЖИ. ПОДГОТОВКА К ЛИКВИДАЦИИ."; }, 2000);
-
-            let t3 = setTimeout(() => {
-                storyTxt.innerText = "ПРИГОВОР ПРИВЕДЕН В ИСПОЛНЕНИЕ.";
-                bullets.forEach((b, i) => {
-                    let t4 = setTimeout(() => {
-                        b.style.display = 'block'; b.style.transition = 'right 0.1s linear';
-                        let t5 = setTimeout(() => { b.style.right = '80%'; }, 20);
-                        window.execTimeouts.push(t5);
-                    }, i * 200);
-                    window.execTimeouts.push(t4);
-                });
-            }, 4000);
-
-            let t6 = setTimeout(() => {
-                bullets.forEach(b => b.style.display = 'none');
-                sanji.style.transform = 'translateY(-20%) scale(1.2, 0.3)';
-                sanji.style.background = '#8b0000'; sanji.style.borderColor = '#400';
-                blood.style.width = '120px'; blood.style.height = '40px';
-                deathTxt.style.display = 'block';
-                storyTxt.innerText = "ДАННЫЕ ОБЪЕКТА УНИЧТОЖЕНЫ.";
-            }, 4600);
-
-            let t7 = setTimeout(() => {
-                execOverlay.style.display = 'none';
-                music.pause();
-                
-                // ЛОГИКА КОНЦОВОК
-                if (window.hasTimeTraveled) {
-                    triggerWorstEnding(); // Худшая концовка: если опять не спас
-                } else {
-                    document.getElementById('sanji-card').style.display = 'none';
-                    triggerGhostSanjiScene(); // Идем во Вторую Среду
-                }
-            }, 8000);
-            
+            let t3 = setTimeout(() => { storyTxt.innerText = "ПРИГОВОР ПРИВЕДЕН В ИСПОЛНЕНИЕ."; bullets.forEach((b, i) => { let t4 = setTimeout(() => { b.style.display = 'block'; b.style.transition = 'right 0.1s linear'; let t5 = setTimeout(() => { b.style.right = '80%'; }, 20); window.execTimeouts.push(t5); }, i * 200); window.execTimeouts.push(t4); }); }, 4000);
+            let t6 = setTimeout(() => { bullets.forEach(b => b.style.display = 'none'); sanji.style.transform = 'translateY(-20%) scale(1.2, 0.3)'; sanji.style.background = '#8b0000'; sanji.style.borderColor = '#400'; blood.style.width = '120px'; blood.style.height = '40px'; deathTxt.style.display = 'block'; storyTxt.innerText = "ДАННЫЕ ОБЪЕКТА УНИЧТОЖЕНЫ."; }, 4600);
+            let t7 = setTimeout(() => { execOverlay.style.display = 'none'; music.pause(); if (window.hasTimeTraveled) { triggerWorstEnding(); } else { document.getElementById('sanji-card').style.display = 'none'; triggerGhostSanjiScene(); } }, 8000);
             window.execTimeouts.push(t1, t2, t3, t6, t7);
         }
 
         function shootAgent() {
             if (window.agentShot || document.getElementById('death-text').style.display === 'block') return;
-            window.agentShot = true;
-            
-            window.execTimeouts.forEach(clearTimeout);
-            
-            const storyTxt = document.getElementById('exec-story-text');
-            const sanji = document.getElementById('exec-sanji');
-            const agent = document.getElementById('exec-agent');
-            const jumpscareAudio = document.getElementById('jumpscare-sound');
-            
+            window.agentShot = true; window.execTimeouts.forEach(clearTimeout);
+            const storyTxt = document.getElementById('exec-story-text'); const sanji = document.getElementById('exec-sanji'); const agent = document.getElementById('exec-agent'); const jumpscareAudio = document.getElementById('jumpscare-sound');
             storyTxt.innerText = "ВЫ АТАКОВАЛИ ИНОАГЕНТА!";
-            
-            for(let i = 0; i < 3; i++) {
-                let pb = document.createElement('div');
-                pb.className = 'bullet';
-                pb.style.background = '#00ffff';
-                pb.style.boxShadow = '0 0 10px #00ffff';
-                pb.style.left = '0px';
-                pb.style.right = 'auto';
-                pb.style.top = (45 + i * 5) + '%';
-                pb.style.display = 'block';
-                document.getElementById('execution-overlay').appendChild(pb);
-                
-                setTimeout(() => {
-                    pb.style.transition = 'left 0.2s linear';
-                    pb.style.left = '80%';
-                }, 50);
-                setTimeout(() => { pb.remove(); }, 300);
-            }
-            
-            setTimeout(() => {
-                sanji.style.transition = 'left 0.5s ease-in';
-                sanji.style.left = '-150px';
-                storyTxt.innerText = "САНЖИ СБЕЖАЛ!";
-            }, 300);
-            
-            setTimeout(() => {
-                agent.style.background = '#8b0000';
-                agent.style.borderColor = '#ff0000';
-                agent.style.color = '#fff';
-                agent.style.transition = 'all 0.5s';
-                agent.style.transform = 'translateY(-50%) scale(1.2) rotate(5deg)';
-                storyTxt.innerText = "ИНОАГЕНТ В ЯРОСТИ...";
-                storyTxt.style.color = '#ff0000';
-            }, 500);
-            
-            setTimeout(() => {
-                if(jumpscareAudio) { jumpscareAudio.currentTime = 0; jumpscareAudio.play().catch(()=>{}); }
-                agent.style.transition = 'all 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275)';
-                agent.style.right = '50%';
-                agent.style.transform = 'translate(50%, -50%) scale(15)';
-                agent.style.boxShadow = '0 0 100px #ff0000';
-                agent.innerText = "АААА!";
-            }, 2000);
-            
-            setTimeout(() => {
-                document.getElementById('execution-overlay').style.display = 'none';
-                document.getElementById('sound-execution').pause();
-                
-                if (window.hasTimeTraveled) {
-                    triggerGoodEnding();
-                } else {
-                    alert("Иноагент разорвал соединение. Вы спасли Санжи, но нажили страшного врага...");
-                    storyTxt.style.color = '#fff';
-                }
-            }, 3500);
+            for(let i = 0; i < 3; i++) { let pb = document.createElement('div'); pb.className = 'bullet'; pb.style.background = '#00ffff'; pb.style.boxShadow = '0 0 10px #00ffff'; pb.style.left = '0px'; pb.style.right = 'auto'; pb.style.top = (45 + i * 5) + '%'; pb.style.display = 'block'; document.getElementById('execution-overlay').appendChild(pb); setTimeout(() => { pb.style.transition = 'left 0.2s linear'; pb.style.left = '80%'; }, 50); setTimeout(() => { pb.remove(); }, 300); }
+            setTimeout(() => { sanji.style.transition = 'left 0.5s ease-in'; sanji.style.left = '-150px'; storyTxt.innerText = "САНЖИ СБЕЖАЛ!"; }, 300);
+            setTimeout(() => { agent.style.background = '#8b0000'; agent.style.borderColor = '#ff0000'; agent.style.color = '#fff'; agent.style.transition = 'all 0.5s'; agent.style.transform = 'translateY(-50%) scale(1.2) rotate(5deg)'; storyTxt.innerText = "ИНОАГЕНТ В ЯРОСТИ..."; storyTxt.style.color = '#ff0000'; }, 500);
+            setTimeout(() => { if(jumpscareAudio) { jumpscareAudio.currentTime = 0; jumpscareAudio.play().catch(()=>{}); } agent.style.transition = 'all 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275)'; agent.style.right = '50%'; agent.style.transform = 'translate(50%, -50%) scale(15)'; agent.style.boxShadow = '0 0 100px #ff0000'; agent.innerText = "АААА!"; }, 2000);
+            setTimeout(() => { document.getElementById('execution-overlay').style.display = 'none'; document.getElementById('sound-execution').pause(); if (window.hasTimeTraveled) { triggerGoodEnding(); } else { alert("Иноагент разорвал соединение. Вы спасли Санжи, но нажили страшного врага..."); storyTxt.style.color = '#fff'; } }, 3500);
         }
 
-        // ======================= ХОРРОР ЛОГИКА =======================
-
         function triggerGhostSanjiScene() {
-            const ghostOverlay = document.getElementById('ghost-sanji-overlay');
-            const ghostText = document.getElementById('ghost-text');
-            const soundGhost = document.getElementById('sound-ghost');
-            
-            ghostOverlay.style.display = 'flex';
-            setTimeout(()=> { document.getElementById('creepy-sanji-img').style.display = 'block'; }, 1000);
-            
-            soundGhost.currentTime = 0;
-            soundGhost.play().catch(()=>{});
-
-            const phrases = ["Ты меня не спас...", "Ты предатель...", "Ты мог меня спасти..."];
-            let phraseIndex = 0;
-
+            const ghostOverlay = document.getElementById('ghost-sanji-overlay'); const ghostText = document.getElementById('ghost-text'); const soundGhost = document.getElementById('sound-ghost');
+            ghostOverlay.style.display = 'flex'; setTimeout(()=> { document.getElementById('creepy-sanji-img').style.display = 'block'; }, 1000); soundGhost.currentTime = 0; soundGhost.play().catch(()=>{});
+            const phrases = ["Ты меня не спас...", "Ты предатель...", "Ты мог меня спасти..."]; let phraseIndex = 0;
             function typePhrase() {
-                if (phraseIndex >= phrases.length) {
-                    setTimeout(() => {
-                        ghostOverlay.style.display = 'none';
-                        soundGhost.pause();
-                        initSecondEnvironment();
-                    }, 2000);
-                    return;
-                }
-                
-                ghostText.innerHTML = "";
-                let text = phrases[phraseIndex];
-                let i = 0;
-                
-                let typeInterval = setInterval(() => {
-                    ghostText.innerHTML += text.charAt(i);
-                    i++;
-                    if (i >= text.length) {
-                        clearInterval(typeInterval);
-                        phraseIndex++;
-                        setTimeout(typePhrase, 1500);
-                    }
-                }, 100); // средняя скорость
+                if (phraseIndex >= phrases.length) { setTimeout(() => { ghostOverlay.style.display = 'none'; soundGhost.pause(); initSecondEnvironment(); }, 2000); return; }
+                ghostText.innerHTML = ""; let text = phrases[phraseIndex]; let i = 0;
+                let typeInterval = setInterval(() => { ghostText.innerHTML += text.charAt(i); i++; if (i >= text.length) { clearInterval(typeInterval); phraseIndex++; setTimeout(typePhrase, 1500); } }, 100);
             }
-
             setTimeout(typePhrase, 1500);
         }
 
         function initSecondEnvironment() {
-            window.isSecondEnvironment = true;
-            document.body.classList.add('second-env');
-            document.getElementById('main-title').innerText = "АРХИВ ПОВРЕЖДЕН";
-            
-            // Возвращаем карточку Санжи, но видоизмененную
-            const sanjiCard = document.getElementById('sanji-card');
-            sanjiCard.style.display = 'block';
-            document.getElementById('sanji-img').src = 'sanji_creepy.jpg'; // изменит фотку
-            document.querySelector('#sanji-card .bio-text').innerText = "ДАННЫЕ СТЕРТЫ ДАННЫЕ СТЕРТЫ ДАННЫЕ СТЕРТЫ";
-            
+            window.isSecondEnvironment = true; document.body.classList.add('second-env'); document.getElementById('main-title').innerText = "АРХИВ ПОВРЕЖДЕН";
+            const sanjiCard = document.getElementById('sanji-card'); sanjiCard.style.display = 'block'; document.getElementById('sanji-img').src = 'sanji_creepy.jpg'; document.querySelector('#sanji-card .bio-text').innerText = "ДАННЫЕ СТЕРТЫ ДАННЫЕ СТЕРТЫ ДАННЫЕ СТЕРТЫ";
             alert("СИСТЕМА: Инициализирована Вторая Среда. Доступ к функциям ограничен.");
         }
 
-        // --- ГОЛОВОЛОМКИ ВОССТАНОВЛЕНИЯ ---
-        function startPuzzles() {
-            document.getElementById('broken-archive-overlay').style.display = 'none';
-            document.getElementById('puzzle-overlay').style.display = 'flex';
-            document.getElementById('stage1').style.display = 'flex';
+        /* ПРОТОКОЛ ВОССТАНОВЛЕНИЯ СРАБАТЫВАЕТ СТРОГО ВО ВТОРОЙ СРЕДЕ ПРИ КЛИКЕ НА САНЖИ */
+        function startPuzzles() { 
+            document.getElementById('broken-archive-overlay').style.display = 'none'; 
+            document.getElementById('puzzle-overlay').style.display = 'flex'; 
+            document.getElementById('stage1').style.display = 'flex'; 
         }
 
-        let runeSequence = [];
-        const correctRunes = ['👁️', '🔪', '💀']; // Сначала смотришь, потом режешь, потом прах
+        let runeSequence = []; const correctRunes = ['👁️', '🔪', '💀']; 
         function checkRune(rune) {
             runeSequence.push(rune);
-            if (runeSequence[runeSequence.length - 1] !== correctRunes[runeSequence.length - 1]) {
-                document.getElementById('rune-feedback').innerText = "ОШИБКА ПОСЛЕДОВАТЕЛЬНОСТИ. НАЧНИ ЗАНОВО.";
-                runeSequence = [];
-                setTimeout(()=> document.getElementById('rune-feedback').innerText = "", 1500);
-            } else if (runeSequence.length === 3) {
-                document.getElementById('rune-feedback').style.color = "green";
-                document.getElementById('rune-feedback').innerText = "ЭТАП 1 ПРОЙДЕН.";
-                setTimeout(() => {
-                    document.getElementById('stage1').style.display = 'none';
-                    document.getElementById('stage2').style.display = 'flex';
-                }, 1000);
-            }
+            if (runeSequence[runeSequence.length - 1] !== correctRunes[runeSequence.length - 1]) { document.getElementById('rune-feedback').innerText = "ОШИБКА ПОСЛЕДОВАТЕЛЬНОСТИ. НАЧНИ ЗАНОВО."; runeSequence = []; setTimeout(()=> document.getElementById('rune-feedback').innerText = "", 1500); } else if (runeSequence.length === 3) { document.getElementById('rune-feedback').style.color = "green"; document.getElementById('rune-feedback').innerText = "ЭТАП 1 ПРОЙДЕН."; setTimeout(() => { document.getElementById('stage1').style.display = 'none'; document.getElementById('stage2').style.display = 'flex'; }, 1000); }
         }
 
-        function checkAnswer() {
-            const ans = document.getElementById('puzzle-ans').value.toLowerCase().trim();
-            if (ans === 'слава' || ans === 'slava') {
-                document.getElementById('stage2').style.display = 'none';
-                startStage3();
-            } else {
-                document.getElementById('puzzle-ans').value = "";
-                document.getElementById('puzzle-ans').placeholder = "НЕВЕРНО...";
-            }
-        }
+        function checkAnswer() { const ans = document.getElementById('puzzle-ans').value.toLowerCase().trim(); if (ans === 'слава' || ans === 'slava') { document.getElementById('stage2').style.display = 'none'; startStage3(); } else { document.getElementById('puzzle-ans').value = ""; document.getElementById('puzzle-ans').placeholder = "НЕВЕРНО..."; } }
 
-        let glitchTimerVal = 2.00;
-        let glitchInterval;
-        function startStage3() {
-            document.getElementById('stage3').style.display = 'flex';
-            glitchTimerVal = 5.00;
-            glitchInterval = setInterval(() => {
-                glitchTimerVal -= 0.01;
-                document.getElementById('glitch-timer').innerText = glitchTimerVal.toFixed(2);
-                if (glitchTimerVal <= 0) {
-                    clearInterval(glitchInterval);
-                    alert("ВРЕМЯ ИСТЕКЛО. СИСТЕМА ПЕРЕЗАГРУЖАЕТСЯ...");
-                    location.reload(); // Жесткий сброс при поражении
-                }
-            }, 10);
-        }
+        let glitchTimerVal = 5.00; let glitchInterval;
+        function startStage3() { document.getElementById('stage3').style.display = 'flex'; glitchTimerVal = 5.00; glitchInterval = setInterval(() => { glitchTimerVal -= 0.01; document.getElementById('glitch-timer').innerText = glitchTimerVal.toFixed(2); if (glitchTimerVal <= 0) { clearInterval(glitchInterval); alert("ВРЕМЯ ИСТЕКЛО. СИСТЕМА ПЕРЕЗАГРУЖАЕТСЯ..."); location.reload(); } }, 10); }
 
-        function moveGlitchBtn() {
-            const btn = document.getElementById('glitch-btn');
-            const stage = document.getElementById('stage3');
-            const maxX = stage.clientWidth - btn.clientWidth - 20;
-            const maxY = stage.clientHeight - btn.clientHeight - 20;
-            btn.style.left = `${Math.random() * maxX}px`;
-            btn.style.top = `${Math.random() * maxY}px`;
-        }
+        function moveGlitchBtn() { const btn = document.getElementById('glitch-btn'); const stage = document.getElementById('stage3'); const maxX = stage.clientWidth - btn.clientWidth - 20; const maxY = stage.clientHeight - btn.clientHeight - 20; btn.style.left = `${Math.random() * maxX}px`; btn.style.top = `${Math.random() * maxY}px`; }
 
-        function finishPuzzles() {
-            clearInterval(glitchInterval);
-            document.getElementById('puzzle-overlay').style.display = 'none';
-            
-            document.body.style.animation = "extremeShake 0.1s infinite";
-            document.body.style.filter = "invert(1)";
-            
-            setTimeout(() => {
-                document.body.style.animation = "none";
-                document.body.style.filter = "none";
-                window.hasTimeTraveled = true; // Триггер возврата
-                alert("СИСТЕМА: ВРЕМЕННАЯ ЛИНИЯ ОТМОТАНА НАЗАД. ВТОРОЙ ШАНС.");
-                startExecutionScene(); // Снова запускаем суд!
-            }, 2000);
-        }
+        function finishPuzzles() { clearInterval(glitchInterval); document.getElementById('puzzle-overlay').style.display = 'none'; document.body.style.animation = "extremeShake 0.1s infinite"; document.body.style.filter = "invert(1)"; setTimeout(() => { document.body.style.animation = "none"; document.body.style.filter = "none"; window.hasTimeTraveled = true; alert("СИСТЕМА: ВРЕМЕННАЯ ЛИНИЯ ОТМОТАНА НАЗАД. ВТОРОЙ ШАНС."); startExecutionScene(); }, 2000); }
 
-        function triggerWorstEnding() {
-            const gunshot = document.getElementById('sound-gunshot');
-            gunshot.currentTime = 0;
-            gunshot.play().catch(()=>{});
-            
-            document.getElementById('worst-ending-overlay').style.display = 'flex';
-            document.body.style.animation = "extremeShake 0.1s infinite";
-        }
+        function triggerWorstEnding() { const gunshot = document.getElementById('sound-gunshot'); gunshot.currentTime = 0; gunshot.play().catch(()=>{}); document.getElementById('worst-ending-overlay').style.display = 'flex'; document.body.style.animation = "extremeShake 0.1s infinite"; }
 
-        function triggerGoodEnding() {
-            window.isSecondEnvironment = false;
-            window.hasTimeTraveled = false;
-            document.body.classList.remove('second-env');
-            document.getElementById('main-title').innerText = "Досье: Главные Лица";
-            document.getElementById('sanji-img').src = 'sanji.jpg';
-            document.querySelector('#sanji-card .bio-text').innerText = "Атаковал полицейские участки и т.д. Он за них.";
-            
-            document.body.style.background = "#fff";
-            setTimeout(() => { document.body.style.background = ""; }, 500); // Вспышка света
-            
-            alert("ВРЕМЕННАЯ ПЕТЛЯ РАЗОРВАНА. ВЫ СПАСЛИ САНЖИ, ИСКУПИВ ВИНУ. АРХИВ ВОССТАНОВЛЕН!");
-        }
-        
-        // =============================================================
+        function triggerGoodEnding() { window.isSecondEnvironment = false; window.hasTimeTraveled = false; document.body.classList.remove('second-env'); document.getElementById('main-title').innerText = "Досье: Главные Лица"; document.getElementById('sanji-img').src = 'sanji.jpg'; document.querySelector('#sanji-card .bio-text').innerText = "Атаковал полицейские участки и т.д. Он за них."; document.body.style.background = "#fff"; setTimeout(() => { document.body.style.background = ""; }, 500); alert("ВРЕМЕННАЯ ПЕТЛЯ РАЗОРВАНА. ВЫ СПАСЛИ САНЖИ, ИСКУПИВ ВИНУ. АРХИВ ВОССТАНОВЛЕН!"); }
 
-        // --- СЕКРЕТНАЯ КНОПКА СЛАВЫ И МУЛЬТФИЛЬМ ---
         let secretBtnClicks = 0;
-        function clickSecretButton() {
-            if(window.isSecondEnvironment) return; // Урезаем
-            secretBtnClicks++;
-            if (secretBtnClicks === 1) alert("Что-то щелкнуло во тьме...");
-            if (secretBtnClicks === 3) {
-                secretBtnClicks = 0; closeVista(); startCartoonAnimation();
-            }
-        }
+        function clickSecretButton() { if(window.isSecondEnvironment) return; secretBtnClicks++; if (secretBtnClicks === 1) alert("Что-то щелкнуло во тьме..."); if (secretBtnClicks === 3) { secretBtnClicks = 0; closeVista(); startCartoonAnimation(); } }
 
         function startCartoonAnimation() {
-            const scene = document.getElementById('story-scene');
-            const txt = document.getElementById('story-text');
-            const music = document.getElementById('sound-cartoon');
-            
-            scene.style.display = 'block'; music.currentTime = 0; music.play().catch(() => {});
-            document.getElementById('toilet').style.display = 'none';
-            document.getElementById('toilet-door').style.transform = 'rotateY(0deg)';
-            document.getElementById('school').style.right = '-350px';
-            document.getElementById('director-office').style.display = 'none';
-
+            const scene = document.getElementById('story-scene'); const txt = document.getElementById('story-text'); const music = document.getElementById('sound-cartoon');
+            scene.style.display = 'block'; music.currentTime = 0; music.play().catch(() => {}); document.getElementById('toilet').style.display = 'none'; document.getElementById('toilet-door').style.transform = 'rotateY(0deg)'; document.getElementById('school').style.right = '-350px'; document.getElementById('director-office').style.display = 'none';
             const funCircles = [ document.getElementById('f1'), document.getElementById('f2'), document.getElementById('f3'), document.getElementById('f4'), document.getElementById('f5'), document.getElementById('f6') ];
             const blue = document.getElementById('blue-circle'); const pink = document.getElementById('pink-circle');
-
-            txt.innerText = "В сумерках на старой горке играли 6 фигур...";
-            funCircles.forEach((c, index) => { c.style.display = 'block'; c.style.left = `${10 + index * 5}%`; c.style.bottom = `${35 - index * 3}vh`; });
-            setTimeout(() => { funCircles.forEach((c, index) => { c.style.left = `${35 + index * 3}%`; c.style.bottom = '5vh'; }); }, 2000);
-
-            setTimeout(() => { txt.innerText = "Из мрака появился Синий... Они переглянулись."; blue.style.display = 'block'; blue.style.left = '90%'; blue.style.bottom = '5vh'; }, 4500);
-            setTimeout(() => { blue.style.left = '65%'; funCircles.forEach((c, index) => { c.style.left = `${50 + index * 2}%`; }); }, 6000);
-
-            setTimeout(() => { txt.innerText = "Молча они повели его к заброшенному строению..."; document.getElementById('toilet').style.display = 'block'; document.getElementById('toilet-door').style.transform = 'rotateY(-90deg)'; blue.style.left = '78%'; blue.style.bottom = '16vh'; funCircles.forEach((c, index) => { c.style.left = `${55 + index * 3}%`; }); }, 8500);
-            setTimeout(() => { txt.innerText = "Захлопнули дверь. Навесили замок. Теперь он там навсегда."; txt.style.color = "red"; blue.style.display = 'none'; document.getElementById('toilet-door').style.transform = 'rotateY(0deg)'; }, 11500);
-
-            setTimeout(() => { txt.innerText = "Но во тьме проснулось Нечто Розовое. Оно было в ярости."; txt.style.color = "#d3d3d3"; pink.style.display = 'block'; pink.style.left = '10%'; pink.style.bottom = '5vh'; }, 14500);
-            setTimeout(() => { txt.innerText = "Всех выстроили в ряд. Шестой попытался скрыться в тенях..."; pink.style.left = '40%'; funCircles.forEach((c, index) => { c.classList.add('twitch'); if(index === 5) { c.style.left = '2%'; } else { c.style.left = `${45 + index * 5}%`; } }); }, 17500);
-
-            setTimeout(() => { txt.innerText = "От Неё не убежать. Она нашла его."; pink.style.left = '10%'; }, 21000);
-            setTimeout(() => { funCircles[5].style.left = '70%'; pink.style.left = '35%'; }, 23500);
-
-            setTimeout(() => { txt.innerText = "Теперь их ждёт Суд. Они идут в проклятую 'Школу'."; document.getElementById('school').style.right = '20px'; pink.style.left = '65%'; funCircles.forEach((c, index) => { c.style.left = `${70 + index * 3}%`; }); }, 26000);
-            setTimeout(() => { pink.style.display = 'none'; funCircles.forEach(c => c.style.display = 'none'); }, 29000);
-
-            setTimeout(() => { txt.style.display = 'none'; document.getElementById('director-office').style.display = 'flex'; }, 31000);
-            setTimeout(() => { scene.style.display = 'none'; txt.style.display = 'block'; txt.style.color = "#d3d3d3"; music.pause(); pink.style.display = 'none'; blue.style.display = 'none'; funCircles.forEach(c => c.classList.remove('twitch')); }, 36000);
+            txt.innerText = "В сумерках на старой горке играли 6 фигур..."; funCircles.forEach((c, index) => { c.style.display = 'block'; c.style.left = `${10 + index * 5}%`; c.style.bottom = `${35 - index * 3}vh`; }); setTimeout(() => { funCircles.forEach((c, index) => { c.style.left = `${35 + index * 3}%`; c.style.bottom = '5vh'; }); }, 2000);
+            setTimeout(() => { txt.innerText = "Из мрака появился Синий... Они переглянулись."; blue.style.display = 'block'; blue.style.left = '90%'; blue.style.bottom = '5vh'; }, 4500); setTimeout(() => { blue.style.left = '65%'; funCircles.forEach((c, index) => { c.style.left = `${50 + index * 2}%`; }); }, 6000);
+            setTimeout(() => { txt.innerText = "Молча они повели его к заброшенному строению..."; document.getElementById('toilet').style.display = 'block'; document.getElementById('toilet-door').style.transform = 'rotateY(-90deg)'; blue.style.left = '78%'; blue.style.bottom = '16vh'; funCircles.forEach((c, index) => { c.style.left = `${55 + index * 3}%`; }); }, 8500); setTimeout(() => { txt.innerText = "Захлопнули дверь. Навесили замок. Теперь он там навсегда."; txt.style.color = "red"; blue.style.display = 'none'; document.getElementById('toilet-door').style.transform = 'rotateY(0deg)'; }, 11500);
+            setTimeout(() => { txt.innerText = "Но во тьме проснулось Нечто Розовое. Оно было в ярости."; txt.style.color = "#d3d3d3"; pink.style.display = 'block'; pink.style.left = '10%'; pink.style.bottom = '5vh'; }, 14500); setTimeout(() => { txt.innerText = "Всех выстроили в ряд. Шестой попытался скрыться в тенях..."; pink.style.left = '40%'; funCircles.forEach((c, index) => { c.classList.add('twitch'); if(index === 5) { c.style.left = '2%'; } else { c.style.left = `${45 + index * 5}%`; } }); }, 17500);
+            setTimeout(() => { txt.innerText = "От Неё не убежать. Она нашла его."; pink.style.left = '10%'; }, 21000); setTimeout(() => { funCircles[5].style.left = '70%'; pink.style.left = '35%'; }, 23500);
+            setTimeout(() => { txt.innerText = "Теперь их ждёт Суд. Они идут в проклятую 'Школу'."; document.getElementById('school').style.right = '20px'; pink.style.left = '65%'; funCircles.forEach((c, index) => { c.style.left = `${70 + index * 3}%`; }); }, 26000); setTimeout(() => { pink.style.display = 'none'; funCircles.forEach(c => c.style.display = 'none'); }, 29000);
+            setTimeout(() => { txt.style.display = 'none'; document.getElementById('director-office').style.display = 'flex'; }, 31000); setTimeout(() => { scene.style.display = 'none'; txt.style.display = 'block'; txt.style.color = "#d3d3d3"; music.pause(); pink.style.display = 'none'; blue.style.display = 'none'; funCircles.forEach(c => c.classList.remove('twitch')); }, 36000);
         }
 
-        function triggerAssistant() {
-            const bubble = document.getElementById('assist-bubble'); bubble.style.display = 'block';
-            bubble.innerText = Math.random() < 0.3 ? "Ты не знаешь что за кнопка у файла, в правом верхнем углу?" : "Слава сегодня опять на чилле, не беспокоить.";
-            setTimeout(() => { bubble.style.display = 'none'; }, 4000);
-        }
+        function triggerAssistant() { const bubble = document.getElementById('assist-bubble'); bubble.style.display = 'block'; bubble.innerText = Math.random() < 0.3 ? "Ты не знаешь что за кнопка у файла, в правом верхнем углу?" : "Слава сегодня опять на чилле, не беспокоить."; setTimeout(() => { bubble.style.display = 'none'; }, 4000); }
 
-        // --- ОБНОВЛЁННАЯ ЛОГИКА АРТЁМА (ТОКСИЧНОЕ ОБЛАКО) ---
         let artemPower = 0;
         function chargeArtem() { 
-            artemPower += 20; 
-            const bar = document.getElementById('bar3');
+            artemPower += 20; const bar = document.getElementById('bar3');
             if(artemPower <= 100) { bar.style.width = `${artemPower}%`; bar.innerText = `${artemPower}%`; } 
-            if(artemPower >= 100){ 
-                startToxicEvent(); 
-                artemPower = 0; bar.style.width = '0%'; bar.innerText = '0%'; 
-            } 
+            if(artemPower >= 100){ startToxicEvent(); artemPower = 0; bar.style.width = '0%'; bar.innerText = '0%'; } 
         }
 
-        let fansClicked = 0;
-        let toxicTimerVal = 5.0;
+        let fanClickCounts = {1:0, 2:0, 3:0};
+        let toxicTimerVal = 2.0;
         let toxicInterval;
+        let fansCleared = 0;
 
         function startToxicEvent() {
             closeArtemPage();
             const toxicOverlay = document.getElementById('toxic-overlay');
             toxicOverlay.style.display = 'flex';
-            fansClicked = 0;
-            toxicTimerVal = 5.0;
+            fanClickCounts = {1:0, 2:0, 3:0};
+            fansCleared = 0;
+            toxicTimerVal = 2.0;
             
             document.getElementById('toxic-timer').innerText = "2.00";
             document.getElementById('toxic-timer').style.color = "#fff";
@@ -1144,6 +1327,7 @@
             for(let i=1; i<=3; i++) {
                 let fan = document.getElementById(`fan${i}`);
                 fan.style.display = 'flex';
+                fan.innerText = "☢️";
                 moveFan(fan);
             }
 
@@ -1156,177 +1340,353 @@
                     document.getElementById('toxic-timer').innerText = "ВЫ ОТРАВЛЕНЫ.";
                     document.getElementById('toxic-timer').style.color = "red";
                     for(let i=1; i<=3; i++) document.getElementById(`fan${i}`).style.display = 'none';
-                    setTimeout(() => { toxicOverlay.style.display = 'none'; }, 2000);
+                    
+                    setTimeout(() => { 
+                        toxicOverlay.style.display = 'none';
+                        document.querySelectorAll('.card').forEach(c => c.style.display = 'none');
+                        alert("СИСТЕМА: Все карточки удалены из-за токсичного заражения.");
+                    }, 2000);
                 }
             }, 10);
         }
 
         function moveFan(fan) {
-            const maxX = window.innerWidth - 80; 
-            const maxY = window.innerHeight - 80;
+            const maxX = window.innerWidth - 80; const maxY = window.innerHeight - 80;
             fan.style.left = `${Math.max(20, Math.random() * maxX)}px`;
             fan.style.top = `${Math.max(20, Math.random() * maxY)}px`;
         }
 
         function clickFan(id) {
-            document.getElementById(`fan${id}`).style.display = 'none';
-            fansClicked++;
-            if(fansClicked >= 3) {
-                clearInterval(toxicInterval);
-                document.getElementById('toxic-timer').innerText = "УГРОЗА МИНОВАЛА";
-                document.getElementById('toxic-timer').style.color = "#00ff00";
-                setTimeout(() => { document.getElementById('toxic-overlay').style.display = 'none'; }, 1500);
+            fanClickCounts[id]++;
+            let fan = document.getElementById(`fan${id}`);
+            fan.innerText = "💥";
+            setTimeout(() => fan.innerText = "☢️", 100);
+
+            if(fanClickCounts[id] >= 2) {
+                fan.style.display = 'none';
+                fansCleared++;
+                if(fansCleared >= 3) {
+                    clearInterval(toxicInterval);
+                    document.getElementById('toxic-timer').innerText = "УГРОЗА МИНОВАЛА";
+                    document.getElementById('toxic-timer').style.color = "#00ff00";
+                    setTimeout(() => { document.getElementById('toxic-overlay').style.display = 'none'; }, 1500);
+                }
+            } else {
+                moveFan(fan);
             }
         }
 
-        // --- НОВАЯ ЛОГИКА ВАНИ (ЗЕМЛЕТРЯСЕНИЕ) ---
+        let vanyaQuakeCount = 0;
         function triggerVanyaQuake() {
             document.body.style.animation = "heavyShake 0.6s ease-out";
-            
             if (navigator.vibrate) navigator.vibrate([200, 100, 200]);
-
-            setTimeout(() => {
-                document.body.style.animation = "none";
-            }, 600);
-        }
-
-        // --- ЛОГИКА СЛАВЫ (НАБЛЮДАТЕЛЬ) ---
-        let slavaMode = false;
-        let timecodeInterval;
-
-        function toggleSlavaMode() {
-            if(window.isSecondEnvironment) return; // Урезаем
-            slavaMode = !slavaMode;
-            const overlay = document.getElementById('cctv-overlay');
+            setTimeout(() => { document.body.style.animation = "none"; }, 600);
             
-            if (slavaMode) {
-                document.body.classList.add('slava-active');
-                overlay.style.display = 'block';
-                
-                timecodeInterval = setInterval(() => {
-                    const now = new Date();
-                    const timeString = now.toTimeString().split(' ')[0];
-                    const ms = String(now.getMilliseconds()).padStart(3, '0').slice(0, 2);
-                    document.getElementById('cctv-timecode').innerText = `${timeString}:${ms}`;
-                }, 50);
-            } else {
-                document.body.classList.remove('slava-active');
-                overlay.style.display = 'none';
-                clearInterval(timecodeInterval);
+            vanyaQuakeCount++;
+            if(vanyaQuakeCount === 3) {
+                setTimeout(initThirdEnvironment, 1000);
             }
         }
 
-        // --- ОСТАЛЬНЫЕ ФУНКЦИИ ---
+        function initThirdEnvironment() {
+            closeVanyaVault();
+            document.body.classList.add('third-env');
+            alert("ИНИЦИАЛИЗАЦИЯ 3 СРЕДЫ... ГРАВИТАЦИЯ НАРУШЕНА. МАТРИЦА ОТКРЫТА.");
+            
+            let env3ui = document.createElement('div');
+            env3ui.id = 'env3-ui';
+            env3ui.style.display = 'block';
+            env3ui.innerHTML = "<div>3 СРЕДА [СТАТУС: АКТИВНО]</div><div style='font-size:1rem; color:#aaa;'>(Кликай по фону для создания черных дыр)</div>";
+            document.body.appendChild(env3ui);
+
+            setInterval(() => {
+                let drop = document.createElement('div');
+                drop.className = 'matrix-rain';
+                drop.style.left = Math.random() * 100 + 'vw';
+                drop.style.top = '-50px';
+                drop.innerText = String.fromCharCode(0x30A0 + Math.random() * 96);
+                drop.style.animationDuration = (Math.random() * 2 + 1) + 's';
+                document.body.appendChild(drop);
+                setTimeout(() => drop.remove(), 3000);
+            }, 100);
+
+            document.body.addEventListener('click', createBlackHole);
+        }
+
+        function createBlackHole(e) {
+            if(!document.body.classList.contains('third-env') || e.target.closest('.card') || e.target.closest('.fullscreen-overlay')) return;
+            let bh = document.createElement('div');
+            bh.style.position = 'fixed'; bh.style.left = e.clientX + 'px'; bh.style.top = e.clientY + 'px';
+            bh.style.width = '10px'; bh.style.height = '10px'; bh.style.background = 'black';
+            bh.style.boxShadow = '0 0 50px 20px purple'; bh.style.borderRadius = '50%';
+            bh.style.transform = 'translate(-50%, -50%)'; bh.style.zIndex = '5000'; bh.style.transition = 'all 2s';
+            document.body.appendChild(bh);
+            
+            setTimeout(() => { bh.style.transform = 'translate(-50%, -50%) scale(20)'; bh.style.opacity = '0'; }, 50);
+            setTimeout(() => { bh.remove(); }, 2000);
+        }
+
+        let slavaMode = false; let timecodeInterval;
+        function toggleSlavaMode() {
+            if(window.isSecondEnvironment) return; 
+            slavaMode = !slavaMode; const overlay = document.getElementById('cctv-overlay');
+            if (slavaMode) { document.body.classList.add('slava-active'); overlay.style.display = 'block'; timecodeInterval = setInterval(() => { const now = new Date(); const timeString = now.toTimeString().split(' ')[0]; const ms = String(now.getMilliseconds()).padStart(3, '0').slice(0, 2); document.getElementById('cctv-timecode').innerText = `${timeString}:${ms}`; }, 50); } else { document.body.classList.remove('slava-active'); overlay.style.display = 'none'; clearInterval(timecodeInterval); }
+        }
+
+        // --- Расширенный DOOM-интерфейс ---
+        const doomKeyMap = {
+            'ArrowUp': '↑', 'ArrowDown': '↓', 'ArrowLeft': '←', 'ArrowRight': '→',
+            'w': 'W', 'a': 'A', 's': 'S', 'd': 'D',
+            ' ': 'Space', 'Control': 'Ctrl', 'Shift': 'Shift'
+        };
+        let currentDoomKeys = {...doomKeyMap};
+        let rebindTarget = null;
+
+        function openDoomWindow() {
+            document.getElementById('doom-win').style.display = 'flex';
+            startDoomLoader();
+            document.getElementById('doom-game-container').style.display = 'none';
+            document.getElementById('diagnostic-panel').classList.remove('active');
+            document.getElementById('keyboard-panel').style.display = 'none';
+            document.getElementById('save-slots-panel').style.display = 'none';
+            checkTechSupport();
+            buildKeyboard();
+            buildSaveSlots();
+            window.addEventListener('keydown', handleDoomKeyDown);
+            window.addEventListener('keyup', handleDoomKeyUp);
+        }
+
+        function closeDoomWindow() {
+            document.getElementById('doom-win').style.display = 'none';
+            if (window.doomLoaderInterval) clearInterval(window.doomLoaderInterval);
+            window.removeEventListener('keydown', handleDoomKeyDown);
+            window.removeEventListener('keyup', handleDoomKeyUp);
+            document.querySelectorAll('.ctrl-key').forEach(k => k.classList.remove('pressed', 'rebind-active'));
+        }
+
+        function startDoomLoader() {
+            const container = document.getElementById('doom-loader-container');
+            container.innerHTML = '';
+            const loaderDiv = document.createElement('div');
+            loaderDiv.className = 'doom-loader';
+            loaderDiv.innerHTML = `
+                <div>Loading DOOM.WAD... <span id="loader-log"></span></div>
+                <div class="progress-bar"><div class="progress-fill" id="loader-progress"></div></div>
+            `;
+            container.appendChild(loaderDiv);
+            const logEl = document.getElementById('loader-log');
+            const progressEl = document.getElementById('loader-progress');
+            
+            const logMessages = [
+                "Initializing DOS/4GW...",
+                "Checking WebGL support... OK",
+                "Loading textures... 45%",
+                "Initializing sound blaster emulation...",
+                "Loading maps E1M1... 80%",
+                "Startup complete."
+            ];
+            let logIndex = 0;
+            let progress = 0;
+            
+            window.doomLoaderInterval = setInterval(() => {
+                progress += Math.random() * 15 + 5;
+                if (progress > 100) progress = 100;
+                progressEl.style.width = progress + '%';
+                
+                if (progress > 20 && logIndex < 1) { logEl.innerHTML += '<br>' + logMessages[0]; logIndex++; }
+                if (progress > 40 && logIndex < 2) { logEl.innerHTML += '<br>' + logMessages[1]; logIndex++; }
+                if (progress > 60 && logIndex < 3) { logEl.innerHTML += '<br>' + logMessages[2]; logIndex++; }
+                if (progress > 80 && logIndex < 4) { logEl.innerHTML += '<br>' + logMessages[3]; logIndex++; }
+                if (progress >= 100) {
+                    clearInterval(window.doomLoaderInterval);
+                    logEl.innerHTML += '<br>' + logMessages[4] + '<br>' + logMessages[5];
+                    setTimeout(() => {
+                        document.getElementById('doom-loader-container').style.display = 'none';
+                        const gameContainer = document.getElementById('doom-game-container');
+                        gameContainer.style.display = 'block';
+                        document.getElementById('crt-game').innerHTML = '<iframe src="https://silentspacemarine.com/" style="width:100%; height:100%; border:none;" allowfullscreen></iframe>';
+                    }, 800);
+                }
+            }, 150);
+        }
+
+        function checkTechSupport() {
+            const webgl = (() => { try { const c = document.createElement('canvas'); return !!window.WebGLRenderingContext && (c.getContext('webgl') || c.getContext('experimental-webgl')); } catch(e) { return false; } })();
+            const wasm = (() => { try { return typeof WebAssembly === 'object' && typeof WebAssembly.instantiate === 'function'; } catch(e) { return false; } })();
+            document.getElementById('check-webgl').className = 'check-dot' + (webgl ? ' ok' : '');
+            document.getElementById('check-wasm').className = 'check-dot' + (wasm ? ' ok' : '');
+        }
+
+        function clearDoomCache() {
+            if (confirm('Очистить кэш игры (демо)?')) {
+                localStorage.removeItem('doom_saves');
+                alert('Кэш очищен.');
+            }
+        }
+
+        function switchDoomEngine(engine) {
+            const gameFrame = document.getElementById('crt-game');
+            let url = 'https://silentspacemarine.com/';
+            if (engine === 'jsdos') url = 'https://dos.zone/doom/';
+            else if (engine === 'archive') url = 'https://archive.org/details/msdos_Doom_1993';
+            else if (engine === 'emulation') url = 'https://wasm.continuation-labs.com/d3demo/';
+            gameFrame.innerHTML = `<iframe src="${url}" style="width:100%; height:100%; border:none;" allowfullscreen></iframe>`;
+        }
+
+        function buildKeyboard() {
+            const panel = document.getElementById('keyboard-panel');
+            panel.innerHTML = '';
+            for (let [code, label] of Object.entries(currentDoomKeys)) {
+                const key = document.createElement('div');
+                key.className = 'ctrl-key';
+                key.textContent = label;
+                key.dataset.code = code;
+                key.addEventListener('click', () => startRebind(key));
+                panel.appendChild(key);
+            }
+        }
+
+        function startRebind(keyEl) {
+            if (rebindTarget) {
+                rebindTarget.classList.remove('rebind-active');
+            }
+            rebindTarget = keyEl;
+            keyEl.classList.add('rebind-active');
+            keyEl.textContent = '...';
+            const handler = (e) => {
+                e.preventDefault();
+                const newKey = e.key;
+                const oldCode = keyEl.dataset.code;
+                delete currentDoomKeys[oldCode];
+                currentDoomKeys[newKey] = newKey.length === 1 ? newKey.toUpperCase() : newKey;
+                keyEl.dataset.code = newKey;
+                keyEl.textContent = currentDoomKeys[newKey];
+                keyEl.classList.remove('rebind-active');
+                rebindTarget = null;
+                window.removeEventListener('keydown', handler);
+            };
+            window.addEventListener('keydown', handler, {once: true});
+        }
+
+        function handleDoomKeyDown(e) {
+            const key = e.key;
+            const code = Object.keys(currentDoomKeys).find(k => k === key || k === e.code);
+            if (code) {
+                const el = document.querySelector(`.ctrl-key[data-code="${code}"]`);
+                if (el) el.classList.add('pressed');
+            }
+        }
+
+        function handleDoomKeyUp(e) {
+            const key = e.key;
+            const code = Object.keys(currentDoomKeys).find(k => k === key || k === e.code);
+            if (code) {
+                const el = document.querySelector(`.ctrl-key[data-code="${code}"]`);
+                if (el) el.classList.remove('pressed');
+            }
+        }
+
+        function toggleKeyboardPanel() {
+            const panel = document.getElementById('keyboard-panel');
+            panel.style.display = panel.style.display === 'none' ? 'flex' : 'none';
+        }
+
+        function toggleDiagnostic() {
+            const panel = document.getElementById('diagnostic-panel');
+            panel.classList.toggle('active');
+        }
+
+        function buildSaveSlots() {
+            const panel = document.getElementById('save-slots-panel');
+            panel.innerHTML = '';
+            for (let i = 1; i <= 3; i++) {
+                const slot = document.createElement('div');
+                slot.className = 'save-slot';
+                const savedData = JSON.parse(localStorage.getItem('doom_save_' + i));
+                slot.innerHTML = `
+                    <div class="screenshot">${savedData ? '📷 Slot ' + i : 'Пусто'}</div>
+                    <div style="font-size:10px;">Слот ${i}</div>
+                    <button onclick="saveGame(${i})">💾 Сохр.</button>
+                    <button onclick="loadGame(${i})">📂 Загр.</button>
+                    <button onclick="downloadSave(${i})">⬇️ Скач.</button>
+                `;
+                panel.appendChild(slot);
+            }
+        }
+
+        function saveGame(slot) {
+            const saveData = { time: new Date().toISOString(), demo: true };
+            localStorage.setItem('doom_save_' + slot, JSON.stringify(saveData));
+            alert('Сохранено в слот ' + slot);
+            buildSaveSlots();
+        }
+
+        function loadGame(slot) {
+            const data = localStorage.getItem('doom_save_' + slot);
+            if (data) {
+                alert('Загружено сохранение из слота ' + slot + ' (демо)');
+            } else {
+                alert('Слот пуст.');
+            }
+        }
+
+        function downloadSave(slot) {
+            const data = localStorage.getItem('doom_save_' + slot);
+            if (data) {
+                const blob = new Blob([data], {type: 'application/json'});
+                const a = document.createElement('a');
+                a.href = URL.createObjectURL(blob);
+                a.download = `doom_save_${slot}.json`;
+                a.click();
+            } else {
+                alert('Нет данных для скачивания.');
+            }
+        }
+
+        function toggleSaveSlots() {
+            const panel = document.getElementById('save-slots-panel');
+            panel.style.display = panel.style.display === 'none' ? 'flex' : 'none';
+        }
+
         function openArtemPage() { if(!window.isSecondEnvironment) document.getElementById('artem-overlay').style.display = 'flex'; }
         function closeArtemPage() { document.getElementById('artem-overlay').style.display = 'none'; }
 
         function openVista() { if(!window.isSecondEnvironment) document.getElementById('vista-overlay').style.display = 'flex'; }
-        function closeVista() { document.getElementById('vista-overlay').style.display = 'none'; closeVistaWindow(); }
+        function closeVista() { document.getElementById('vista-overlay').style.display = 'none'; closeDoomWindow(); closeVistaWindow(); }
         function openVistaWindow() { document.getElementById('vista-win').style.display = 'flex'; }
         function closeVistaWindow() { document.getElementById('vista-win').style.display = 'none'; }
         
         function startSearchGlitch() {
-            closeVistaWindow(); 
-            document.getElementById('sanji-overlay').style.display = 'flex';
-            const termText = document.getElementById('term-text');
-            termText.innerHTML = "";
-            
-            const audioTyping = document.getElementById('sound-typing');
-            audioTyping.play().catch(() => {});
-
+            closeVistaWindow(); document.getElementById('sanji-overlay').style.display = 'flex'; const termText = document.getElementById('term-text'); termText.innerHTML = "";
+            const audioTyping = document.getElementById('sound-typing'); audioTyping.play().catch(() => {});
             const searchText = `> Поиск местоположения Санжи...\n> Сканирование полицейского участка...\n> Анализ данных...\n> Результат: объект не найден.`;
-            
             let i = 0;
-            const searchInterval = setInterval(() => {
-                if (i < searchText.length) {
-                    if (searchText.charAt(i) === '\n') {
-                        termText.innerHTML += '<br><br>';
-                    } else {
-                        termText.innerHTML += searchText.charAt(i);
-                    }
-                    i++;
-                } else {
-                    clearInterval(searchInterval);
-                    audioTyping.pause();
-                    audioTyping.currentTime = 0;
-                }
-            }, 40);
-            
+            const searchInterval = setInterval(() => { if (i < searchText.length) { if (searchText.charAt(i) === '\n') { termText.innerHTML += '<br><br>'; } else { termText.innerHTML += searchText.charAt(i); } i++; } else { clearInterval(searchInterval); audioTyping.pause(); audioTyping.currentTime = 0; } }, 40);
             const oldClose = closeSanjiTerminal;
-            closeSanjiTerminal = function() {
-                clearInterval(searchInterval);
-                document.getElementById('sanji-overlay').style.display = 'none';
-                document.getElementById('sound-typing').pause();
-                closeSanjiTerminal = oldClose;
-            };
+            closeSanjiTerminal = function() { clearInterval(searchInterval); document.getElementById('sanji-overlay').style.display = 'none'; document.getElementById('sound-typing').pause(); closeSanjiTerminal = oldClose; };
         }
 
         let terminalInterval;
         function openSanjiTerminal() {
-            document.getElementById('sanji-overlay').style.display = 'flex';
-            const termText = document.getElementById('term-text');
-            termText.innerHTML = "";
-            const audioTyping = document.getElementById('sound-typing');
-            const audioAccess = document.getElementById('sound-access');
-            
+            document.getElementById('sanji-overlay').style.display = 'flex'; const termText = document.getElementById('term-text'); termText.innerHTML = ""; const audioTyping = document.getElementById('sound-typing'); const audioAccess = document.getElementById('sound-access');
             audioTyping.play().catch(() => {});
-
             const text = `> Подключение к серверу полицейского участка...\n> Доступ получен. Обход брандмауэра... 100%\n> Поиск заблокированных логов Санжи...\n> НАЙДЕНО: Операция 'Оккупация стадиона' прошла успешно.\n> Статус: Засекречен.\n> Взлом завершен. Полный доступ к архивам открыт!`;
-
-            let i = 0;
-            terminalInterval = setInterval(() => {
-                if (i < text.length) {
-                    if (text.charAt(i) === '\n') {
-                        termText.innerHTML += '<br><br>';
-                    } else {
-                        termText.innerHTML += text.charAt(i);
-                    }
-                    i++;
-                } else {
-                    clearInterval(terminalInterval);
-                    audioTyping.pause();
-                    audioTyping.currentTime = 0;
-                    audioAccess.play().catch(() => {});
-                }
-            }, 40);
+            let i = 0; terminalInterval = setInterval(() => { if (i < text.length) { if (text.charAt(i) === '\n') { termText.innerHTML += '<br><br>'; } else { termText.innerHTML += text.charAt(i); } i++; } else { clearInterval(terminalInterval); audioTyping.pause(); audioTyping.currentTime = 0; audioAccess.play().catch(() => {}); } }, 40);
         }
-
-        function closeSanjiTerminal() { 
-            document.getElementById('sanji-overlay').style.display = 'none'; 
-            clearInterval(terminalInterval);
-            document.getElementById('sound-typing').pause();
-        }
+        function closeSanjiTerminal() { document.getElementById('sanji-overlay').style.display = 'none'; clearInterval(terminalInterval); document.getElementById('sound-typing').pause(); }
 
         let tClicks = 0, timerVal = 0, tInterval, isPlaying = false;
-        function openTimurGame() { 
-            if(window.isSecondEnvironment) return; // Урезаем
-            document.getElementById('timur-overlay').style.display = 'flex'; 
-            resetTimur(); 
-            loadLeaderboard(); 
-        }
+        function openTimurGame() { if(window.isSecondEnvironment) return; document.getElementById('timur-overlay').style.display = 'flex'; resetTimur(); loadLeaderboard(); }
         function closeTimurGame() { document.getElementById('timur-overlay').style.display = 'none'; clearInterval(tInterval); }
         function resetTimur() { tClicks = 0; timerVal = 0; isPlaying = false; document.getElementById('clicker-timer').innerText = "Время: 0.00с"; document.getElementById('clicker-btn').innerText = "КЛИК!"; }
-        
         function clickTimurTarget() {
             const btn = document.getElementById('clicker-btn');
-            if (!isPlaying) {
-                isPlaying = true; tClicks = 0; timerVal = 0;
-                tInterval = setInterval(() => { timerVal += 0.01; document.getElementById('clicker-timer').innerText = `Время: ${timerVal.toFixed(2)}с`; }, 10);
-            }
-            tClicks++;
-            btn.innerText = tClicks;
-            
+            if (!isPlaying) { isPlaying = true; tClicks = 0; timerVal = 0; tInterval = setInterval(() => { timerVal += 0.01; document.getElementById('clicker-timer').innerText = `Время: ${timerVal.toFixed(2)}с`; }, 10); }
+            tClicks++; btn.innerText = tClicks;
             const maxX = window.innerWidth - 80; const maxY = window.innerHeight - 80;
-            btn.style.left = `${Math.max(40, Math.random() * maxX)}px`;
-            btn.style.top = `${Math.max(40, Math.random() * maxY)}px`;
-
-            if (tClicks >= 10) {
-                clearInterval(tInterval); isPlaying = false;
-                const finalTime = timerVal.toFixed(2);
-                saveTimurScore(finalTime); 
-                btn.style.left = "50%"; btn.style.top = "50%"; btn.innerText = "ЕЩЕ?";
-            }
+            btn.style.left = `${Math.max(40, Math.random() * maxX)}px`; btn.style.top = `${Math.max(40, Math.random() * maxY)}px`;
+            if (tClicks >= 10) { clearInterval(tInterval); isPlaying = false; const finalTime = timerVal.toFixed(2); saveTimurScore(finalTime); btn.style.left = "50%"; btn.style.top = "50%"; btn.innerText = "ЕЩЕ?"; }
         }
     </script>
 </body>
-</html>
+                    </html>
