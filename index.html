@@ -225,6 +225,19 @@
         #dev-panel details { border-bottom:1px solid #101f10; padding-bottom:8px; }
         #dev-panel details:last-of-type { border-bottom:none; }
 
+        /* ===== НОВОЕ: КНОПКА VHS — "ЧЁРНЫЙ СВЕТ" ===== */
+        #dev-vhs-btn {
+            border-color: #000 !important;
+            background: #050005 !important;
+            color: #9955ff !important;
+            box-shadow: 0 0 15px #6600ff, 0 0 30px rgba(102,0,255,0.5), inset 0 0 10px #000;
+            animation: vhsBlacklightPulse 2s ease-in-out infinite;
+        }
+        @keyframes vhsBlacklightPulse {
+            0%, 100% { box-shadow: 0 0 15px #6600ff, 0 0 30px rgba(102,0,255,0.4), inset 0 0 10px #000; }
+            50% { box-shadow: 0 0 25px #6600ff, 0 0 55px rgba(102,0,255,0.7), inset 0 0 15px #000; }
+        }
+
         /* ===== НОВОЕ: РЕЖИМ БОГОВ — ГЛОБАЛЬНАЯ ЗОЛОТАЯ ТЕМА ===== */
         body.true-ending-active .card {
             border-color: gold !important;
@@ -245,6 +258,123 @@
         body.true-ending-active .chart-bar { filter: drop-shadow(0 0 10px gold); }
         body.true-ending-active .speed-clicker { box-shadow: 0 0 30px gold, 0 0 15px #fff !important; }
         body.true-ending-active #main-title { color: gold; text-shadow: 0 0 20px rgba(255,215,0,0.7); }
+
+        /* ===== НОВОЕ: "ГРЕШНИКИ В АДУ" — ХОРРОР-ТЕМА ПОСЛЕ РИТУАЛА ===== */
+        body.hell-sinner-active {
+            background: radial-gradient(circle at center, #2a0000 0%, #050000 80%) !important;
+        }
+        body.hell-sinner-active .card {
+            border-color: #ff2200 !important;
+            box-shadow: 0 0 25px #ff2200, 0 0 60px rgba(255,0,0,0.5) !important;
+            animation: hellCardFlicker 1.6s infinite;
+            filter: contrast(1.15) saturate(1.3);
+        }
+        @keyframes hellCardFlicker {
+            0%, 100% { opacity: 1; }
+            42% { opacity: 0.88; }
+            48% { opacity: 0.55; }
+            53% { opacity: 0.92; }
+        }
+        body.hell-sinner-active .name { color: #ff3300; text-shadow: 0 0 12px red; }
+        body.hell-sinner-active .status-badge {
+            background: linear-gradient(90deg, #440000, #aa0000, #440000) !important;
+            color: #fff !important;
+        }
+        body.hell-sinner-active #main-title {
+            color: #ff2200; text-shadow: 0 0 25px red;
+            animation: glitchText 0.35s infinite;
+        }
+        #hell-vignette-overlay {
+            display: none; position: fixed; inset: 0; z-index: 8000; pointer-events: none;
+            background: radial-gradient(circle, transparent 35%, rgba(120,0,0,0.4) 100%);
+            animation: hellVignettePulse 2.4s ease-in-out infinite;
+        }
+        @keyframes hellVignettePulse {
+            0%, 100% { opacity: 0.7; }
+            50% { opacity: 1; }
+        }
+
+        /* ===== НОВОЕ: VHS-КОНЦОВКА ===== */
+        #vhs-ending-overlay {
+            display: none; position: fixed; inset: 0; z-index: 99999997;
+            background: #000; overflow: hidden; font-family: 'Courier New', monospace;
+        }
+        #vhs-canvas {
+            position: absolute; inset: 0; width: 100%; height: 100%;
+            image-rendering: pixelated; opacity: 0.18; mix-blend-mode: screen;
+        }
+        #vhs-scanlines {
+            position: absolute; inset: 0; pointer-events: none;
+            background: repeating-linear-gradient(0deg, rgba(255,255,255,0.05) 0px, rgba(255,255,255,0.05) 1px, transparent 1px, transparent 3px);
+            animation: vhsScanScroll 8s linear infinite;
+        }
+        @keyframes vhsScanScroll { from { background-position: 0 0; } to { background-position: 0 100px; } }
+        #vhs-vignette {
+            position: absolute; inset: 0; pointer-events: none;
+            background: radial-gradient(circle, transparent 40%, rgba(0,0,0,0.75) 100%);
+        }
+        #vhs-tracking-bar {
+            position: absolute; left: 0; width: 100%; height: 30px; top: -30px;
+            background: repeating-linear-gradient(90deg, rgba(255,255,255,0.25) 0px, rgba(255,255,255,0.25) 2px, transparent 2px, transparent 5px);
+            filter: blur(1px); opacity: 0; pointer-events: none;
+        }
+        #vhs-rec-indicator {
+            position: absolute; top: 18px; left: 20px; color: #ff2222; font-size: 0.95rem;
+            text-shadow: 0 0 6px red; letter-spacing: 2px; animation: vhsRecBlink 1s step-end infinite;
+        }
+        @keyframes vhsRecBlink { 0%, 60% { opacity: 1; } 61%, 100% { opacity: 0.15; } }
+        #vhs-timestamp {
+            position: absolute; top: 40px; left: 20px; color: #d8d8d8; font-size: 0.85rem;
+            text-shadow: 1px 1px 0 #000;
+        }
+        #vhs-battery {
+            position: absolute; top: 18px; right: 20px; color: #d8d8d8; font-size: 0.85rem;
+            text-shadow: 1px 1px 0 #000;
+        }
+        #vhs-message {
+            position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
+            color: #fff; font-size: 1.6rem; text-align: center; max-width: 85%;
+            text-shadow: 2px 0 #ff0040, -2px 0 #00e5ff, 0 0 20px rgba(255,255,255,0.6);
+            opacity: 0; transition: opacity 0.3s; letter-spacing: 1px;
+        }
+        #vhs-jumpscare-img {
+            position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover;
+            display: none; filter: contrast(1.8) saturate(2.2) brightness(0.8) hue-rotate(-10deg);
+        }
+        #vhs-jumpscare-img2 {
+            position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover;
+            display: none; filter: contrast(2.2) saturate(2.6) brightness(0.7) hue-rotate(10deg);
+        }
+        #vhs-final-text {
+            position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
+            color: #888; font-size: 1.3rem; text-align: center; opacity: 0; letter-spacing: 3px;
+            transition: opacity 2s;
+        }
+        #vhs-fake-off-btn {
+            position: absolute; bottom: 15%; left: 50%; transform: translate(-50%, 0);
+            background: #1a1a1a; color: #ddd; border: 2px solid #666; padding: 14px 26px;
+            font-family: 'Courier New', monospace; font-size: 1rem; letter-spacing: 1px;
+            cursor: pointer; border-radius: 6px; box-shadow: 0 0 15px rgba(255,255,255,0.15);
+            user-select: none; -webkit-user-select: none; touch-action: none;
+        }
+        #vhs-fake-off-btn.holding { background: #333; border-color: #999; }
+        .vhs-shake { animation: extremeShake 0.08s infinite; }
+        .vhs-jitter { animation: vhsJitter 0.12s infinite; }
+        @keyframes vhsJitter {
+            0% { transform: translateX(0); }
+            25% { transform: translateX(-6px); }
+            50% { transform: translateX(4px); }
+            75% { transform: translateX(-3px); }
+            100% { transform: translateX(0); }
+        }
+        .vhs-flicker { animation: vhsFlickerLights 0.15s steps(1) infinite; }
+        @keyframes vhsFlickerLights {
+            0%, 100% { filter: brightness(1); }
+            20% { filter: brightness(0.15); }
+            40% { filter: brightness(1.3); }
+            60% { filter: brightness(0.05); }
+            80% { filter: brightness(1); }
+        }
 
         .god-reveal-photo {
             width: 280px; height: 280px; border-radius: 20px; object-fit: cover;
@@ -1288,6 +1418,7 @@
                     <button class="dev-btn" onclick="window.timurQuestActive=true; localStorage.setItem('timur_quest_active','1'); alert('Квест Тимура активен.');">3️⃣ Активировать квест Тимура</button>
                     <button class="dev-btn" onclick="handleTimurGodClick()">🕯️ Открыть Тимура (ритуал)</button>
                     <button class="dev-btn" onclick="window.ritualReady=true; localStorage.setItem('ritual_ready','1'); alert('Ритуал готов.');">4️⃣ Ритуал готов</button>
+                    <button class="dev-btn" onclick="transformToHellSinners()" style="border-color:#ff2200;">🔥 Тест: Грешники в аду</button>
                     <button class="dev-btn" onclick="showVanyaBelieverDialog()">5️⃣ "Ты верующий?"</button>
                     <button class="dev-btn" onclick="activateFinalRitual()" style="border-color:#883333;">🔥 Активировать финал сразу</button>
                     <button class="dev-btn" onclick="showTungExitPrompt()">🚪 Показать выход Тунга</button>
@@ -1302,6 +1433,7 @@
                     <button class="dev-btn" onclick="triggerWorstEndingTrue()" style="border-color:#883333;">💀 Ужасная концовка (новая)</button>
                     <button class="dev-btn" onclick="coreWin()" style="border-color:#33aa33;">🏆 Победа над Ядром (+ Боги)</button>
                     <button class="dev-btn" onclick="window.hasTimeTraveled=true; triggerGoodEnding();" style="border-color:#33aa33;">✅ Хорошая концовка</button>
+                    <button class="dev-btn" id="dev-vhs-btn" onclick="alert('ОШИБКА')">📼 VHS концовка</button>
                 </div>
             </details>
 
@@ -1310,6 +1442,7 @@
                 <div class="dev-grid">
                     <button class="dev-btn" onclick="devClearLockdown()">🧹 Снять блокировку</button>
                     <button class="dev-btn" onclick="devForceLockdown()">🔒 Заблокировать на 30с (тест)</button>
+                    <button class="dev-btn" onclick="devUnstuckCards()" style="border-color:#ff2222; color:#ff8888;">🚨 Карточки не нажимаются? Жми сюда</button>
                     <button class="dev-btn" onclick="devShowLocalStorage()">📋 Показать localStorage</button>
                     <button class="dev-btn" onclick="devClearAllStorage()" style="border-color:#883333;">🗑️ Очистить весь localStorage</button>
                 </div>
@@ -1321,6 +1454,8 @@
                     <button class="dev-btn" onclick="resetAllStates()">🔄 Сбросить всё (кроме localStorage)</button>
                     <button class="dev-btn" onclick="devCopyStateToClipboard()">📎 Скопировать статус в буфер</button>
                     <button class="dev-btn" onclick="location.reload()">↺ Перезагрузить страницу</button>
+                    <button class="dev-btn" onclick="triggerVHSEnding()" style="border-color:#6600ff; color:#9955ff;">📼 [ТЕСТ] Запустить VHS напрямую</button>
+                    <button class="dev-btn" onclick="resetVHSEnding()">🧹 Сбросить VHS-концовку</button>
                 </div>
             </details>
 
@@ -1339,10 +1474,29 @@
         <div id="god-reveal-buttons" style="display:flex; gap:15px; margin-top:25px; flex-wrap:wrap; justify-content:center;"></div>
     </div>
 
+    <!-- ===== НОВОЕ: ВИНЬЕТКА "ГРЕШНИКИ В АДУ" ===== -->
+    <div id="hell-vignette-overlay"></div>
+
     <!-- ===== НОВОЕ: ФИНАЛЬНЫЙ ПУСТОЙ АРХИВ ===== -->
     <div id="empty-archive-overlay" class="fullscreen-overlay" style="background:#000; z-index: 9999996;">
         <h1 style="color:#2a2a2a; font-family:monospace; font-size:2.2rem; letter-spacing:4px;">АРХИВ</h1>
         <p style="color:#1a1a1a; font-family:monospace; margin-top:25px; font-size:1.1rem; text-align:center;">Здесь никого нет.<br>Абсолютно никого.</p>
+    </div>
+
+    <!-- ===== НОВОЕ: VHS-КОНЦОВКА (секретный код 1108) ===== -->
+    <div id="vhs-ending-overlay">
+        <canvas id="vhs-canvas"></canvas>
+        <div id="vhs-scanlines"></div>
+        <div id="vhs-vignette"></div>
+        <div id="vhs-tracking-bar"></div>
+        <div id="vhs-rec-indicator">● REC</div>
+        <div id="vhs-timestamp">00:00:00</div>
+        <div id="vhs-battery">🔋 12%</div>
+        <div id="vhs-message"></div>
+        <img id="vhs-jumpscare-img" src="vhs_face.jpg" alt="" onerror="this.style.display='none'">
+        <img id="vhs-jumpscare-img2" src="vhs_face2.jpg" alt="" onerror="this.src='vhs_face.jpg'; this.onerror=function(){this.style.display='none';};">
+        <button id="vhs-fake-off-btn" style="display:none;">ЗАЖМИ, ЧТОБЫ ВЫКЛЮЧИТЬ</button>
+        <div id="vhs-final-text"></div>
     </div>
 
     <!-- ===== 2D HORROR-СЦЕНА (замена 3D-леса) ===== -->
@@ -1387,7 +1541,8 @@
             <p style="margin-bottom:10px;">2️⃣ Не гонись за Ядром — просто плавно кружи внизу экрана, уклоняясь от снарядов.</p>
             <p style="margin-bottom:10px;">3️⃣ Всего 3 фазы. Чем меньше HP Ядра — тем больше снарядов, но после каждого попадания у тебя есть ~2 секунды неуязвимости — используй их, чтобы вырваться из плотного места.</p>
             <p style="margin-bottom:10px;">4️⃣ Розовые снаряды с свечением — самонаводящиеся, от них нельзя просто стоять — двигайся по кругу, и они начнут отставать.</p>
-            <p style="margin-bottom:10px;">5️⃣ У тебя 4 жизни. Даже потеряв парочку — не сдавайся, фазы предсказуемы, если запомнить паттерны.</p>
+            <p style="margin-bottom:10px;">5️⃣ У тебя 3 жизни. Даже потеряв одну — не сдавайся, фазы предсказуемы, если запомнить паттерны.</p>
+            <p style="margin-bottom:10px;">6️⃣ Раз в пару секунд летит одиночный БЕЛЫЙ снайперский снаряд прямо в твою текущую позицию — от него нужно именно уворачиваться, стоять на месте нельзя вообще.</p>
             <p style="color:#7fa; margin-top:15px;">— Давай, ты справишься. Я буду смотреть.</p>
         </div>
         <button class="quake-btn" style="margin-top:25px;" onclick="closeSlavaCoreHint()">Понял, идём в бой</button>
@@ -1397,7 +1552,7 @@
 
     <div id="core-battle-overlay">
         <div id="core-hud">
-            <span>Жизни: <span id="core-lives">4</span></span>
+            <span>Жизни: <span id="core-lives">3</span></span>
             <span id="core-phase-label">Фаза 1</span>
             <span>HP Ядра: <span id="core-boss-hp">100</span>%</span>
             <span id="core-hint-btn" onclick="showSlavaCoreHint()" style="cursor:pointer; color:#4488ff;" title="Подсказка от Славы">📹</span>
@@ -1484,7 +1639,7 @@
                 cardId: 'sanji-card', nameSel: '#sanji-card .name', bioId: null,
                 alertText: 'СИСТЕМА ВЗЛОМАНА. САНЖИ ПРОБУЖДАЕТСЯ!',
                 nameText: 'САНЖИ [РЕЖИМ БОГА]',
-                bioText: 'Митсер Бейасит. +1000 к УРОНУ.',
+                bioText: 'ОН БОЛЬШЕ НЕ ПОДЧИНЯЕТСЯ СИСТЕМЕ. +1000 к УРОНУ.',
                 glow: '0 0 50px #fff, 0 0 100px #ff0055',
                 bioSel: '#sanji-card .bio-text'
             }
@@ -1594,17 +1749,9 @@
 
         // ================== НОВОЕ: ПОРТАЛ ХАОСА АРСАЛАНА ==================
         function playPowerSurgeSynth() {
-            const ctx = getSynthCtx();
-            const osc = ctx.createOscillator();
-            const gain = ctx.createGain();
-            osc.type = 'sawtooth';
-            osc.frequency.setValueAtTime(60, ctx.currentTime);
-            osc.frequency.exponentialRampToValueAtTime(900, ctx.currentTime + 1.6);
-            gain.gain.setValueAtTime(0.001, ctx.currentTime);
-            gain.gain.exponentialRampToValueAtTime(0.25, ctx.currentTime + 1.2);
-            gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 1.8);
-            osc.connect(gain); gain.connect(ctx.destination);
-            osc.start(); osc.stop(ctx.currentTime + 1.8);
+            // Реальный звук потрескивающего электричества вместо синтезированного свипа
+            const a = document.getElementById('sound-electricity');
+            if (a) { a.currentTime = 0; a.volume = 0.65; a.play().catch(()=>{}); }
         }
 
         function spawnArsalanSpark() {
@@ -1827,10 +1974,61 @@
             setTimeout(() => {
                 window.ritualReady = true;
                 localStorage.setItem('ritual_ready', '1');
-                showGodReveal('timur_god.jpg', '#ffd6e8', '#3a0020', 'ГОТОВО! Тимур уже рассказал всем, как это сделать.', [
+                transformToHellSinners();
+                showGodReveal('timur_hell.jpg', '#1a0000', '#ff3300', 'ГОТОВО!.. Но свечи вспыхнули чёрным. ВЫ БОЛЬШЕ НЕ БОГИ. ТЕПЕРЬ ВЫ — ГРЕШНИКИ В АДУ.', [
                     { label: 'Закрыть', action: closeGodReveal }
                 ]);
             }, 5000);
+        }
+
+        // ----- ГРЕШНИКИ В АДУ: ритуал оборачивается против всех -----
+        const hellTexts = {
+            artem: { name: 'АРТЁМ [ГРЕШНИК]', bio: 'ГОРИТ В АДСКОМ ПЛАМЕНИ ЗА ПРИЗЫВ ДЕМОНА.' },
+            slava: { name: 'СЛАВА [ГРЕШНИК]', bio: 'ВИДЕЛ ВСЁ ЧЕРЕЗ КАМЕРЫ, НО НЕ ОСТАНОВИЛ ЭТО.' },
+            timur: { name: 'ТИМУР [ГРЕШНИК]', bio: 'НАЧЕРТИЛ ЗВЕЗДУ. ТЕПЕРЬ РАСПЛАЧИВАЕТСЯ ЗА ЭТО.' },
+            vanya: { name: 'ВАНЯ [ГРЕШНИК]', bio: 'ПОЗВАЛ АНГЕЛА. ПРИШЁЛ КТО-ТО ДРУГОЙ.' },
+            arsalan: { name: 'АРСАЛАН [ГРЕШНИК]', bio: 'ХАОС ОБЕРНУЛСЯ ПРОТИВ НЕГО САМОГО.' },
+            sanji: { name: 'САНЖИ [ГРЕШНИК]', bio: 'СИСТЕМА БОЛЬШЕ НЕ ЕДИНСТВЕННЫЙ ЕГО ВРАГ.' }
+        };
+
+        function applyHellVisuals(charId) {
+            const sel = awakeningData[charId];
+            const txt = hellTexts[charId];
+            if (!sel || !txt) return;
+            const card = document.getElementById(sel.cardId);
+            card.style.boxShadow = '0 0 40px #ff2200, 0 0 90px rgba(255,0,0,0.55)';
+            card.style.borderColor = '#ff2200';
+            card.style.transform = 'scale(1.04)';
+            document.querySelector(sel.nameSel).innerText = txt.name;
+            const bioEl = sel.bioSel ? document.querySelector(sel.bioSel) : document.getElementById(sel.bioId);
+            if (bioEl) bioEl.innerText = txt.bio;
+        }
+
+        function transformToHellSinners() {
+            window.inHellMode = true;
+            localStorage.setItem('in_hell_mode', '1');
+            document.body.classList.remove('true-ending-active');
+            document.body.classList.add('hell-sinner-active');
+            const vignette = document.getElementById('hell-vignette-overlay');
+            if (vignette) vignette.style.display = 'block';
+            Object.keys(hellTexts).forEach(applyHellVisuals);
+            applyFinalCardImages();
+            playGlitchSynth();
+            startHellAmbient();
+        }
+
+        let hellAmbientInterval = null;
+        function startHellAmbient() {
+            startAmbientLoop(38, 2600, 'sawtooth');
+            if (hellAmbientInterval) clearInterval(hellAmbientInterval);
+            hellAmbientInterval = setInterval(() => {
+                const growl = document.getElementById('sound-monster-growl');
+                if (growl) { growl.currentTime = 0; growl.volume = 0.4; growl.play().catch(()=>{}); }
+            }, 9000);
+        }
+        function stopHellAmbient() {
+            stopAmbientLoop();
+            if (hellAmbientInterval) { clearInterval(hellAmbientInterval); hellAmbientInterval = null; }
         }
 
         // ----- ФИНАЛ: "ТЫ ВЕРУЮЩИЙ?" -----
@@ -1851,19 +2049,25 @@
                 activateFinalRitual();
             }, 5000);
         }
+
+        // Общая таблица финальных фото — используется и в аду, и в финальном ритуале
+        const CARD_FINAL_IMAGES = {
+            'artem-img': 'artem_final.jpg', 'slava-img': 'slava_final.jpg',
+            'timur-img': 'timur_final.jpg', 'vanya-img': 'vanya_final.jpg',
+            'arsalan-img': 'arsalan_final.jpg', 'sanji-img': 'sanji_final.jpg'
+        };
+        function applyFinalCardImages() {
+            Object.keys(CARD_FINAL_IMAGES).forEach(id => {
+                const el = document.getElementById(id);
+                if (el) el.src = CARD_FINAL_IMAGES[id];
+            });
+        }
+
         function activateFinalRitual() {
             window.finalRitualActive = true;
             localStorage.setItem('final_ritual_active', '1');
             localStorage.setItem('final_ritual_start', Date.now().toString());
-            const finalImages = {
-                'artem-img': 'artem_final.jpg', 'slava-img': 'slava_final.jpg',
-                'timur-img': 'timur_final.jpg', 'vanya-img': 'vanya_final.jpg',
-                'arsalan-img': 'arsalan_final.jpg', 'sanji-img': 'sanji_final.jpg'
-            };
-            Object.keys(finalImages).forEach(id => {
-                const el = document.getElementById(id);
-                if (el) el.src = finalImages[id];
-            });
+            applyFinalCardImages();
             const music = document.getElementById('sound-cartoon');
             if (music) { music.loop = true; music.currentTime = 0; music.volume = 0.5; music.play().catch(()=>{}); }
             startTungExitWatcher();
@@ -1904,18 +2108,22 @@
         // При загрузке страницы — восстановить наблюдатель Тунга, если ритуал уже финальный
         (function checkFinalRitualOnLoad() {
             if (window.finalRitualActive) {
-                const finalImages = {
-                    'artem-img': 'artem_final.jpg', 'slava-img': 'slava_final.jpg',
-                    'timur-img': 'timur_final.jpg', 'vanya-img': 'vanya_final.jpg',
-                    'arsalan-img': 'arsalan_final.jpg', 'sanji-img': 'sanji_final.jpg'
-                };
-                window.addEventListener('DOMContentLoaded', () => {
-                    Object.keys(finalImages).forEach(id => {
-                        const el = document.getElementById(id);
-                        if (el) el.src = finalImages[id];
-                    });
-                });
+                window.addEventListener('DOMContentLoaded', applyFinalCardImages);
                 startTungExitWatcher();
+            }
+        })();
+
+        // При загрузке страницы — восстановить адскую тему, если ритуал уже был завершён
+        (function checkHellModeOnLoad() {
+            if (localStorage.getItem('in_hell_mode') === '1') {
+                window.inHellMode = true;
+                document.body.classList.remove('true-ending-active');
+                document.body.classList.add('hell-sinner-active');
+                const vignette = document.getElementById('hell-vignette-overlay');
+                if (vignette) vignette.style.display = 'block';
+                Object.keys(hellTexts).forEach(applyHellVisuals);
+                applyFinalCardImages();
+                startHellAmbient();
             }
         })();
 
@@ -2150,6 +2358,355 @@
         function triggerWorstEnding() { const gunshot = document.getElementById('sound-gunshot'); gunshot.currentTime = 0; gunshot.play().catch(()=>{}); document.getElementById('worst-ending-overlay').style.display = 'flex'; document.body.style.animation = "extremeShake 0.1s infinite"; }
 
         function triggerGoodEnding() { window.isSecondEnvironment = false; window.hasTimeTraveled = false; document.body.classList.remove('second-env'); document.getElementById('main-title').innerText = "Досье: Главные Лица"; document.getElementById('sanji-img').src = 'sanji.jpg'; document.querySelector('#sanji-card .bio-text').innerText = "Атаковал полицейские участки и т.д. Он за них."; document.body.style.background = "#fff"; setTimeout(() => { document.body.style.background = ""; }, 500); alert("ВРЕМЕННАЯ ПЕТЛЯ РАЗОРВАНА. ВЫ СПАСЛИ САНЖИ, ИСКУПИВ ВИНУ. АРХИВ ВОССТАНОВЛЕН!"); }
+
+        // ================== НОВОЕ: VHS-КОНЦОВКА (секретный код 1108) ==================
+        let vhsStaticRAF = null, vhsTimestampInterval = null, vhsSequenceTimeouts = [];
+
+        function triggerVHSEnding() {
+            resetVHSEnding(); // на случай повторного запуска из dev-панели
+            document.querySelectorAll('.fullscreen-overlay').forEach(el => el.style.display = 'none');
+            document.getElementById('dev-panel').style.display = 'none';
+            document.getElementById('minigame-overlay').style.display = 'none';
+            document.getElementById('core-battle-overlay').style.display = 'none';
+            document.body.style.overflow = 'hidden';
+
+            const overlay = document.getElementById('vhs-ending-overlay');
+            overlay.style.display = 'block';
+
+            startVHSStatic();
+            startVHSTimestamp();
+            playVHSAmbientHiss();
+            runVHSSequence();
+        }
+
+        function resetVHSEnding() {
+            stopVHSStatic();
+            if (vhsTimestampInterval) { clearInterval(vhsTimestampInterval); vhsTimestampInterval = null; }
+            if (vhsCycleInterval) { clearInterval(vhsCycleInterval); vhsCycleInterval = null; }
+            vhsSequenceTimeouts.forEach(clearTimeout);
+            vhsSequenceTimeouts = [];
+            const overlay = document.getElementById('vhs-ending-overlay');
+            overlay.style.display = 'none';
+            overlay.classList.remove('vhs-shake', 'vhs-jitter', 'vhs-flicker');
+            document.getElementById('vhs-message').style.opacity = '0';
+            document.getElementById('vhs-final-text').style.opacity = '0';
+            document.getElementById('vhs-final-text').innerText = '';
+            document.getElementById('vhs-jumpscare-img').style.display = 'none';
+            document.getElementById('vhs-jumpscare-img2').style.display = 'none';
+            document.getElementById('vhs-tracking-bar').style.opacity = '0';
+            document.getElementById('vhs-canvas').style.opacity = '0.18';
+            const offBtn = document.getElementById('vhs-fake-off-btn');
+            offBtn.style.display = 'none';
+            offBtn.classList.remove('holding');
+            offBtn.innerText = 'ЗАЖМИ, ЧТОБЫ ВЫКЛЮЧИТЬ';
+            ['sound-glitch','sound-footsteps','sound-phone-ring','sound-siren','sound-electricity','sound-rain'].forEach(id => {
+                const a = document.getElementById(id);
+                if (a) a.pause();
+            });
+            document.body.style.overflow = '';
+        }
+
+        function startVHSStatic() {
+            const canvas = document.getElementById('vhs-canvas');
+            canvas.width = 160; canvas.height = 90; // низкое разрешение — ретро-статика + производительность
+            const ctx = canvas.getContext('2d');
+            function draw() {
+                const imgData = ctx.createImageData(canvas.width, canvas.height);
+                for (let i = 0; i < imgData.data.length; i += 4) {
+                    const v = Math.random() * 255;
+                    imgData.data[i] = v; imgData.data[i+1] = v; imgData.data[i+2] = v; imgData.data[i+3] = 255;
+                }
+                ctx.putImageData(imgData, 0, 0);
+                vhsStaticRAF = requestAnimationFrame(draw);
+            }
+            draw();
+        }
+        function stopVHSStatic() {
+            if (vhsStaticRAF) cancelAnimationFrame(vhsStaticRAF);
+            vhsStaticRAF = null;
+        }
+
+        function startVHSTimestamp() {
+            let seconds = Math.floor(Math.random() * 40) + 10; // якобы плёнка уже давно крутится
+            const el = document.getElementById('vhs-timestamp');
+            vhsTimestampInterval = setInterval(() => {
+                seconds++;
+                let display;
+                if (Math.random() < 0.08) {
+                    display = Array.from({length: 6}, () => Math.floor(Math.random()*10)).join('').replace(/(\d{2})(\d{2})(\d{2})/, '$1:$2:$3');
+                } else {
+                    const h = String(Math.floor(seconds/3600)).padStart(2,'0');
+                    const m = String(Math.floor((seconds%3600)/60)).padStart(2,'0');
+                    const s = String(seconds%60).padStart(2,'0');
+                    display = `${h}:${m}:${s}`;
+                }
+                el.innerText = display;
+            }, 1000);
+        }
+
+        function playVHSAmbientHiss() {
+            const glitchAudio = document.getElementById('sound-glitch');
+            if (glitchAudio) { glitchAudio.volume = 0.1; glitchAudio.currentTime = 0; glitchAudio.play().catch(()=>{}); }
+        }
+
+        function vhsTrackingGlitch(intensity) {
+            const canvas = document.getElementById('vhs-canvas');
+            const bar = document.getElementById('vhs-tracking-bar');
+            const overlay = document.getElementById('vhs-ending-overlay');
+            overlay.classList.add('vhs-jitter');
+            bar.style.opacity = '0.8';
+            bar.style.transition = 'none';
+            bar.style.top = '-30px';
+            requestAnimationFrame(() => {
+                bar.style.transition = `top ${0.6 * intensity}s linear`;
+                bar.style.top = '100%';
+            });
+            playGlitchSynth();
+            const t1 = setTimeout(() => {
+                overlay.classList.remove('vhs-jitter');
+                bar.style.opacity = '0';
+            }, 600 * intensity);
+            vhsSequenceTimeouts.push(t1);
+        }
+
+        function vhsSignalLoss(duration) {
+            const canvas = document.getElementById('vhs-canvas');
+            const msg = document.getElementById('vhs-message');
+            msg.style.opacity = '0';
+            canvas.style.transition = 'opacity 0.15s';
+            canvas.style.opacity = '0.95';
+            playGlitchSynth();
+            const glitchAudio = document.getElementById('sound-glitch');
+            if (glitchAudio) glitchAudio.volume = 0.5;
+            const t1 = setTimeout(() => {
+                canvas.style.opacity = '0.18';
+                if (glitchAudio) glitchAudio.volume = 0.1;
+            }, duration);
+            vhsSequenceTimeouts.push(t1);
+        }
+
+        function vhsShowMessage(text, color) {
+            const msg = document.getElementById('vhs-message');
+            msg.innerText = text;
+            msg.style.color = color || '#fff';
+            msg.style.opacity = '1';
+        }
+        function vhsHideMessage() {
+            document.getElementById('vhs-message').style.opacity = '0';
+        }
+
+        function vhsPlaySound(id, volume) {
+            const audio = document.getElementById(id);
+            if (!audio) return;
+            audio.currentTime = 0;
+            audio.volume = volume !== undefined ? volume : 1;
+            audio.play().catch(()=>{});
+        }
+        function vhsStopSound(id) {
+            const audio = document.getElementById(id);
+            if (audio) audio.pause();
+        }
+
+        // Мигание света — короткая вспышка яркости/темноты
+        function vhsFlickerLights(duration) {
+            const overlay = document.getElementById('vhs-ending-overlay');
+            overlay.classList.add('vhs-flicker');
+            const t1 = setTimeout(() => overlay.classList.remove('vhs-flicker'), duration);
+            vhsSequenceTimeouts.push(t1);
+        }
+
+        // Едва заметный "проблеск" лица в статике — сеет тревогу до того, как оно появится по-настоящему
+        function vhsFaceGlimpse(duration, opacity) {
+            const img = document.getElementById('vhs-jumpscare-img');
+            img.style.transition = 'none';
+            img.style.opacity = opacity || 0.25;
+            img.style.display = 'block';
+            playGlitchSynth();
+            const t1 = setTimeout(() => { img.style.display = 'none'; img.style.opacity = '1'; }, duration);
+            vhsSequenceTimeouts.push(t1);
+        }
+
+        // Быстрая смена обрывочных фраз — создаёт ощущение "глюка сознания"
+        let vhsCycleInterval = null;
+        function vhsCycleGlitchText(phrases, totalDuration, intervalMs) {
+            let i = 0;
+            vhsCycleInterval = setInterval(() => {
+                vhsShowMessage(phrases[i % phrases.length], i % 2 === 0 ? '#ff0033' : '#ffffff');
+                i++;
+            }, intervalMs);
+            const t1 = setTimeout(() => {
+                clearInterval(vhsCycleInterval);
+                vhsCycleInterval = null;
+                vhsHideMessage();
+            }, totalDuration);
+            vhsSequenceTimeouts.push(t1);
+        }
+
+        // Интерактивная ловушка: кнопка "выключить" не помогает — зажатие только ухудшает происходящее
+        function vhsSetupFakeOffButton(holdMs, onTriggered) {
+            const btn = document.getElementById('vhs-fake-off-btn');
+            btn.style.display = 'block';
+            btn.classList.remove('holding');
+            btn.innerText = 'ЗАЖМИ, ЧТОБЫ ВЫКЛЮЧИТЬ';
+            let holdTimer = null, triggered = false;
+            const start = (e) => {
+                e.preventDefault();
+                if (triggered) return;
+                btn.classList.add('holding');
+                holdTimer = setTimeout(() => {
+                    triggered = true;
+                    btn.style.display = 'none';
+                    onTriggered();
+                }, holdMs);
+            };
+            const cancel = () => { clearTimeout(holdTimer); btn.classList.remove('holding'); };
+            btn.addEventListener('mousedown', start);
+            btn.addEventListener('touchstart', start, { passive: false });
+            btn.addEventListener('mouseup', cancel);
+            btn.addEventListener('mouseleave', cancel);
+            btn.addEventListener('touchend', cancel);
+            // Если так и не тронули кнопку — сценарий всё равно продолжается сам
+            const autoT = setTimeout(() => {
+                if (!triggered) { triggered = true; btn.style.display = 'none'; onTriggered(); }
+            }, holdMs + 7000);
+            vhsSequenceTimeouts.push(autoT);
+        }
+
+        // ================== ОСНОВНАЯ ТАЙМЛИНИЯ: ~150 СЕКУНД ==================
+        function runVHSSequence() {
+            const t = (fn, delay) => vhsSequenceTimeouts.push(setTimeout(fn, delay));
+
+            // --- Акт 1: тишина и первые сомнения (0-30с) ---
+            t(() => { vhsShowMessage('НЕ ВЫКЛЮЧАЙ ПЛЁНКУ', '#dddddd'); vhsTrackingGlitch(1); }, 3000);
+            t(vhsHideMessage, 6000);
+
+            t(() => { vhsShowMessage('ТЫ ЖЕ ЗНАЕШЬ, ЧТО БУДЕТ ДАЛЬШЕ?', '#cccccc'); }, 8000);
+            t(vhsHideMessage, 11500);
+
+            t(() => vhsPlaySound('sound-footsteps', 0.35), 14000);
+            t(() => { vhsShowMessage('ШАГИ...', '#ff8888'); }, 16000);
+            t(() => vhsStopSound('sound-footsteps'), 19000);
+            t(vhsHideMessage, 19500);
+
+            t(() => vhsTrackingGlitch(1.2), 22000);
+            t(() => vhsPlaySound('sound-door-creak', 0.6), 24000);
+            t(() => vhsSignalLoss(1200), 25000);
+
+            // --- Акт 2: что-то входит (30-70с) ---
+            t(() => { vhsShowMessage('КТО-ТО ВОШЁЛ', '#ffffff'); }, 30000);
+            t(vhsHideMessage, 33500);
+
+            t(() => vhsFaceGlimpse(150, 0.15), 37000); // едва заметный проблеск в статике
+            t(() => { vhsShowMessage('ТЫ ЭТО ВИДЕЛ?', '#ff5555'); }, 39000);
+            t(vhsHideMessage, 42500);
+
+            t(() => vhsPlaySound('sound-monster-growl', 0.55), 45000);
+            t(() => vhsTrackingGlitch(1.4), 46500);
+
+            t(() => vhsPlaySound('sound-phone-ring', 0.6), 50000);
+            t(() => { vhsShowMessage('НЕ БЕРИ ТРУБКУ', '#ffaaaa'); }, 52000);
+            t(() => vhsStopSound('sound-phone-ring'), 55000);
+            t(vhsHideMessage, 55500);
+
+            t(() => vhsPlaySound('sound-evil-laugh', 0.5), 59000);
+            t(() => { vhsShowMessage('ОНО СМЕЁТСЯ', '#ff3333'); }, 60500);
+            t(vhsHideMessage, 64000);
+
+            t(() => { vhsSignalLoss(1600); vhsPlaySound('sound-electricity', 0.45); }, 67000);
+            t(() => vhsFlickerLights(1800), 67200);
+            t(() => { vhsShowMessage('СВЕТ МИГАЕТ', '#ffffff'); }, 69500);
+            t(vhsHideMessage, 72000);
+
+            // --- Акт 3: ложный выбор (75-95с) ---
+            t(() => vhsPlaySound('sound-siren', 0.4), 75000);
+            t(() => vhsStopSound('sound-siren'), 76500);
+            t(() => { vhsShowMessage('БЕГИ', '#ff0033'); }, 77500);
+            t(vhsHideMessage, 80000);
+
+            t(() => {
+                vhsShowMessage('ЕСТЬ СПОСОБ ЭТО ОСТАНОВИТЬ...', '#ffffff');
+                const t2 = setTimeout(() => {
+                    vhsHideMessage();
+                    vhsSetupFakeOffButton(3000, () => {
+                        // "Выключение" не сработало — становится хуже
+                        vhsTrackingGlitch(2);
+                        vhsFlickerLights(1200);
+                        vhsPlaySound('sound-electricity', 0.6);
+                        vhsShowMessage('ОНО НЕ ВЫКЛЮЧАЕТСЯ', '#ff0033');
+                        const t3 = setTimeout(vhsHideMessage, 3000);
+                        vhsSequenceTimeouts.push(t3);
+                    });
+                }, 2500);
+                vhsSequenceTimeouts.push(t2);
+            }, 82000);
+
+            // --- Акт 4: нарастание к развязке (100-125с) ---
+            t(() => { document.getElementById('vhs-ending-overlay').classList.add('vhs-shake'); }, 100000);
+            t(() => vhsCycleGlitchText(['ПОМОГИ', 'ВЫЙДИ', 'ОСТАНОВИСЬ', 'ПОЗАДИ'], 6000, 550), 102000);
+
+            t(() => vhsFaceGlimpse(300, 0.4), 109000);
+            t(() => vhsPlaySound('sound-monster-growl', 0.7), 109200);
+            t(() => { vhsShowMessage('ОНА ПОЗАДИ ТЕБЯ', '#ff0033'); }, 111500);
+            t(vhsHideMessage, 114000);
+
+            t(() => vhsSignalLoss(1000), 116000);
+
+            // --- Кульминация: два скримера подряд (118-124с) ---
+            t(() => vhsBigJumpscare('vhs-jumpscare-img', 'sound-scream', 1), 118500);
+            t(() => vhsBigJumpscare('vhs-jumpscare-img2', 'sound-explosion', 2), 121500);
+
+            // --- Внезапная тишина после испуга — самый жуткий приём ---
+            t(() => {
+                ['sound-glitch','sound-monster-growl','sound-electricity'].forEach(vhsStopSound);
+                document.getElementById('vhs-ending-overlay').classList.remove('vhs-shake');
+                vhsHideMessage();
+            }, 125000);
+
+            t(() => { vhsShowMessage('...записано в 3:14 ночи.', '#666666'); }, 129000);
+            t(vhsHideMessage, 135000);
+
+            t(vhsFadeToBlackEnding, 138000);
+        }
+
+        function vhsBigJumpscare(imgId, soundId, shakeLevel) {
+            const overlay = document.getElementById('vhs-ending-overlay');
+            const img = document.getElementById(imgId);
+            overlay.classList.remove('vhs-shake');
+            vhsHideMessage();
+            document.getElementById('vhs-canvas').style.opacity = '1';
+            img.style.opacity = '1';
+            img.style.display = 'block';
+            vhsPlaySound(soundId, 1);
+            overlay.classList.add('vhs-shake');
+            const t1 = setTimeout(() => {
+                img.style.display = 'none';
+                if (shakeLevel < 2) overlay.classList.remove('vhs-shake');
+                document.getElementById('vhs-canvas').style.opacity = '0.18';
+            }, 550);
+            vhsSequenceTimeouts.push(t1);
+        }
+
+        function vhsFadeToBlackEnding() {
+            stopVHSStatic();
+            if (vhsTimestampInterval) { clearInterval(vhsTimestampInterval); vhsTimestampInterval = null; }
+            if (vhsCycleInterval) { clearInterval(vhsCycleInterval); vhsCycleInterval = null; }
+            ['sound-glitch','sound-footsteps','sound-phone-ring','sound-siren','sound-electricity'].forEach(vhsStopSound);
+            document.getElementById('vhs-ending-overlay').classList.remove('vhs-shake', 'vhs-jitter', 'vhs-flicker');
+            ['vhs-scanlines','vhs-vignette','vhs-tracking-bar','vhs-rec-indicator','vhs-timestamp','vhs-battery','vhs-canvas'].forEach(id => {
+                const el = document.getElementById(id);
+                if (el) { el.style.transition = 'opacity 1.5s'; el.style.opacity = '0'; }
+            });
+            playTone(220, 0.15, 'square', 0.2, 0); // щелчок "извлечения кассеты"
+            const finalText = document.getElementById('vhs-final-text');
+            const t1 = setTimeout(() => {
+                finalText.innerText = 'ЗАПИСЬ ОКОНЧЕНА';
+                finalText.style.opacity = '1';
+            }, 800);
+            const t2 = setTimeout(() => {
+                finalText.innerHTML = 'ЗАПИСЬ ОКОНЧЕНА<br><span style="font-size:0.8rem; color:#444;">плёнка повреждена — дальше ничего нет</span>';
+            }, 3200);
+            vhsSequenceTimeouts.push(t1, t2);
+        }
 
         let secretBtnClicks = 0;
         function clickSecretButton() { if(window.isSecondEnvironment) return; secretBtnClicks++; if (secretBtnClicks === 1) alert("Что-то щелкнуло во тьме..."); if (secretBtnClicks === 3) { secretBtnClicks = 0; closeVista(); startCartoonAnimation(); } }
@@ -2516,9 +3073,11 @@
 
         function askDevPin() {
             let pin = prompt("Введите пин-код (Кнопка только для Арсалана.):");
-            if (pin === "4242" || pin === "1337" || pin === "beta") {
+            if (pin === "1337" || pin === "beta") {
                 if (pin === "beta") alert("Привет, друг! Это панель для вызова всех секретных функций. Нажимай кнопки и смотри, что происходит. Если что-то сломается – просто перезагрузи страницу.");
                 openDevPanel();
+            } else if (pin === "1108") {
+                triggerVHSEnding();
             } else if (pin !== null) {
                 alert("Неверный код!");
             }
@@ -2569,10 +3128,13 @@
                 lockLine = `Блокировка: <b style="color:#ff5555">АКТИВНА, осталось ${remaining}с</b>`;
             }
             const godLine = `Режим Богов: <b style="color:${window.godModeUnlocked ? '#ffd700' : '#7fff7f'}">${window.godModeUnlocked ? 'АКТИВЕН 👑' : 'нет'}</b>`;
+            const finalRitualOn = localStorage.getItem('final_ritual_active') === '1';
+            const finalLine = `Финальный ритуал: <b style="color:${finalRitualOn ? '#ff2222' : '#7fff7f'}">${finalRitualOn ? 'АКТИВЕН — карточки теперь только джампскейр!' : 'нет'}</b>`;
             box.innerHTML = `
                 2-я среда: <b>${window.isSecondEnvironment ? 'да' : 'нет'}</b> &nbsp;|&nbsp;
                 Петля времени: <b>${window.hasTimeTraveled ? 'да' : 'нет'}</b><br>
                 ${godLine}<br>
+                ${finalLine}<br>
                 ${lockLine}
             `;
         }
@@ -2614,15 +3176,20 @@
             window.ritualReady = false;
             window.finalRitualActive = false;
             window.tungExitShown = false;
+            window.inHellMode = false;
             localStorage.removeItem('artem_is_demon');
             localStorage.removeItem('timur_quest_active');
             localStorage.removeItem('ritual_ready');
             localStorage.removeItem('final_ritual_active');
             localStorage.removeItem('final_ritual_start');
+            localStorage.removeItem('in_hell_mode');
             if (tungWatcherInterval) clearInterval(tungWatcherInterval);
+            stopHellAmbient();
             const music = document.getElementById('sound-cartoon');
             if (music) music.pause();
             closeGodReveal();
+            document.body.classList.remove('hell-sinner-active');
+            document.getElementById('hell-vignette-overlay').style.display = 'none';
             document.getElementById('empty-archive-overlay').style.display = 'none';
             const originalImages = {
                 'artem-img': 'artem.jpg', 'slava-img': 'slava.jpg', 'timur-img': 'timur.jpg',
@@ -2632,7 +3199,7 @@
                 const el = document.getElementById(id);
                 if (el) el.src = originalImages[id];
             });
-            alert('Ветка Ваня → Тунг → Артём сброшена.');
+            alert('Ветка Ваня → Тунг → Артём (включая ад) сброшена.');
         }
 
         function devCopyStateToClipboard() {
@@ -2675,6 +3242,22 @@
             document.getElementById('core-revival-overlay').style.display = 'none';
             updateDevStatus();
             alert('Блокировка снята.');
+        }
+
+        // Если после тестов карточки перестали открываться — почти всегда виноват
+        // "финальный ритуал" (после него любой клик по карточке = джампскейр).
+        // Эта кнопка снимает именно это состояние, не трогая остальной прогресс.
+        function devUnstuckCards() {
+            window.finalRitualActive = false;
+            window.tungExitShown = false;
+            localStorage.removeItem('final_ritual_active');
+            localStorage.removeItem('final_ritual_start');
+            if (tungWatcherInterval) clearInterval(tungWatcherInterval);
+            const music = document.getElementById('sound-cartoon');
+            if (music) music.pause();
+            document.getElementById('empty-archive-overlay').style.display = 'none';
+            updateDevStatus();
+            alert('Готово! Карточки должны снова работать. (Это снимает только "финальный ритуал" — режим богов и остальной сюжетный прогресс не тронуты.)');
         }
 
         function devForceLockdown() {
@@ -3071,21 +3654,35 @@
             osc.stop(ctx.currentTime + startDelay + duration);
         }
 
-        function playGunshotSynth() {
-            const ctx = getSynthCtx();
-            const bufferSize = ctx.sampleRate * 0.2;
-            const buffer = ctx.createBuffer(1, bufferSize, ctx.sampleRate);
-            const data = buffer.getChannelData(0);
-            for (let i = 0; i < bufferSize; i++) data[i] = (Math.random()*2-1) * Math.exp(-i/bufferSize*8);
-            const noise = ctx.createBufferSource(); noise.buffer = buffer;
-            const gain = ctx.createGain(); gain.gain.value = 0.5;
-            noise.connect(gain); gain.connect(ctx.destination);
-            noise.start();
+        // Одноразовое воспроизведение реального файла — создаёт отдельный Audio на каждый вызов,
+        // поэтому не конфликтует с зацикленными тегами (например sound-glitch) и безопасно
+        // дёргается очень часто (например playBossShootBlip во время боя).
+        function playFileOneShot(url, volume) {
+            try {
+                const a = new Audio(url);
+                a.volume = volume !== undefined ? volume : 0.6;
+                a.play().catch(()=>{});
+            } catch(e) {}
         }
 
-        function playHitSynth() { playTone(180, 0.12, 'square', 0.25, 0); }
-        function playVictorySynth() { [523,659,784,1046].forEach((f,i)=> playTone(f, 0.3, 'triangle', 0.15, i*0.15)); }
-        function playGlitchSynth() { for (let i=0;i<6;i++) playTone(100+Math.random()*800, 0.08, 'sawtooth', 0.1, i*0.05); }
+        // ===== ЗВУКОВЫЕ ЭФФЕКТЫ — теперь реальные файлы с myinstants.com вместо синтеза =====
+        function playGunshotSynth() {
+            const a = document.getElementById('sound-gunshot');
+            if (a) { a.currentTime = 0; a.volume = 0.7; a.play().catch(()=>{}); }
+        }
+
+        function playHitSynth() {
+            const a = document.getElementById('sound-punch');
+            if (a) { a.currentTime = 0; a.volume = 0.6; a.play().catch(()=>{}); }
+        }
+        function playVictorySynth() {
+            // "ding" — реальный подтверждённый файл с myinstants.com
+            playFileOneShot('https://www.myinstants.com/media/sounds/ding-sound-effect_2.mp3', 0.7);
+        }
+        function playGlitchSynth() {
+            // static-noise — тот же файл, что и у sound-glitch, но отдельным Audio (не зациклен)
+            playFileOneShot('https://www.myinstants.com/media/sounds/static-noise.mp3', 0.3);
+        }
 
         let forestAmbientNodes = [];
         function playForestAmbient() {
@@ -3106,10 +3703,14 @@
         }
 
         function playCoreVoicePulse() {
-            playTone(80, 1.2, 'sawtooth', 0.3, 0);
-            playTone(40, 1.5, 'sine', 0.4, 0.1);
+            // Глубокий утробный голос Ядра — реальный рык вместо синтезированного гула
+            const a = document.getElementById('sound-monster-growl');
+            if (a) { a.currentTime = 0; a.volume = 0.7; a.play().catch(()=>{}); }
         }
-        function playBossShootBlip() { playTone(220 + Math.random()*100, 0.05, 'square', 0.06, 0); }
+        function playBossShootBlip() {
+            // Лазерный выстрел — реальный файл, подтверждённый напрямую (biglasergun)
+            playFileOneShot('https://www.myinstants.com/media/sounds/biglasergun.mp3', 0.18);
+        }
 
         // ================== ФОНОВАЯ МУЗЫКА ДЛЯ МИНИ-ИГР (синтез, без файлов) ==================
         let ambientLoopNodes = [];
@@ -3544,11 +4145,11 @@
             coreIsMobile = ('ontouchstart' in window) || navigator.maxTouchPoints > 0 || window.innerWidth < 768;
 
             coreState = {
-                lives: 4,
+                lives: 3,
                 bossHp: 100,
                 phase: 1,
                 bullets: [],
-                player: { x: coreLogicalW/2, y: coreLogicalH*0.8, r: coreIsMobile ? 15 : 11, hitR: coreIsMobile ? 7 : 8 },
+                player: { x: coreLogicalW/2, y: coreLogicalH*0.8, r: coreIsMobile ? 14 : 11, hitR: coreIsMobile ? 9 : 10 },
                 boss: { x: coreLogicalW/2, y: coreLogicalH*0.2 },
                 pointer: null,
                 invulnerable: false,
@@ -3603,17 +4204,18 @@
             coreState.boss.x = w/2 + Math.sin(coreState.frame*0.018)*w*0.28;
             coreState.boss.y = h*0.2 + Math.sin(coreState.frame*0.01)*h*0.04;
 
-            // Усложнение: интервал спавна снарядов сокращается с каждой фазой.
-            // На телефоне интервалы длиннее (реже) — компенсация меньшего экрана и пальца поверх экрана.
-            // Общий множитель 1.3 делает бой легче на обеих платформах.
-            const easyFactor = 1.3;
-            const mobileSlow = (coreIsMobile ? 1.45 : 1) * easyFactor;
-            const phaseInterval = Math.round((coreState.phase===1 ? 46 : coreState.phase===2 ? 30 : 16) * mobileSlow);
+            // Усложнение по фазам — БЕЗ перегруза в фазе 3 (раньше там было невозможно пройти)
+            const mobileSlow = coreIsMobile ? 1.2 : 1;
+            const phaseInterval = Math.round((coreState.phase===1 ? 42 : coreState.phase===2 ? 30 : 22) * mobileSlow);
             if (coreState.frame % phaseInterval === 0) spawnCoreBulletPattern();
 
-            // В фазе 3 накладывается ВТОРОЙ независимый паттерн — настоящий bullet hell
-            const secondaryInterval = Math.round((coreIsMobile ? 34 : 24) * easyFactor);
+            // В фазе 3 накладывается ВТОРОЙ паттерн, но реже и мягче, чем раньше
+            const secondaryInterval = Math.round((coreIsMobile ? 42 : 34) * mobileSlow);
             if (coreState.phase === 3 && coreState.frame % secondaryInterval === 0) spawnCoreSecondaryPattern();
+
+            // Снайперский выстрел — работает только в фазах 1-2, отключаем в фазе 3,
+            // чтобы там не накладывались сразу 3 источника снарядов одновременно.
+            if (coreState.phase !== 3 && coreState.frame % 150 === 0) spawnCoreSniperShot();
 
             coreState.bullets = coreState.bullets.filter(b => {
                 if (b.homing) {
@@ -3635,12 +4237,18 @@
                 ctx.shadowBlur = 0;
 
                 const dx = b.x - coreState.player.x, dy = b.y - coreState.player.y;
-                if (!coreState.invulnerable && Math.sqrt(dx*dx+dy*dy) < coreState.player.hitR + (b.radius||5)*0.55) {
+                if (!coreState.invulnerable && Math.sqrt(dx*dx+dy*dy) < coreState.player.hitR + (b.radius||5)*0.68) {
                     coreHitPlayer();
                     return false;
                 }
                 return b.y > -30 && b.y < h+30 && b.x > -30 && b.x < w+30;
             });
+
+            // КРИТИЧНО: если игрок только что умер (coreHitPlayer уже показал экран поражения
+            // и выставил running=false) — прекращаем обработку кадра ЗДЕСЬ.
+            // Раньше выполнение доходило до проверки HP босса ниже и могло ВТОРЫМ вызовом
+            // запустить coreWin(), из-за чего после смерти иногда показывалась "победа".
+            if (!coreState.running) return;
 
             ctx.beginPath();
             ctx.arc(coreState.player.x, coreState.player.y, coreState.player.r, 0, Math.PI*2);
@@ -3658,9 +4266,9 @@
                 ctx.stroke();
             }
 
-            const hpTickRate = coreIsMobile ? 320 : 260;
+            const hpTickRate = coreIsMobile ? 300 : 250;
             if (coreState.frame % hpTickRate === 0 && coreState.frame > 0) {
-                coreState.bossHp -= 17;
+                coreState.bossHp -= 12;
                 document.getElementById('core-boss-hp').innerText = Math.max(0, coreState.bossHp);
                 if (coreState.bossHp <= 66 && coreState.phase===1) {
                     coreState.phase=2;
@@ -3677,14 +4285,12 @@
         function spawnCoreBulletPattern() {
             const cx = coreState.boss.x, cy = coreState.boss.y;
             playBossShootBlip();
-            const spd = (coreIsMobile ? 0.8 : 1) * 0.85; // снаряды медленнее на телефоне + общее замедление
+            const spd = coreIsMobile ? 0.85 : 1; // лёгкая скидка только на телефоне ради читаемости
 
             if (coreState.phase === 1) {
-                // Двойная вращающаяся спираль с разрывами (на телефоне — реже снарядов)
-                const bulletCount = coreIsMobile ? 7 : 10;
-                const gapEvery = 4;
+                // Двойная вращающаяся спираль БЕЗ разрывов — стоять на месте больше не вариант
+                const bulletCount = coreIsMobile ? 9 : 12;
                 for (let i=0;i<bulletCount;i++) {
-                    if (i % gapEvery === gapEvery-1) continue;
                     const ang = (i/bulletCount)*Math.PI*2 + coreState.frame*0.045;
                     coreState.bullets.push({ x:cx, y:cy, vx:Math.cos(ang)*2.6*spd, vy:Math.sin(ang)*2.6*spd, color:'#ff8800', glow:true, radius:5 });
                     const ang2 = (i/bulletCount)*Math.PI*2 - coreState.frame*0.03 + Math.PI;
@@ -3703,41 +4309,54 @@
                 coreState.bullets.push({
                     x:cx, y:cy, vx:(dx/len)*1.5, vy:(dy/len)*1.5,
                     color:'#ff00ff', glow:true, radius:7,
-                    homing:true, homingStrength: coreIsMobile ? 0.08 : 0.12, maxSpeed: coreIsMobile ? 3.5 : 4.5
+                    homing:true, homingStrength: coreIsMobile ? 0.1 : 0.14, maxSpeed: coreIsMobile ? 4 : 5
                 });
             } else {
-                // Фаза 3: волна по всей ширине с нарастающей скоростью
-                const speedBoost = (2.8 + (coreState.frame % 1000)*0.0006) * spd;
-                const waveCount = coreIsMobile ? 9 : 14;
+                // Фаза 3: волна по всей ширине, скорость растёт мягче, чем раньше
+                const speedBoost = (2.5 + (coreState.frame % 1400)*0.0004) * spd;
+                const waveCount = coreIsMobile ? 7 : 10;
                 for (let i=0;i<waveCount;i++) {
                     coreState.bullets.push({
                         x: (i/(waveCount-1))*coreLogicalW, y: -10,
-                        vx: Math.sin(i*0.7)*0.6, vy: speedBoost,
+                        vx: Math.sin(i*0.7)*0.5, vy: speedBoost,
                         color:'#ff4444', glow:true, radius:5
                     });
                 }
             }
         }
 
+        // Снайперский выстрел: летит ровно туда, где стоит игрок в момент выстрела.
+        // Появляется с 1 фазы каждые ~2.3 сек, чтобы полностью статичная стратегия не работала.
+        function spawnCoreSniperShot() {
+            const cx = coreState.boss.x, cy = coreState.boss.y;
+            const dx = coreState.player.x - cx, dy = coreState.player.y - cy;
+            const len = Math.sqrt(dx*dx+dy*dy) || 1;
+            const speed = (coreIsMobile ? 3.6 : 4.4);
+            playTone(500, 0.12, 'sine', 0.1, 0); // короткий "пинг" — предупреждение о прицеле
+            coreState.bullets.push({
+                x: cx, y: cy, vx: (dx/len)*speed, vy: (dy/len)*speed,
+                color: '#ffffff', glow: true, radius: 6
+            });
+        }
+
         function spawnCoreSecondaryPattern() {
             const cx = coreState.boss.x, cy = coreState.boss.y;
             playBossShootBlip();
-            const spd = (coreIsMobile ? 0.8 : 1) * 0.85;
-            const bulletCount = coreIsMobile ? 8 : 13;
+            const spd = coreIsMobile ? 0.85 : 1;
+            const bulletCount = coreIsMobile ? 7 : 10;
             for (let i=0;i<bulletCount;i++) {
                 const ang = (i/bulletCount)*Math.PI*2 + coreState.frame*0.06;
-                coreState.bullets.push({ x:cx, y:cy, vx:Math.cos(ang)*3.2*spd, vy:Math.sin(ang)*3.2*spd, color:'#00ffff', glow:true, radius:4 });
+                coreState.bullets.push({ x:cx, y:cy, vx:Math.cos(ang)*2.8*spd, vy:Math.sin(ang)*2.8*spd, color:'#00ffff', glow:true, radius:4 });
             }
-            const homingCount = coreIsMobile ? 1 : 2;
+            const homingCount = 1;
             for (let k=0;k<homingCount;k++) {
                 const dx = coreState.player.x-cx, dy = coreState.player.y-cy;
                 const len = Math.sqrt(dx*dx+dy*dy) || 1;
-                const jitterAng = Math.atan2(dy,dx) + (k===0?-0.4:0.4);
                 coreState.bullets.push({
                     x:cx, y:cy,
-                    vx:Math.cos(jitterAng)*1.2, vy:Math.sin(jitterAng)*1.2,
+                    vx:(dx/len)*1.2, vy:(dy/len)*1.2,
                     color:'#ff00ff', glow:true, radius:7,
-                    homing:true, homingStrength: coreIsMobile ? 0.08 : 0.1, maxSpeed: coreIsMobile ? 4 : 5
+                    homing:true, homingStrength: coreIsMobile ? 0.07 : 0.09, maxSpeed: coreIsMobile ? 3.6 : 4.4
                 });
             }
         }
@@ -3752,7 +4371,7 @@
             coreState.lives--;
             document.getElementById('core-lives').innerText = coreState.lives;
             coreState.invulnerable = true;
-            setTimeout(()=> coreState.invulnerable = false, coreIsMobile ? 1900 : 1600);
+            setTimeout(()=> coreState.invulnerable = false, coreIsMobile ? 1500 : 1200);
             if (coreState.lives <= 0) {
                 coreState.running = false;
                 document.body.style.overflow = '';
@@ -3775,8 +4394,11 @@
         function showTrueEndingScreen() {
             const div = document.createElement('div');
             div.id = 'true-ending-screen';
-            div.innerText = 'ВЫ ПОБЕДИЛИ ЯДРО.\nИстинная концовка открыта.';
+            div.innerText = 'ВЫ ПОБЕДИЛИ ЯДРО.\nИстинная концовка открыта.\n\n(нажми, чтобы продолжить)';
+            div.style.cursor = 'pointer';
+            div.onclick = () => div.remove();
             document.body.appendChild(div);
+            setTimeout(() => { if (div.parentNode) div.remove(); }, 6000);
         }
 
         // ================== УЖАСНАЯ КОНЦОВКА ИСТИННОЙ ВЕТКИ И БЛОКИРОВКА ==================
